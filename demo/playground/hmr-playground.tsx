@@ -26,7 +26,12 @@ const specUrl =
   (userUrl && userUrl[1]) || (swagger ? 'swagger.yaml' : big ? 'big-openapi.json' : 'openapi.yaml');
 
 let store;
-const options: RedocRawOptions = { nativeScrollbars: false };
+const options: RedocRawOptions = {
+  nativeScrollbars: false,
+  theme: { colors: { primary: { main: "#8abb2a" } } },
+  menuToggle: true,
+  showExtensions: ['x-accessControl', 'x-validationRules', 'x-requiredFields', 'x-commentary']
+};
 
 async function init() {
   const spec = await loadAndBundleSpec(specUrl);

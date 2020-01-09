@@ -10,7 +10,8 @@
 
 </div>
 
-**This is README for `2.0` version of ReDoc (React based). README for `1.x` version is on the branch [v1.x](https://github.com/Redocly/redoc/tree/v1.x)**
+**This fork of `2.0` of ReDoc has been customised for use within Ministry of Education.  see [CUSTOMISATIONS.md](.github/CUSTOMISATIONS.md)**
+
 
 
 ![ReDoc demo](https://raw.githubusercontent.com/Redocly/redoc/master/demo/redoc-demo.png)

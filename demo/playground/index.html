@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ReDoc</title>
+  <title>ReDoc Playground</title>
   <style>
     body {
       margin: 0;
@@ -14,12 +14,26 @@
     redoc {
       display: block;
     }
+
+    label[role=menuitem][type=section],
+    label[role=menuitem][type=group] {
+      color: orange;
+      font-weight: bolder;
+      font-size: 120%;
+    }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="js/imageMapResizer.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
 </head>
 
 <body>
   <redoc id="example"></redoc>
+  <script>
+    $(document).ready(function () {
+      $('map').imageMapResize();
+    });
+  </script>
 </body>
 
 </html>
