@@ -85,7 +85,6 @@ export const ExtensionValue = styled(ExampleValue)`
   display: block;
   overflow: scroll;
   max-height: ${({ theme }) => theme.extension.maxHeight};
-  max-width: 100%;
   ${extensionsHook('ExtensionValue')};
 `;
 
