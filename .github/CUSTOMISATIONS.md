@@ -8,6 +8,30 @@ This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-r
 ## Development
 see [CONTRIBUTING.md](CONTRIBUTING.md) to read the original guidelines on development of this [React](https://en.wikipedia.org/wiki/React_(web_framework)) application
 
+### Commonly used Yarn/NPM scripts
+
+``` bash
+# dev-server, watch and auto reload playground
+$ yarn start
+
+# runt tslint
+$ yarn lint
+
+# try autofix tslint issues
+$ yarn lint --fix
+
+# run unit tests
+$ yarn unit
+
+# prepare bundles
+$ yarn bundle
+
+# put bundles into place for redoc-cli
+$ yarn bundle:cli
+```
+
+There are some other scripts available in the `scripts` section of the `package.json` file.
+
 ## JSON Schema Const
 - JSON Schema uses keyword `const` as short hand for a single `enum` value, which allows us to have titles and description fields for each enumeration value, thus:
 ```JSON

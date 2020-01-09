@@ -35,6 +35,7 @@
     "bundle:standalone": "webpack --env.standalone --mode=production",
     "bundle:lib": "webpack --mode=production && npm run declarations",
     "bundle": "npm run bundle:clean && npm run bundle:lib && npm run bundle:standalone",
+    "bundle:cli": "rimraf cli/node_modules/redc/bundles && cpy bundles/* cli/node_modules/redoc/bundles",
     "declarations": "tsc --emitDeclarationOnly -p tsconfig.lib.json && cp -R src/types typings/",
     "stats": "webpack --env.standalone --json --profile --mode=production > stats.json",
     "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
