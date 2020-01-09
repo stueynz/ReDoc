@@ -72,6 +72,7 @@ export const ExampleValue = styled(FieldLabel)`
     padding: 0 ${theme.spacing.unit}px;
     border: 1px solid ${transparentize(0.9, theme.colors.text.primary)};
     font-family: ${theme.typography.code.fontFamily};
+    color: ${theme.typography.code.color};    
 }`};
   & + & {
     margin-left: 0;
@@ -79,7 +80,14 @@ export const ExampleValue = styled(FieldLabel)`
   ${extensionsHook('ExampleValue')};
 `;
 
-export const ExtensionValue = styled(ExampleValue)``;
+export const ExtensionValue = styled(ExampleValue)`
+  white-space: pre;
+  display: block;
+  overflow: scroll;
+  max-height: ${({ theme }) => theme.extension.maxHeight};
+  max-width: 100%;
+  ${extensionsHook('ExtensionValue')};
+`;
 
 export const ConstraintItem = styled(FieldLabel)`
   border-radius: 2px;
