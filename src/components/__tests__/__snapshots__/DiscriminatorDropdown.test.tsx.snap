@@ -17,6 +17,7 @@ exports[`Components SchemaView discriminator should correctly render discriminat
           "required": false,
           "schema": SchemaModel {
             "activeOneOf": 0,
+            "const": undefined,
             "constraints": Array [],
             "default": undefined,
             "deprecated": false,
@@ -67,6 +68,7 @@ exports[`Components SchemaView discriminator should correctly render discriminat
           "required": true,
           "schema": SchemaModel {
             "activeOneOf": 0,
+            "const": undefined,
             "constraints": Array [],
             "default": undefined,
             "deprecated": false,
