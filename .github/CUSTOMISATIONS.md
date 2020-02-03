@@ -3,6 +3,7 @@
 This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-rc.20) has the following customisations:
 
 - [JSON Schema `const`](#json-schema-const)
+- [JSON Schema `x-deferred`](#json-schema-deferred-fields)
 - [Vendor Extensions Display](#vendor-extensions-display)
 - [Multi Lingual Annotations](#multi-lingual-annotations)
 - [New Configuration Options](#new-configuration-options)
@@ -41,6 +42,7 @@ Many of these customisations are controlled by new configuration options.
 - `oneOffSuppressionThreshold` (default 30)  enumerations with at least this many members will not be fully described; as they are too long to be useful.  They may however be fully described in external documentation, see `externalDocs`
 
 
+
 ## JSON Schema Const
 - JSON Schema uses keyword `const` as short hand for a single `enum` value, which allows us to have titles and description fields for each enumeration value, thus:
 ``` JSON
@@ -68,7 +70,12 @@ Many of these customisations are controlled by new configuration options.
       title: Not Willing to Disclose
 ```
 
-Enumerations that have been constructed with `onOf` and `const` can be very long.  Enumerations with  at least `options.oneOffSuppressionThreshold` (default 30) members will not be fully described;  They may however be fully described in external documentation, see `externalDocs`
+Enumerations that have been constructed with `oneOf` and `const` can be very long.  Enumerations with  at least `options.oneOffSuppressionThreshold` (default 30) members will not be fully described;  They may however be fully described in external documentation, see `externalDocs`
+
+## JSON Schema deferred fields
+- Fields in JSON Schema can be marked as `x-deferred` meaning the fields is deferred, but it will be used in the near future, although currently
+  they are not to be used.  The `deferred` marking is displayed under the field name similar to the `required` marking.
+
 
 ## Vendor Extensions Display
 - Vendor extension fields (ones with `x-` prefix) are displayed as follows
@@ -78,6 +85,8 @@ Enumerations that have been constructed with `onOf` and `const` can be very long
 - Vendor extension fields are initially displayed collapsed - just click on the label to expand.
 
   ![](../docs/images/collapsed-extensions-demo.gif)
+
+
 
 ## Multi Lingual Annotations
 Keywords `title*` and `description*` can be used instead of `title` and `description`;  they are multi-lingual string maps, using 
