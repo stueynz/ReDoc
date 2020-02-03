@@ -4,48 +4,48 @@ description: JSON Schema derived from SIF IN v3.3
 type: array
 items:
   oneOf:
-  - required:
-    - alert
-  - required:
-    - codeSet
-  - required:
-    - createResponse
-  - required:
-    - deleteRequest
-  - required:
-    - deleteResponse
-  - required:
-    - environment
-  - required:
-    - error
-  - required:
-    - job
-  - required:
-    - namespace
-  - required:
-    - pod
-  - required:
-    - provider
-  - required:
-    - provisionRequest
-  - required:
-    - queue
-  - required:
-    - state
-  - required:
-    - subscription
-  - required:
-    - updateResponse
-  - required:
-    - xquery
-  - required:
-    - zone
+    - required:
+        - alert
+    - required:
+        - codeSet
+    - required:
+        - createResponse
+    - required:
+        - deleteRequest
+    - required:
+        - deleteResponse
+    - required:
+        - environment
+    - required:
+        - error
+    - required:
+        - job
+    - required:
+        - namespace
+    - required:
+        - pod
+    - required:
+        - provider
+    - required:
+        - provisionRequest
+    - required:
+        - queue
+    - required:
+        - state
+    - required:
+        - subscription
+    - required:
+        - updateResponse
+    - required:
+        - xquery
+    - required:
+        - zone
 properties:
   alert:
     required:
-    - exchange
-    - level
-    - reporter
+      - exchange
+      - level
+      - reporter
     type: object
     properties:
       id:
@@ -62,19 +62,19 @@ properties:
       exchange:
         description: <p>The exchange (or lack of exchange) responsible for generating the Alert.</p>
         oneOf:
-        - const: REQUEST
-        - const: RESPONSE
-        - const: EVENT
-        - const: TIMEOUT
-        - const: OTHER
+          - const: REQUEST
+          - const: RESPONSE
+          - const: EVENT
+          - const: TIMEOUT
+          - const: OTHER
       level:
         description: <p>The level of the Alert.</p>
         oneOf:
-        - const: INFO
-        - const: STATECHANGE
-        - const: EVENT
-        - const: WARNING
-        - const: ERROR
+          - const: INFO
+          - const: STATECHANGE
+          - const: EVENT
+          - const: WARNING
+          - const: ERROR
       description:
         type: string
         description: <p>A description of the reason for the Alert.</p>
@@ -112,9 +112,9 @@ properties:
       much identifying information about the problem being reported as possible.</p>
   codeSet:
     required:
-    - timestamp
-    - version
-    - zone
+      - timestamp
+      - version
+      - zone
     type: object
     properties:
       id:
@@ -141,17 +141,17 @@ properties:
       codeItems:
         type: object
         required:
-        - codeItem
+          - codeItem
         properties:
           codeItem:
             type: array
             items:
               type: object
               required:
-              - action
-              - code
-              - timestamp
-              - value
+                - action
+                - code
+                - timestamp
+                - value
               properties:
                 code:
                   type: string
@@ -176,21 +176,21 @@ properties:
                 aliases:
                   type: object
                   required:
-                  - alias
+                    - alias
                   properties:
                     alias:
                       type: array
                       items:
                         type: object
                         required:
-                        - code
+                          - code
                         properties:
                           code:
                             type: object
                             required:
-                            - official
-                            - old
-                            - value
+                              - official
+                              - old
+                              - value
                             properties:
                               old:
                                 type: boolean
@@ -216,10 +216,10 @@ properties:
                 action:
                   description: <p>The last action to be taken for this code item.</p>
                   oneOf:
-                  - const: ADD
-                  - const: CHANGE
-                  - const: DEPRECATED
-                  - const: DELETE
+                    - const: ADD
+                    - const: CHANGE
+                    - const: DEPRECATED
+                    - const: DELETE
                 timestamp:
                   description: >-
                     <p>The date and time of the last action taken on this code item. So that only updates can be queried efficiently
@@ -230,20 +230,20 @@ properties:
       break existing Consumer / Provider interoperability.</p>
   createResponse:
     required:
-    - creates
+      - creates
     type: object
     properties:
       creates:
         type: object
         required:
-        - create
+          - create
         properties:
           create:
             type: array
             items:
               type: object
               required:
-              - advisoryId
+                - advisoryId
               properties:
                 id:
                   type: string
@@ -259,9 +259,9 @@ properties:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
@@ -293,13 +293,13 @@ properties:
       that failed to be created is indicated by an error statusCode and a corresponding error payload.</p>
   deleteRequest:
     required:
-    - deletes
+      - deletes
     type: object
     properties:
       deletes:
         type: object
         required:
-        - delete
+          - delete
         properties:
           delete:
             type: array
@@ -316,13 +316,13 @@ properties:
       Header Field value of methodOverride set to DELETE.</p>
   deleteResponse:
     required:
-    - deletes
+      - deletes
     type: object
     properties:
       deletes:
         type: object
         required:
-        - delete
+          - delete
         properties:
           delete:
             type: array
@@ -339,9 +339,9 @@ properties:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
@@ -374,12 +374,12 @@ properties:
       type:
         type: string
         oneOf:
-        - const: DIRECT
-        - const: BROKERED
+          - const: DIRECT
+          - const: BROKERED
         xml:
           attribute: true
         enum:
-        - DIRECT
+          - DIRECT
       id:
         type: string
         pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[14][a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -411,7 +411,7 @@ properties:
           properties:
             type: object
             required:
-            - property
+              - property
             properties:
               property:
                 type: array
@@ -434,7 +434,7 @@ properties:
         type: string
         description: <p>Defines the way in which the applicationKey can be used to enforce security.</p>
         enum:
-        - Bearer
+          - Bearer
       instanceId:
         type: string
       userToken:
@@ -457,7 +457,7 @@ properties:
             type: string
             description: <p>The version of the SIF infrastructure which the Consumer supports.</p>
             enum:
-            - '3.3'
+              - '3.3'
           dataModelNamespace:
             type: string
             format: uri
@@ -465,18 +465,18 @@ properties:
               <p>The namespace of the data payloads conveyed by this environment. Returns may be of a diffrent minor version.
               Utility payloads will be of the infrastructure namespace.</p>
             enum:
-            - 'http://www.sifassociation.org/datamodel/nz/3.0'
+              - 'http://www.sifassociation.org/datamodel/nz/3.0'
           transport:
             type: string
             description: >-
               <p>The transport which the Consumer expects the infrastructure to use to interoperate with it. The default is
               whichever transport the create request was issued on</p>
             enum:
-            - Bearer
+              - Bearer
           applicationProduct:
             type: object
             required:
-            - productName
+              - productName
             properties:
               vendorName:
                 type: string
@@ -499,7 +499,7 @@ properties:
           adapterProduct:
             type: object
             required:
-            - productName
+              - productName
             properties:
               vendorName:
                 type: string
@@ -520,13 +520,13 @@ properties:
                   pixels to 128x128 pixels and be of an image MIME type commonly supported by Web browsers (e.g. PNG, JPEG,
                   GIF).</p>
         required:
-        - supportedInfrastructureVersion
-        - dataModelNamespace
-        - transport
+          - supportedInfrastructureVersion
+          - dataModelNamespace
+          - transport
       infrastructureServices:
         type: object
         required:
-        - infrastructureService
+          - infrastructureService
         properties:
           infrastructureService:
             type: array
@@ -538,26 +538,26 @@ properties:
                 name:
                   type: string
                   oneOf:
-                  - const: environment
-                  - const: provisionRequests
-                  - const: requestsConnector
-                  - const: eventsConnector
-                  - const: queues
-                  - const: subscriptions
-                  - const: servicesConnector
+                    - const: environment
+                    - const: provisionRequests
+                    - const: requestsConnector
+                    - const: eventsConnector
+                    - const: queues
+                    - const: subscriptions
+                    - const: servicesConnector
                   xml:
                     attribute: true
       provisionedZones:
         type: object
         required:
-        - provisionedZone
+          - provisionedZone
         properties:
           provisionedZone:
             type: array
             items:
               type: object
               required:
-              - id
+                - id
               properties:
                 id:
                   type: string
@@ -567,27 +567,27 @@ properties:
                 services:
                   type: object
                   required:
-                  - service
+                    - service
                   properties:
                     service:
                       type: array
                       items:
                         type: object
                         required:
-                        - contextId
-                        - name
-                        - rights
-                        - type
+                          - contextId
+                          - name
+                          - rights
+                          - type
                         properties:
                           type:
                             type: string
                             oneOf:
-                            - const: UTILITY
-                            - const: OBJECT
-                            - const: FUNCTIONAL
-                            - const: SERVICEPATH
-                            - const: XQUERYTEMPLATE
-                            - const: SERVICE
+                              - const: UTILITY
+                              - const: OBJECT
+                              - const: FUNCTIONAL
+                              - const: SERVICEPATH
+                              - const: XQUERYTEMPLATE
+                              - const: SERVICE
                             xml:
                               attribute: true
                           name:
@@ -608,7 +608,7 @@ properties:
                           rights:
                             type: object
                             required:
-                            - right
+                              - right
                             properties:
                               right:
                                 type: array
@@ -618,20 +618,20 @@ properties:
                                     value:
                                       type: string
                                       oneOf:
-                                      - const: APPROVED
-                                      - const: SUPPORTED
-                                      - const: REJECTED
-                                      - const: UNSUPPORTED
-                                      - const: REQUESTED
+                                        - const: APPROVED
+                                        - const: SUPPORTED
+                                        - const: REJECTED
+                                        - const: UNSUPPORTED
+                                        - const: REQUESTED
                                     type:
                                       description: <p>The type of the requested Access Right</p>
                                       oneOf:
-                                      - const: QUERY
-                                      - const: CREATE
-                                      - const: UPDATE
-                                      - const: DELETE
-                                      - const: SUBSCRIBE
-                                      - const: PROVIDE
+                                        - const: QUERY
+                                        - const: CREATE
+                                        - const: UPDATE
+                                        - const: DELETE
+                                        - const: SUBSCRIBE
+                                        - const: PROVIDE
                                       xml:
                                         attribute: true
     description: >-
@@ -639,18 +639,18 @@ properties:
       the infrastructure and any Provider Services accessible from it. The Environment Service provides the set of (possibly
       customized) information the Application needs to interoperate successfully.</p>
     required:
-    - type
-    - authenticationMethod
-    - consumerName
-    - applicationInfo
-    - sessionToken
-    - infrastructureServices
-    - provisionedZones
+      - type
+      - authenticationMethod
+      - consumerName
+      - applicationInfo
+      - sessionToken
+      - infrastructureServices
+      - provisionedZones
   error:
     required:
-    - code
-    - message
-    - scope
+      - code
+      - message
+      - scope
     type: object
     properties:
       id:
@@ -676,7 +676,7 @@ properties:
           300)."</p>
   job:
     required:
-    - name
+      - name
     type: object
     properties:
       id:
@@ -693,10 +693,10 @@ properties:
       state:
         type: string
         oneOf:
-        - const: NOTSTARTED
-        - const: INPROGRESS
-        - const: COMPLETED
-        - const: FAILED
+          - const: NOTSTARTED
+          - const: INPROGRESS
+          - const: COMPLETED
+          - const: FAILED
         description: <p>The current enumerable state of the job.</p>
       stateDescription:
         type: string
@@ -712,18 +712,18 @@ properties:
       phases:
         type: object
         required:
-        - phase
+          - phase
         properties:
           phase:
             type: array
             items:
               type: object
               required:
-              - name
-              - required
-              - rights
-              - states
-              - statesRights
+                - name
+                - required
+                - rights
+                - states
+                - statesRights
               properties:
                 name:
                   type: string
@@ -735,7 +735,7 @@ properties:
                       type: array
                       items:
                         required:
-                        - type
+                          - type
                         type: object
                         properties:
                           id:
@@ -746,13 +746,13 @@ properties:
                           type:
                             type: string
                             oneOf:
-                            - const: NOTAPPLICABLE
-                            - const: NOTSTARTED
-                            - const: PENDING
-                            - const: SKIPPED
-                            - const: INPROGRESS
-                            - const: COMPLETED
-                            - const: FAILED
+                              - const: NOTAPPLICABLE
+                              - const: NOTSTARTED
+                              - const: PENDING
+                              - const: SKIPPED
+                              - const: INPROGRESS
+                              - const: COMPLETED
+                              - const: FAILED
                             description: <p>The type of this State object.</p>
                           created:
                             description: <p>The datetime this job was created.</p>
@@ -777,7 +777,7 @@ properties:
                 rights:
                   type: object
                   required:
-                  - right
+                    - right
                   properties:
                     right:
                       type: array
@@ -787,27 +787,27 @@ properties:
                           value:
                             type: string
                             oneOf:
-                            - const: APPROVED
-                            - const: SUPPORTED
-                            - const: REJECTED
-                            - const: UNSUPPORTED
-                            - const: REQUESTED
+                              - const: APPROVED
+                              - const: SUPPORTED
+                              - const: REJECTED
+                              - const: UNSUPPORTED
+                              - const: REQUESTED
                           type:
                             description: <p>The type of the requested Access Right</p>
                             oneOf:
-                            - const: QUERY
-                            - const: CREATE
-                            - const: UPDATE
-                            - const: DELETE
-                            - const: SUBSCRIBE
-                            - const: PROVIDE
+                              - const: QUERY
+                              - const: CREATE
+                              - const: UPDATE
+                              - const: DELETE
+                              - const: SUBSCRIBE
+                              - const: PROVIDE
                             xml:
                               attribute: true
                   description: <p>Access rights given to the consumer for this phase.</p>
                 statesRights:
                   type: object
                   required:
-                  - right
+                    - right
                   properties:
                     right:
                       type: array
@@ -817,20 +817,20 @@ properties:
                           value:
                             type: string
                             oneOf:
-                            - const: APPROVED
-                            - const: SUPPORTED
-                            - const: REJECTED
-                            - const: UNSUPPORTED
-                            - const: REQUESTED
+                              - const: APPROVED
+                              - const: SUPPORTED
+                              - const: REJECTED
+                              - const: UNSUPPORTED
+                              - const: REQUESTED
                           type:
                             description: <p>The type of the requested Access Right</p>
                             oneOf:
-                            - const: QUERY
-                            - const: CREATE
-                            - const: UPDATE
-                            - const: DELETE
-                            - const: SUBSCRIBE
-                            - const: PROVIDE
+                              - const: QUERY
+                              - const: CREATE
+                              - const: UPDATE
+                              - const: DELETE
+                              - const: SUBSCRIBE
+                              - const: PROVIDE
                             xml:
                               attribute: true
                   description: <p>Access rights given to the consumer for each state.</p>
@@ -838,7 +838,7 @@ properties:
       initialization:
         type: object
         required:
-        - payload
+          - payload
         properties:
           phaseName:
             type: string
@@ -855,9 +855,9 @@ properties:
       job to be created.</p>
   namespace:
     required:
-    - uri
-    - url
-    - zone
+      - uri
+      - url
+      - zone
     type: object
     properties:
       id:
@@ -881,12 +881,12 @@ properties:
       currently valid within the Environment.</p>
   pod:
     required:
-    - id
-    - partyId
-    - podStatus
-    - podToken
-    - podVersion
-    - privacyList
+      - id
+      - partyId
+      - podStatus
+      - podToken
+      - podVersion
+      - privacyList
     type: object
     properties:
       id:
@@ -898,10 +898,10 @@ properties:
       podStatus:
         description: <p>The status value for this POD.</p>
         oneOf:
-        - const: Live
-        - const: Draft
-        - const: Pending
-        - const: Expired
+          - const: Live
+          - const: Draft
+          - const: Pending
+          - const: Expired
       podToken:
         description: <p>The token reference for the POD.</p>
         type: string
@@ -923,13 +923,13 @@ properties:
               description: <p>.</p>
               type: object
               required:
-              - default
+                - default
               properties:
                 default:
                   description: <p>Is this the default privacy template?</p>
                   oneOf:
-                  - const: 'Y'
-                  - const: 'N'
+                    - const: 'Y'
+                    - const: 'N'
                 appIDList:
                   description: <p>The list of applications in this contract.</p>
                   type: object
@@ -1003,10 +1003,10 @@ properties:
                       description: <p>The details of the contract the POD has been derived from.</p>
                       type: object
                       required:
-                      - contractName
-                      - contractURI
-                      - dateValidFrom
-                      - lawList
+                        - contractName
+                        - contractURI
+                        - dateValidFrom
+                        - lawList
                       properties:
                         contractURI:
                           type: string
@@ -1036,8 +1036,8 @@ properties:
                                 description: <p>Information about the specific law.</p>
                                 type: object
                                 required:
-                                - lawDescription
-                                - lawName
+                                  - lawDescription
+                                  - lawName
                                 properties:
                                   lawName:
                                     type: string
@@ -1052,7 +1052,7 @@ properties:
                       description: <p>Legal Requirements Container.</p>
                       type: object
                       required:
-                      - clauseList
+                        - clauseList
                       properties:
                         clauseList:
                           description: <p>A list of the legal clauses within the contract.</p>
@@ -1204,8 +1204,8 @@ properties:
                                       controlrights:
                                         description: <p>What are the control rights around this "green listed field"?</p>
                                         oneOf:
-                                        - const: R
-                                        - const: RW
+                                          - const: R
+                                          - const: RW
                         conditionList:
                           description: <p></p>
                           type: object
@@ -1348,16 +1348,16 @@ properties:
                                       controlrights:
                                         description: <p>What are the control rights around this "green listed field"?</p>
                                         oneOf:
-                                        - const: R
-                                        - const: RW
+                                          - const: R
+                                          - const: RW
                             respondInDays:
                               type: integer
                               description: <p>n how many days should any request for information around this data subject be responded to?</p>
                             requirePortability:
                               description: <p>Do all the rules surrounding this data need to be ported with any data that is transmeitted?</p>
                               oneOf:
-                              - const: 'Y'
-                              - const: 'N'
+                                - const: 'Y'
+                                - const: 'N'
                         dataDeletion:
                           description: <p>Details and requirements for data deletion.</p>
                           type: object
@@ -1365,8 +1365,8 @@ properties:
                             deleteData:
                               description: <p>Must data be deleted when no longer required to the primary purpose?</p>
                               oneOf:
-                              - const: 'Y'
-                              - const: 'N'
+                                - const: 'Y'
+                                - const: 'N'
                             dataRetention:
                               type: integer
                               description: >-
@@ -1391,7 +1391,7 @@ properties:
                                     institution.</p>
                                   type: object
                                   required:
-                                  - name
+                                    - name
                                   properties:
                                     name:
                                       description: >-
@@ -1427,8 +1427,8 @@ properties:
                                             non-European, ethnic or language groups and related to the display nature of a name.
                                             </p>
                                           oneOf:
-                                          - const: 'Y'
-                                          - const: 'N'
+                                            - const: 'Y'
+                                            - const: 'N'
                                         preferredName:
                                           type: string
                                           description: <p>The given name preferred most by the person (as written). </p>
@@ -1448,10 +1448,10 @@ properties:
                                       description: <p>Address of the contact.</p>
                                       type: object
                                       required:
-                                      - city
-                                      - gCoreAddressType
-                                      - line1
-                                      - postalCode
+                                        - city
+                                        - gCoreAddressType
+                                        - line1
+                                        - postalCode
                                       properties:
                                         effectiveFromDate:
                                           type: string
@@ -1486,7 +1486,7 @@ properties:
                                       description: <p>List of Email elements.</p>
                                       type: object
                                       required:
-                                      - email
+                                        - email
                                       properties:
                                         email:
                                           type: array
@@ -1499,7 +1499,7 @@ properties:
                                       description: <p>List of PhoneNumber elements.</p>
                                       type: object
                                       required:
-                                      - phoneNumber
+                                        - phoneNumber
                                       properties:
                                         phoneNumber:
                                           type: array
@@ -1509,7 +1509,7 @@ properties:
                                               StudentPersonal, StaffPersonal, etc.</p>
                                             type: object
                                             required:
-                                            - number
+                                              - number
                                             properties:
                                               number:
                                                 type: string
@@ -1522,8 +1522,8 @@ properties:
                                               listedStatus:
                                                 description: <p>Indicates whether or not the phone number is available to the public.</p>
                                                 oneOf:
-                                                - const: 'Y'
-                                                - const: 'N'
+                                                  - const: 'Y'
+                                                  - const: 'N'
                                               preference:
                                                 type: integer
                                                 description: >-
@@ -1537,8 +1537,8 @@ properties:
                             requirePortability:
                               description: <p>Do all the rules surrounding this data need to be ported with any data that is transmeitted?</p>
                               oneOf:
-                              - const: 'Y'
-                              - const: 'N'
+                                - const: 'Y'
+                                - const: 'N'
                         securityTechnologyList:
                           description: <p></p>
                           type: object
@@ -1628,7 +1628,7 @@ properties:
                         GDPR.</p>
                       type: object
                       required:
-                      - privacyPolicyURL
+                        - privacyPolicyURL
                       properties:
                         dataControllerName:
                           type: string
@@ -1641,7 +1641,7 @@ properties:
                           description: <p>The details of the privacy contact.</p>
                           type: object
                           required:
-                          - contact
+                            - contact
                           properties:
                             contact:
                               type: array
@@ -1651,7 +1651,7 @@ properties:
                                   institution.</p>
                                 type: object
                                 required:
-                                - name
+                                  - name
                                 properties:
                                   name:
                                     description: >-
@@ -1686,8 +1686,8 @@ properties:
                                           <p>An indicator used to identify the naming conventions used by some predominantly
                                           non-European, ethnic or language groups and related to the display nature of a name. </p>
                                         oneOf:
-                                        - const: 'Y'
-                                        - const: 'N'
+                                          - const: 'Y'
+                                          - const: 'N'
                                       preferredName:
                                         type: string
                                         description: <p>The given name preferred most by the person (as written). </p>
@@ -1707,10 +1707,10 @@ properties:
                                     description: <p>Address of the contact.</p>
                                     type: object
                                     required:
-                                    - city
-                                    - gCoreAddressType
-                                    - line1
-                                    - postalCode
+                                      - city
+                                      - gCoreAddressType
+                                      - line1
+                                      - postalCode
                                     properties:
                                       effectiveFromDate:
                                         type: string
@@ -1745,7 +1745,7 @@ properties:
                                     description: <p>List of Email elements.</p>
                                     type: object
                                     required:
-                                    - email
+                                      - email
                                     properties:
                                       email:
                                         type: array
@@ -1758,7 +1758,7 @@ properties:
                                     description: <p>List of PhoneNumber elements.</p>
                                     type: object
                                     required:
-                                    - phoneNumber
+                                      - phoneNumber
                                     properties:
                                       phoneNumber:
                                         type: array
@@ -1768,7 +1768,7 @@ properties:
                                             StudentPersonal, StaffPersonal, etc.</p>
                                           type: object
                                           required:
-                                          - number
+                                            - number
                                           properties:
                                             number:
                                               type: string
@@ -1781,8 +1781,8 @@ properties:
                                             listedStatus:
                                               description: <p>Indicates whether or not the phone number is available to the public.</p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preference:
                                               type: integer
                                               description: >-
@@ -1794,7 +1794,7 @@ properties:
                             the contract.</p>
                           type: object
                           required:
-                          - contact
+                            - contact
                           properties:
                             contact:
                               type: array
@@ -1804,7 +1804,7 @@ properties:
                                   institution.</p>
                                 type: object
                                 required:
-                                - name
+                                  - name
                                 properties:
                                   name:
                                     description: >-
@@ -1839,8 +1839,8 @@ properties:
                                           <p>An indicator used to identify the naming conventions used by some predominantly
                                           non-European, ethnic or language groups and related to the display nature of a name. </p>
                                         oneOf:
-                                        - const: 'Y'
-                                        - const: 'N'
+                                          - const: 'Y'
+                                          - const: 'N'
                                       preferredName:
                                         type: string
                                         description: <p>The given name preferred most by the person (as written). </p>
@@ -1860,10 +1860,10 @@ properties:
                                     description: <p>Address of the contact.</p>
                                     type: object
                                     required:
-                                    - city
-                                    - gCoreAddressType
-                                    - line1
-                                    - postalCode
+                                      - city
+                                      - gCoreAddressType
+                                      - line1
+                                      - postalCode
                                     properties:
                                       effectiveFromDate:
                                         type: string
@@ -1898,7 +1898,7 @@ properties:
                                     description: <p>List of Email elements.</p>
                                     type: object
                                     required:
-                                    - email
+                                      - email
                                     properties:
                                       email:
                                         type: array
@@ -1911,7 +1911,7 @@ properties:
                                     description: <p>List of PhoneNumber elements.</p>
                                     type: object
                                     required:
-                                    - phoneNumber
+                                      - phoneNumber
                                     properties:
                                       phoneNumber:
                                         type: array
@@ -1921,7 +1921,7 @@ properties:
                                             StudentPersonal, StaffPersonal, etc.</p>
                                           type: object
                                           required:
-                                          - number
+                                            - number
                                           properties:
                                             number:
                                               type: string
@@ -1934,8 +1934,8 @@ properties:
                                             listedStatus:
                                               description: <p>Indicates whether or not the phone number is available to the public.</p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preference:
                                               type: integer
                                               description: >-
@@ -1947,7 +1947,7 @@ properties:
                         processes personal data on behalf of the controller", see GDPR.</p>
                       type: object
                       required:
-                      - privacyPolicyURL
+                        - privacyPolicyURL
                       properties:
                         dataProcessorName:
                           type: string
@@ -1960,7 +1960,7 @@ properties:
                           description: <p>The details of the privacy contact.</p>
                           type: object
                           required:
-                          - contact
+                            - contact
                           properties:
                             contact:
                               type: array
@@ -1970,7 +1970,7 @@ properties:
                                   institution.</p>
                                 type: object
                                 required:
-                                - name
+                                  - name
                                 properties:
                                   name:
                                     description: >-
@@ -2005,8 +2005,8 @@ properties:
                                           <p>An indicator used to identify the naming conventions used by some predominantly
                                           non-European, ethnic or language groups and related to the display nature of a name. </p>
                                         oneOf:
-                                        - const: 'Y'
-                                        - const: 'N'
+                                          - const: 'Y'
+                                          - const: 'N'
                                       preferredName:
                                         type: string
                                         description: <p>The given name preferred most by the person (as written). </p>
@@ -2026,10 +2026,10 @@ properties:
                                     description: <p>Address of the contact.</p>
                                     type: object
                                     required:
-                                    - city
-                                    - gCoreAddressType
-                                    - line1
-                                    - postalCode
+                                      - city
+                                      - gCoreAddressType
+                                      - line1
+                                      - postalCode
                                     properties:
                                       effectiveFromDate:
                                         type: string
@@ -2064,7 +2064,7 @@ properties:
                                     description: <p>List of Email elements.</p>
                                     type: object
                                     required:
-                                    - email
+                                      - email
                                     properties:
                                       email:
                                         type: array
@@ -2077,7 +2077,7 @@ properties:
                                     description: <p>List of PhoneNumber elements.</p>
                                     type: object
                                     required:
-                                    - phoneNumber
+                                      - phoneNumber
                                     properties:
                                       phoneNumber:
                                         type: array
@@ -2087,7 +2087,7 @@ properties:
                                             StudentPersonal, StaffPersonal, etc.</p>
                                           type: object
                                           required:
-                                          - number
+                                            - number
                                           properties:
                                             number:
                                               type: string
@@ -2100,8 +2100,8 @@ properties:
                                             listedStatus:
                                               description: <p>Indicates whether or not the phone number is available to the public.</p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preference:
                                               type: integer
                                               description: >-
@@ -2110,13 +2110,13 @@ properties:
                         notifyDataControllerOnAccessRequests:
                           description: <p>Do we need to advise the data controller of access requests?</p>
                           oneOf:
-                          - const: 'Y'
-                          - const: 'N'
+                            - const: 'Y'
+                            - const: 'N'
                         dataProcessorContactForAccessRequestsList:
                           description: <p>The details of the person to contact for access requests.</p>
                           type: object
                           required:
-                          - contact
+                            - contact
                           properties:
                             contact:
                               type: array
@@ -2126,7 +2126,7 @@ properties:
                                   institution.</p>
                                 type: object
                                 required:
-                                - name
+                                  - name
                                 properties:
                                   name:
                                     description: >-
@@ -2161,8 +2161,8 @@ properties:
                                           <p>An indicator used to identify the naming conventions used by some predominantly
                                           non-European, ethnic or language groups and related to the display nature of a name. </p>
                                         oneOf:
-                                        - const: 'Y'
-                                        - const: 'N'
+                                          - const: 'Y'
+                                          - const: 'N'
                                       preferredName:
                                         type: string
                                         description: <p>The given name preferred most by the person (as written). </p>
@@ -2182,10 +2182,10 @@ properties:
                                     description: <p>Address of the contact.</p>
                                     type: object
                                     required:
-                                    - city
-                                    - gCoreAddressType
-                                    - line1
-                                    - postalCode
+                                      - city
+                                      - gCoreAddressType
+                                      - line1
+                                      - postalCode
                                     properties:
                                       effectiveFromDate:
                                         type: string
@@ -2220,7 +2220,7 @@ properties:
                                     description: <p>List of Email elements.</p>
                                     type: object
                                     required:
-                                    - email
+                                      - email
                                     properties:
                                       email:
                                         type: array
@@ -2233,7 +2233,7 @@ properties:
                                     description: <p>List of PhoneNumber elements.</p>
                                     type: object
                                     required:
-                                    - phoneNumber
+                                      - phoneNumber
                                     properties:
                                       phoneNumber:
                                         type: array
@@ -2243,7 +2243,7 @@ properties:
                                             StudentPersonal, StaffPersonal, etc.</p>
                                           type: object
                                           required:
-                                          - number
+                                            - number
                                           properties:
                                             number:
                                               type: string
@@ -2256,8 +2256,8 @@ properties:
                                             listedStatus:
                                               description: <p>Indicates whether or not the phone number is available to the public.</p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preference:
                                               type: integer
                                               description: >-
@@ -2290,21 +2290,21 @@ properties:
                         dataUsageMarketingAllowed:
                           description: <p>Can the data be used for marketing purposes?</p>
                           oneOf:
-                          - const: 'Y'
-                          - const: 'N'
+                            - const: 'Y'
+                            - const: 'N'
                         personalInformationUpdatedFromSource:
                           type: integer
                           description: <p>The frequency at which personal information is to be updated from source systems.</p>
                         dataBreachNotification:
                           description: <p>In the event there is a breach event is notification of the breach contact required?</p>
                           oneOf:
-                          - const: 'Y'
-                          - const: 'N'
+                            - const: 'Y'
+                            - const: 'N'
                         dataBreachContactList:
                           description: <p>Contact details for the individual/s to be notified in the event of a data breach.</p>
                           type: object
                           required:
-                          - contact
+                            - contact
                           properties:
                             contact:
                               type: array
@@ -2314,7 +2314,7 @@ properties:
                                   institution.</p>
                                 type: object
                                 required:
-                                - name
+                                  - name
                                 properties:
                                   name:
                                     description: >-
@@ -2349,8 +2349,8 @@ properties:
                                           <p>An indicator used to identify the naming conventions used by some predominantly
                                           non-European, ethnic or language groups and related to the display nature of a name. </p>
                                         oneOf:
-                                        - const: 'Y'
-                                        - const: 'N'
+                                          - const: 'Y'
+                                          - const: 'N'
                                       preferredName:
                                         type: string
                                         description: <p>The given name preferred most by the person (as written). </p>
@@ -2370,10 +2370,10 @@ properties:
                                     description: <p>Address of the contact.</p>
                                     type: object
                                     required:
-                                    - city
-                                    - gCoreAddressType
-                                    - line1
-                                    - postalCode
+                                      - city
+                                      - gCoreAddressType
+                                      - line1
+                                      - postalCode
                                     properties:
                                       effectiveFromDate:
                                         type: string
@@ -2408,7 +2408,7 @@ properties:
                                     description: <p>List of Email elements.</p>
                                     type: object
                                     required:
-                                    - email
+                                      - email
                                     properties:
                                       email:
                                         type: array
@@ -2421,7 +2421,7 @@ properties:
                                     description: <p>List of PhoneNumber elements.</p>
                                     type: object
                                     required:
-                                    - phoneNumber
+                                      - phoneNumber
                                     properties:
                                       phoneNumber:
                                         type: array
@@ -2431,7 +2431,7 @@ properties:
                                             StudentPersonal, StaffPersonal, etc.</p>
                                           type: object
                                           required:
-                                          - number
+                                            - number
                                           properties:
                                             number:
                                               type: string
@@ -2444,8 +2444,8 @@ properties:
                                             listedStatus:
                                               description: <p>Indicates whether or not the phone number is available to the public.</p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preference:
                                               type: integer
                                               description: >-
@@ -2454,13 +2454,13 @@ properties:
                         employeesMustComplyWithAgreement:
                           description: <p>Must employees of the data controller comply the with agreement?</p>
                           oneOf:
-                          - const: 'Y'
-                          - const: 'N'
+                            - const: 'Y'
+                            - const: 'N'
                         employeeConfidentialityAgreement:
                           description: <p> Are employees of the data controller required to comply with a confidentiality agreement?</p>
                           oneOf:
-                          - const: 'Y'
-                          - const: 'N'
+                            - const: 'Y'
+                            - const: 'N'
                         employeeTrainingList:
                           description: <p>A list of the data controller employee’s training requirements.</p>
                           type: object
@@ -2509,8 +2509,8 @@ properties:
                                   shareResults:
                                     description: <p>Are the results of this security test allowed to be shared?</p>
                                     oneOf:
-                                    - const: 'Y'
-                                    - const: 'N'
+                                      - const: 'Y'
+                                      - const: 'N'
                         countryImpactedList:
                           description: <p>List of impacted countries in or through which the data transits or is stored.</p>
                           type: object
@@ -2539,7 +2539,7 @@ properties:
                             description: <p>Details of organisations who process data on behalf of the data processor.</p>
                             type: object
                             required:
-                            - privacyPolicyURL
+                              - privacyPolicyURL
                             properties:
                               subProcessorName:
                                 type: string
@@ -2552,7 +2552,7 @@ properties:
                                 description: <p>Details of the data sub processor's privacy contact.</p>
                                 type: object
                                 required:
-                                - contact
+                                  - contact
                                 properties:
                                   contact:
                                     type: array
@@ -2562,7 +2562,7 @@ properties:
                                         institution.</p>
                                       type: object
                                       required:
-                                      - name
+                                        - name
                                       properties:
                                         name:
                                           description: >-
@@ -2600,8 +2600,8 @@ properties:
                                                 non-European, ethnic or language groups and related to the display nature of a name.
                                                 </p>
                                               oneOf:
-                                              - const: 'Y'
-                                              - const: 'N'
+                                                - const: 'Y'
+                                                - const: 'N'
                                             preferredName:
                                               type: string
                                               description: <p>The given name preferred most by the person (as written). </p>
@@ -2621,10 +2621,10 @@ properties:
                                           description: <p>Address of the contact.</p>
                                           type: object
                                           required:
-                                          - city
-                                          - gCoreAddressType
-                                          - line1
-                                          - postalCode
+                                            - city
+                                            - gCoreAddressType
+                                            - line1
+                                            - postalCode
                                           properties:
                                             effectiveFromDate:
                                               type: string
@@ -2659,7 +2659,7 @@ properties:
                                           description: <p>List of Email elements.</p>
                                           type: object
                                           required:
-                                          - email
+                                            - email
                                           properties:
                                             email:
                                               type: array
@@ -2673,7 +2673,7 @@ properties:
                                           description: <p>List of PhoneNumber elements.</p>
                                           type: object
                                           required:
-                                          - phoneNumber
+                                            - phoneNumber
                                           properties:
                                             phoneNumber:
                                               type: array
@@ -2683,7 +2683,7 @@ properties:
                                                   StudentPersonal, StaffPersonal, etc.</p>
                                                 type: object
                                                 required:
-                                                - number
+                                                  - number
                                                 properties:
                                                   number:
                                                     type: string
@@ -2696,8 +2696,8 @@ properties:
                                                   listedStatus:
                                                     description: <p>Indicates whether or not the phone number is available to the public.</p>
                                                     oneOf:
-                                                    - const: 'Y'
-                                                    - const: 'N'
+                                                      - const: 'Y'
+                                                      - const: 'N'
                                                   preference:
                                                     type: integer
                                                     description: >-
@@ -2714,12 +2714,12 @@ properties:
     description: <p>This object contains information about privacy obligations.</p>
   provider:
     required:
-    - contextId
-    - providerName
-    - querySupport
-    - serviceName
-    - serviceType
-    - zoneId
+      - contextId
+      - providerName
+      - querySupport
+      - serviceName
+      - serviceType
+      - zoneId
     type: object
     properties:
       id:
@@ -2730,12 +2730,12 @@ properties:
       serviceType:
         type: string
         oneOf:
-        - const: UTILITY
-        - const: OBJECT
-        - const: FUNCTIONAL
-        - const: SERVICEPATH
-        - const: XQUERYTEMPLATE
-        - const: SERVICE
+          - const: UTILITY
+          - const: OBJECT
+          - const: FUNCTIONAL
+          - const: SERVICEPATH
+          - const: XQUERYTEMPLATE
+          - const: SERVICE
         description: <p>The generic type of Service being provided.</p>
       serviceName:
         type: string
@@ -2774,7 +2774,7 @@ properties:
           applicationProduct:
             type: object
             required:
-            - productName
+              - productName
             properties:
               vendorName:
                 type: string
@@ -2798,7 +2798,7 @@ properties:
           adapterProduct:
             type: object
             required:
-            - productName
+              - productName
             properties:
               vendorName:
                 type: string
@@ -2822,7 +2822,7 @@ properties:
       mimeTypes:
         type: object
         required:
-        - mediaType
+          - mediaType
         properties:
           mediaType:
             type: array
@@ -2831,7 +2831,7 @@ properties:
       endPoint:
         type: object
         required:
-        - location
+          - location
         properties:
           location:
             type: string
@@ -2840,7 +2840,7 @@ properties:
           properties:
             type: object
             required:
-            - property
+              - property
             properties:
               property:
                 type: array
@@ -2866,7 +2866,7 @@ properties:
       granted in the Consumer's Environment object, and is not guaranteed.</p>
   provisionRequest:
     required:
-    - provisionedZones
+      - provisionedZones
     type: object
     properties:
       id:
@@ -2876,22 +2876,22 @@ properties:
           attribute: true
       completionStatus:
         oneOf:
-        - const: ACCEPTED
-        - const: MIXED
-        - const: REJECTED
+          - const: ACCEPTED
+          - const: MIXED
+          - const: REJECTED
         xml:
           attribute: true
       provisionedZones:
         type: object
         required:
-        - provisionedZone
+          - provisionedZone
         properties:
           provisionedZone:
             type: array
             items:
               type: object
               required:
-              - id
+                - id
               properties:
                 id:
                   type: string
@@ -2901,27 +2901,27 @@ properties:
                 services:
                   type: object
                   required:
-                  - service
+                    - service
                   properties:
                     service:
                       type: array
                       items:
                         type: object
                         required:
-                        - contextId
-                        - name
-                        - rights
-                        - type
+                          - contextId
+                          - name
+                          - rights
+                          - type
                         properties:
                           type:
                             type: string
                             oneOf:
-                            - const: UTILITY
-                            - const: OBJECT
-                            - const: FUNCTIONAL
-                            - const: SERVICEPATH
-                            - const: XQUERYTEMPLATE
-                            - const: SERVICE
+                              - const: UTILITY
+                              - const: OBJECT
+                              - const: FUNCTIONAL
+                              - const: SERVICEPATH
+                              - const: XQUERYTEMPLATE
+                              - const: SERVICE
                             xml:
                               attribute: true
                           name:
@@ -2942,7 +2942,7 @@ properties:
                           rights:
                             type: object
                             required:
-                            - right
+                              - right
                             properties:
                               right:
                                 type: array
@@ -2952,20 +2952,20 @@ properties:
                                     value:
                                       type: string
                                       oneOf:
-                                      - const: APPROVED
-                                      - const: SUPPORTED
-                                      - const: REJECTED
-                                      - const: UNSUPPORTED
-                                      - const: REQUESTED
+                                        - const: APPROVED
+                                        - const: SUPPORTED
+                                        - const: REJECTED
+                                        - const: UNSUPPORTED
+                                        - const: REQUESTED
                                     type:
                                       description: <p>The type of the requested Access Right</p>
                                       oneOf:
-                                      - const: QUERY
-                                      - const: CREATE
-                                      - const: UPDATE
-                                      - const: DELETE
-                                      - const: SUBSCRIBE
-                                      - const: PROVIDE
+                                        - const: QUERY
+                                        - const: CREATE
+                                        - const: UPDATE
+                                        - const: DELETE
+                                        - const: SUBSCRIBE
+                                        - const: PROVIDE
                                       xml:
                                         attribute: true
         description: <p>A specific Zone defined for this environment.</p>
@@ -2986,8 +2986,8 @@ properties:
           <p>Determines, when no messages are queued, whether the Consumer will have to periodically reissue Polling Requests at
           timed intervals or can reissue a Polling Request immediately.</p>
         oneOf:
-        - const: IMMEDIATE
-        - const: LONG
+          - const: IMMEDIATE
+          - const: LONG
       ownerId:
         type: string
         pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[14][a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -3037,7 +3037,7 @@ properties:
     description: '<p>The Queues Service supports creation, deletion and querying of Queue (Instance) / Queue Messages Service pairs.</p>'
   state:
     required:
-    - type
+      - type
     type: object
     properties:
       id:
@@ -3048,13 +3048,13 @@ properties:
       type:
         type: string
         oneOf:
-        - const: NOTAPPLICABLE
-        - const: NOTSTARTED
-        - const: PENDING
-        - const: SKIPPED
-        - const: INPROGRESS
-        - const: COMPLETED
-        - const: FAILED
+          - const: NOTAPPLICABLE
+          - const: NOTSTARTED
+          - const: PENDING
+          - const: SKIPPED
+          - const: INPROGRESS
+          - const: COMPLETED
+          - const: FAILED
         description: <p>The type of this State object.</p>
       created:
         description: <p>The datetime this job was created.</p>
@@ -3071,10 +3071,10 @@ properties:
       for updating the phase status. NOTE: The "states" collection represented here is reserved for future capabilities.</p>
   subscription:
     required:
-    - queueId
-    - serviceName
-    - serviceType
-    - zoneId
+      - queueId
+      - serviceName
+      - serviceType
+      - zoneId
     type: object
     properties:
       id:
@@ -3092,12 +3092,12 @@ properties:
       serviceType:
         type: string
         oneOf:
-        - const: UTILITY
-        - const: OBJECT
-        - const: FUNCTIONAL
-        - const: SERVICEPATH
-        - const: XQUERYTEMPLATE
-        - const: SERVICE
+          - const: UTILITY
+          - const: OBJECT
+          - const: FUNCTIONAL
+          - const: SERVICEPATH
+          - const: XQUERYTEMPLATE
+          - const: SERVICE
         description: <p>The type of the Service</p>
       serviceName:
         type: string
@@ -3112,13 +3112,13 @@ properties:
       Providers.</p>
   updateResponse:
     required:
-    - updates
+      - updates
     type: object
     properties:
       updates:
         type: object
         required:
-        - update
+          - update
         properties:
           update:
             type: array
@@ -3135,9 +3135,9 @@ properties:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
@@ -3168,11 +3168,11 @@ properties:
       object. It contains a payload consisting of a single "updateResponse" element.</p>
   xquery:
     required:
-    - parameters
-    - returnType
-    - script
-    - status
-    - type
+      - parameters
+      - returnType
+      - script
+      - status
+      - type
     type: object
     properties:
       id:
@@ -3187,15 +3187,15 @@ properties:
       type:
         description: <p>Determines if the query may be sent to a data provider or if it requires the extended XQuery mechanism.</p>
         oneOf:
-        - const: SINGULAR
-        - const: FORMULA
-        - const: EXTENDED
+          - const: SINGULAR
+          - const: FORMULA
+          - const: EXTENDED
       status:
         description: <p>Communicates if the query has been inspected for data hiding and the results of that assessment.</p>
         oneOf:
-        - const: PENDING
-        - const: APPROVED
-        - const: DISALLOWED
+          - const: PENDING
+          - const: APPROVED
+          - const: DISALLOWED
       qualifier:
         type: string
         description: <p>If status is DISALLOWED this element optionally contains the reason.</p>
@@ -3213,7 +3213,7 @@ properties:
             items:
               type: object
               required:
-              - name
+                - name
               properties:
                 name:
                   type: string
@@ -3235,14 +3235,14 @@ properties:
                 enumerations:
                   type: object
                   required:
-                  - enumeration
+                    - enumeration
                   properties:
                     enumeration:
                       type: array
                       items:
                         type: object
                         required:
-                        - value
+                          - value
                         properties:
                           value:
                             type: string
@@ -3253,8 +3253,8 @@ properties:
                 range:
                   type: object
                   required:
-                  - end
-                  - start
+                    - end
+                    - start
                   properties:
                     start:
                       description: '<p>If a numeric range is used, this holds the inclusive starting value.</p>'
@@ -3293,7 +3293,7 @@ properties:
       properties:
         type: object
         required:
-        - property
+          - property
         properties:
           property:
             type: array
@@ -3315,13 +3315,13 @@ properties:
 definitions:
   deleteRequest:
     required:
-    - deletes
+      - deletes
     type: object
     properties:
       deletes:
         type: object
         required:
-        - delete
+          - delete
         properties:
           delete:
             type: array
@@ -3338,20 +3338,20 @@ definitions:
       Header Field value of methodOverride set to DELETE.</p>
   createResponse:
     required:
-    - creates
+      - creates
     type: object
     properties:
       creates:
         type: object
         required:
-        - create
+          - create
         properties:
           create:
             type: array
             items:
               type: object
               required:
-              - advisoryId
+                - advisoryId
               properties:
                 id:
                   type: string
@@ -3367,9 +3367,9 @@ definitions:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
@@ -3401,13 +3401,13 @@ definitions:
       that failed to be created is indicated by an error statusCode and a corresponding error payload.</p>
   deleteResponse:
     required:
-    - deletes
+      - deletes
     type: object
     properties:
       deletes:
         type: object
         required:
-        - delete
+          - delete
         properties:
           delete:
             type: array
@@ -3424,9 +3424,9 @@ definitions:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
@@ -3455,13 +3455,13 @@ definitions:
     description: <p>An HTTP Response with a status of 200 (success). It contains a payload consisting of a single "deleteResponse" element.</p>
   updateResponse:
     required:
-    - updates
+      - updates
     type: object
     properties:
       updates:
         type: object
         required:
-        - update
+          - update
         properties:
           update:
             type: array
@@ -3478,9 +3478,9 @@ definitions:
                     attribute: true
                 error:
                   required:
-                  - code
-                  - message
-                  - scope
+                    - code
+                    - message
+                    - scope
                   type: object
                   properties:
                     id:
