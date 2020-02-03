@@ -38,6 +38,7 @@ export class FieldModel {
   description: string;
   example?: string;
   deprecated: boolean;
+  deferred: boolean;
   in?: OpenAPIParameterLocation;
   kind: string;
   extensions?: Dict<any>;
@@ -69,6 +70,7 @@ export class FieldModel {
     this.description =
       info.description === undefined ? this.schema.description || '' : info.description;
     this.example = info.example || this.schema.example;
+    this.deferred = !!this.schema.deferred;
 
     if (serializationMime) {
       this.serializationMime = serializationMime;

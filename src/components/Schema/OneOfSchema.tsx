@@ -8,6 +8,8 @@ import {
 } from '../../common-elements/schema';
 import { SchemaModel } from '../../services/models';
 import { Schema, SchemaProps } from './Schema';
+import { RedocNormalizedOptions } from '../../services';
+import { OptionsContext } from '../OptionsProvider';
 
 export interface OneOfButtonProps {
   subSchema: SchemaModel;
@@ -33,6 +35,9 @@ export class OneOfButton extends React.Component<OneOfButtonProps> {
 
 @observer
 export class OneOfSchema extends React.Component<SchemaProps> {
+  static contextType = OptionsContext;
+  context: RedocNormalizedOptions;
+
   render() {
     const {
       schema: { oneOf },
@@ -42,6 +47,10 @@ export class OneOfSchema extends React.Component<SchemaProps> {
     if (oneOf === undefined) {
       return null;
     }
+    if (oneOf.length >= this.context.oneOffSuppressionThreshold) {
+      return null;
+    }
+
     return (
       <div>
         <OneOfLabel> {schema.oneOfType} </OneOfLabel>
@@ -52,6 +61,6 @@ export class OneOfSchema extends React.Component<SchemaProps> {
         </OneOfList>
         <Schema {...this.props} schema={oneOf[schema.activeOneOf]} />
       </div>
-    );
+    )
   }
 }

@@ -36,6 +36,9 @@ export interface RedocRawOptions {
   enumSkipQuotes?: boolean | string;
 
   expandDefaultServerVariables?: boolean;
+
+  defaultLanguage?: string;                   // What is the default language when working with title* and description* fields
+  oneOffSuppressionThreshold?: number;        // No of oneOf children, that means don't bother inserting the oneOf expansion
 }
 
 function argValueToBoolean(val?: string | boolean, defaultValue?: boolean): boolean {
@@ -160,6 +163,8 @@ export class RedocNormalizedOptions {
   enumSkipQuotes: boolean;
   hideSchemaTitles: boolean;
   payloadSampleIdx: number;
+  defaultLanguage: string;
+  oneOffSuppressionThreshold: number;
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
@@ -206,5 +211,7 @@ export class RedocNormalizedOptions {
     this.allowedMdComponents = raw.allowedMdComponents || {};
 
     this.expandDefaultServerVariables = argValueToBoolean(raw.expandDefaultServerVariables);
+    this.defaultLanguage = raw.defaultLanguage || '';
+    this.oneOffSuppressionThreshold = raw.oneOffSuppressionThreshold || 30;
   }
 }

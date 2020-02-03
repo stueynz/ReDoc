@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 
-import { OpenAPIExternalDocumentation, OpenAPISchema, Referenced } from '../../types';
+import { OpenAPIDictionary, OpenAPIExternalDocumentation, OpenAPISchema, Referenced } from '../../types';
 
 import { OpenAPIParser } from '../OpenAPIParser';
 import { RedocNormalizedOptions } from '../RedocNormalizedOptions';
@@ -29,7 +29,9 @@ export class SchemaModel {
   displayType: string;
   typePrefix: string = '';
   title: string;
+  titleStar: OpenAPIDictionary;
   description: string;
+  descriptionStar: OpenAPIDictionary;
   externalDocs?: OpenAPIExternalDocumentation;
 
   isPrimitive: boolean;
@@ -39,6 +41,7 @@ export class SchemaModel {
   displayFormat?: string;
   nullable: boolean;
   deprecated: boolean;
+  deferred: boolean;
   pattern?: string;
   example?: any;
   enum: any[];
@@ -84,6 +87,16 @@ export class SchemaModel {
     if (options.showExtensions) {
       this.extensions = extractExtensions(this.schema, options.showExtensions);
     }
+
+    // If we've got defaultLanguage and 'title*' or 'description*' translation maps, 
+    //    then set the title and description fields using the default language string
+    // PS:  We're overwriting any pre-existing 'title' or 'description'
+    if (options.defaultLanguage && this.titleStar[options.defaultLanguage]) {
+      this.title = this.titleStar[options.defaultLanguage];
+    }
+    if (options.defaultLanguage && this.descriptionStar[options.defaultLanguage]) {
+      this.description = this.descriptionStar[options.defaultLanguage];
+    }
   }
 
   /**
@@ -101,7 +114,9 @@ export class SchemaModel {
 
     this.title =
       schema.title || (isNamedDefinition(this.pointer) && JsonPointer.baseName(this.pointer)) || '';
+    this.titleStar = schema['title*'] || {};
     this.description = schema.description || '';
+    this.descriptionStar = schema['description*'] || {};
     this.type = schema.type || detectType(schema);
     this.format = schema.format;
     this.nullable = !!schema.nullable;
@@ -109,6 +124,7 @@ export class SchemaModel {
     this.const = schema.const;
     this.example = schema.example;
     this.deprecated = !!schema.deprecated;
+    this.deferred = !!schema['x-deferred'];
     this.pattern = schema.pattern;
     this.externalDocs = schema.externalDocs;
 

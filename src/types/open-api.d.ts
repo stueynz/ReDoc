@@ -108,12 +108,14 @@ export interface OpenAPISchema {
   properties?: { [name: string]: OpenAPISchema };
   additionalProperties?: boolean | OpenAPISchema;
   description?: string;
+  'description*'?: OpenAPIDictionary;
   default?: any;
   items?: OpenAPISchema;
   required?: string[];
   readOnly?: boolean;
   writeOnly?: boolean;
   deprecated?: boolean;
+  'x-deferred'?: boolean;
   format?: string;
   externalDocs?: OpenAPIExternalDocumentation;
   discriminator?: OpenAPIDiscriminator;
@@ -124,6 +126,7 @@ export interface OpenAPISchema {
   not?: OpenAPISchema;
 
   title?: string;
+  'title*'?: OpenAPIDictionary;
   multipleOf?: number;
   maximum?: number;
   exclusiveMaximum?: boolean;
@@ -268,4 +271,8 @@ export interface OpenAPIContact {
 export interface OpenAPILicense {
   name: string;
   url?: string;
+}
+
+export interface OpenAPIDictionary {
+  [index: string]: string;
 }
