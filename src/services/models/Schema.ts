@@ -79,6 +79,7 @@ export class SchemaModel {
     this.pointer = schemaOrRef.$ref || pointer || '';
     this.rawSchema = parser.deref(schemaOrRef);
     this.schema = parser.mergeAllOf(this.rawSchema, this.pointer, isChild);
+
     this.init(parser, isChild);
 
     parser.exitRef(schemaOrRef);
@@ -143,6 +144,13 @@ export class SchemaModel {
     if (!isChild && getDiscriminator(schema) !== undefined) {
       this.initDiscriminator(schema, parser);
       return;
+    } else if (
+      isChild &&
+      Array.isArray(schema.oneOf) &&
+      schema.oneOf.find(s => s.$ref === this.pointer)
+    ) {
+      // we hit allOf of the schema with the parent discriminator
+      delete schema.oneOf;
     }
 
     if (schema.oneOf !== undefined) {
@@ -248,7 +256,7 @@ export class SchemaModel {
           continue;
         }
         const name = JsonPointer.baseName(variant.$ref);
-        implicitInversedMapping[variant.$ref] = [name];
+        implicitInversedMapping[variant.$ref] = name;
       }
     }
 
@@ -260,6 +268,7 @@ export class SchemaModel {
       if (Array.isArray(explicitInversedMapping[$ref])) {
         explicitInversedMapping[$ref].push(name);
       } else {
+        // overrides implicit mapping here
         explicitInversedMapping[$ref] = [name];
       }
     }
