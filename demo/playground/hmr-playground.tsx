@@ -30,7 +30,7 @@ const options: RedocRawOptions = {
   nativeScrollbars: false,
   theme: { colors: { primary: { main: "#8abb2a" } } },
   menuToggle: true,
-  showExtensions: ['x-accessControl', 'x-validationRules', 'x-requiredFields', 'x-deferredFields'],
+  showExtensions: ['x-accessControl', 'x-validationRules', 'x-requiredFields', 'x-deferredFields', 'x-deferred'],
   defaultLanguage: 'en',
   oneOffSuppressionThreshold: 18
 };

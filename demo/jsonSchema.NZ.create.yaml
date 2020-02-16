@@ -12605,6 +12605,7 @@ properties:
                 description: '<p>The person''s place of birth - like village, town, city etc.</p>'
                 x-deferred: Until SMS ESR or later
               CountryOfBirth:
+                type: string
                 $ref: '#/definitions/ISO3166Country'
                 description: <p>The person's country of birth.</p>
                 x-deferred: Until SMS ESR or later
@@ -26244,8 +26245,8 @@ definitions:
           mi: Kāore i mārama te take o ngā whanonga whakararu a te ākonga
   ISO3166Country:
     type: string
-    title: 3166 Country
-    description: >-
+    title: ISO 3166 Country
+    description: |-
       <p>A country is a geopolitical entity recognised by the New Zealand government. The term country may include</p> <ul>
       <li>Independent countries recognised by the New Zealand Government</li> <li>Units that are recognised geographic areas</li>
       <li>administrative subdivisions of the United Kingdom</li> <li>overseas dependencies, external territories of independent
@@ -26764,3 +26765,4 @@ definitions:
         title: Zambia
       - const: ZWE
         title: Zimbabwe
+ 

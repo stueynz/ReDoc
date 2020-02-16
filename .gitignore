@@ -10,6 +10,7 @@
 .Trash-*
 
 demo/dist/
+demo/*
 
 ### Node ###
 # Logs
