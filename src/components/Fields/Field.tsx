@@ -47,7 +47,7 @@ export class Field extends React.Component<FieldProps> {
         <PropertyBullet />
         {name}
         <ShelfIcon direction={expanded ? 'down' : 'right'} />
-        {required && <RequiredLabel> required </RequiredLabel>}
+        {required && !deferred && <RequiredLabel> required </RequiredLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
       </ClickablePropertyNameCell>
     ) : (
