@@ -3,7 +3,9 @@
 This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-rc.20) has the following customisations:
 
 - [JSON Schema `const`](#json-schema-const)
+- [Long Enumerations](#long-enumerations)
 - [JSON Schema `x-deferred`](#json-schema-deferred-fields)
+- [JSON Schema `x-startDate` & `x-endDate`](#json-schema-effective-dates)
 - [Vendor Extensions Display](#vendor-extensions-display)
 - [Multi Lingual Annotations](#multi-lingual-annotations)
 - [New Configuration Options](#new-configuration-options)
@@ -70,13 +72,22 @@ Many of these customisations are controlled by new configuration options.
       title: Not Willing to Disclose
 ```
 
-Enumerations that have been constructed with `oneOf` and `const` can be very long.  Enumerations with  at least `options.oneOffSuppressionThreshold` (default 30) members will not be fully described;  They may however be fully described in external documentation, see `externalDocs`
+## Long Enumerations
+Enumerations that have been constructed with `oneOf` and `const` can be very long.  Long enumerations are initially displayed with only `options.oneOffSuppressionThreshold` (default 30) members. Clicking on the little red `more...` button will remove the truncation.
+
+ ![](../docs/images/truncated-enumerations-demo.gif)
 
 ## JSON Schema deferred fields
 - Fields in JSON Schema can be marked as `x-deferred` meaning the fields is deferred, but it will be used in the near future, although currently
   they are not to be used.  The `deferred` marking is displayed under the field name similar to the `required` marking.
 
+## JSON Schema effective dates
+- Fields in JSON Schema can be marked with `x-startDate` and `x-endDate` defining the dates from
+which and/or until which the field is valid.  This is intended to allow for code values to change
+within enumerations; but can be used to record arrival and deprecation of individual field values. 
 
+ ![](../docs/images/effective-dates-demo.gif)
+ 
 ## Vendor Extensions Display
 - Vendor extension fields (ones with `x-` prefix) are displayed as follows
   - If field is a JSON object, it is displayed in a code block, using [json-stringify-pretty-compact](https://www.npmjs.com/package/json-stringify-pretty-compact)
@@ -101,3 +112,5 @@ ISO standard language codes as keys; allowing for multiple versions of the same 
         en: Student is taught using Te Marautanga o Aotearoa.
         mi: E whakaakohia ana te ākonga mā Te Marautanga o Aotearoa.
 ```
+Such multi-lingual titles and descriptions are displayed thus:
+ ![](../docs/images/multi-lingual-annotations.gif)

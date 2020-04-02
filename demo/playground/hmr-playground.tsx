@@ -32,7 +32,7 @@ const options: RedocRawOptions = {
   menuToggle: true,
   showExtensions: ['x-accessControl', 'x-validationRules', 'x-requiredFields', 'x-deferredFields', 'x-deferred'],
   defaultLanguage: 'en',
-  oneOffSuppressionThreshold: 18
+  oneOffSuppressionThreshold: 6
 };
 
 async function init() {

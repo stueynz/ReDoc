@@ -39,6 +39,15 @@ export const OneOfButton = styled.li<{ active: boolean }>`
   }}
 `;
 
+export const OneOfButtonTruncated = styled.li`
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  color: ${props => props.theme.schema.requireLabelColor};
+  font-size: ${props => props.theme.schema.labelsTextSize};
+  cursor: pointer;
+`;
+
 export const ArrayOpenningLabel = styled.div`
   font-size: 0.9em;
   font-family: ${props => props.theme.typography.code.fontFamily};

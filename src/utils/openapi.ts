@@ -380,6 +380,27 @@ function humanizeMultipleOfConstraint(multipleOf: number | undefined): string | 
   return `decimal places <= ${strigifiedMultipleOf.split('.')[1].length}`;
 }
 
+function humanizeDateRange(
+  description: string,
+  start: Date | undefined,
+  end: Date | undefined
+): string | undefined {
+
+  if (start == undefined && end == undefined) {
+    return undefined;
+  }
+
+  if (end == undefined && start != undefined) {
+    return `${description} from ${start.toISOString().slice(0, 10)}`;
+  }
+
+  if (start == undefined && end != undefined) {
+    return `${description} until ${end.toISOString().slice(0, 10)}`;
+  }
+
+  return `${description} from ${start} until ${end}`;
+};
+
 function humanizeRangeConstraint(
   description: string,
   min: number | undefined,
@@ -442,6 +463,11 @@ export function humanizeConstraints(schema: OpenAPISchema): string[] {
     res.push(numberRange);
   }
 
+  // x-startDate and x-endDate are also constraints
+  const effectiveDates = humanizeDateRange('effective', schema['x-startDate'], schema['x-endDate']);
+  if (effectiveDates !== undefined) {
+    res.push(effectiveDates);
+  }
   return res;
 }
 

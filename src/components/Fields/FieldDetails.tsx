@@ -8,6 +8,7 @@ import {
   TypeName,
   TypePrefix,
   TypeTitle,
+  MultiLingualLabels
 } from '../../common-elements/fields';
 import { serializeParameterValue } from '../../utils/openapi';
 import { ExternalDocumentation } from '../ExternalDocumentation/ExternalDocumentation';
@@ -17,14 +18,16 @@ import { Extensions } from './Extensions';
 import { FieldProps } from './Field';
 import { ConstraintsView } from './FieldContstraints';
 import { FieldDetail } from './FieldDetail';
-
 import { Badge } from '../../common-elements/';
 
 import { l } from '../../services/Labels';
+import { RedocNormalizedOptions } from '../../services';
 import { OptionsContext } from '../OptionsProvider';
+import { isEmpty } from 'lodash';
 
 export class FieldDetails extends React.PureComponent<FieldProps> {
   static contextType = OptionsContext;
+  context: RedocNormalizedOptions;
   render() {
     const { showExamples, field, renderDiscriminatorSwitch } = this.props;
     const { enumSkipQuotes, hideSchemaTitles } = this.context;
@@ -50,7 +53,7 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
       <div>
         <div>
           <TypePrefix>{schema.typePrefix}</TypePrefix>
-          <TypeName>{schema.displayType}</TypeName>
+          {!schema.const && <TypeName>{schema.displayType}</TypeName>}
           {schema.displayFormat && (
             <TypeFormat>
               {' '}
@@ -59,8 +62,24 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
               &gt;{' '}
             </TypeFormat>
           )}
-          {schema.title && !hideSchemaTitles && <TypeTitle> ({schema.title}) </TypeTitle>}
+          {isEmpty(schema.titleStar) && schema.title && !hideSchemaTitles && <TypeTitle> ({schema.title}) </TypeTitle>}
+          {schema.const && <FieldDetail label={l('enumSingleValue') + ':'} value={schema.const} />}
           <ConstraintsView constraints={schema.constraints} />
+          {Object.keys(schema.titleStar).length > 0 && !hideSchemaTitles && (
+            <div>
+              <NullableLabel>Title:</NullableLabel>
+              <MultiLingualLabels>
+                {Object.keys(schema.titleStar).map(lang => (
+                  <li>
+                    <span>
+                      <NullableLabel> {lang} </NullableLabel>
+                      <TypeTitle> {schema.titleStar[lang]} </TypeTitle>
+                    </span>
+                  </li>
+                ))}
+              </MultiLingualLabels>
+            </div>
+          )}
           {schema.nullable && <NullableLabel> {l('nullable')} </NullableLabel>}
           {schema.pattern && <PatternLabel> {schema.pattern} </PatternLabel>}
           {schema.isCircular && <RecursiveLabel> {l('recursive')} </RecursiveLabel>}
@@ -72,13 +91,29 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
         )}
         <FieldDetail raw={rawDefault} label={l('default') + ':'} value={schema.default} />
         {!renderDiscriminatorSwitch && <EnumValues type={schema.type} values={schema.enum} />}{' '}
-        {schema.const && <FieldDetail label={l('enumSingleValue') + ':'} value={schema.const} />}
         {exampleField}
-        <div>
-          <Markdown compact={true} source={description} />
-        </div>
+        {isEmpty(schema.descriptionStar) &&
+          <div>
+            <Markdown compact={true} source={description} />
+          </div>
+        }
         {schema.externalDocs && (
           <ExternalDocumentation externalDocs={schema.externalDocs} compact={true} />
+        )}
+        {Object.keys(schema.descriptionStar).length > 0 && (
+          <div>
+            <NullableLabel>Description:</NullableLabel>
+            <MultiLingualLabels>
+              {Object.keys(schema.descriptionStar).map(lang => (
+                <li>
+                  <span>
+                    <NullableLabel> {lang} </NullableLabel>
+                    <TypeTitle> {schema.descriptionStar[lang]} </TypeTitle>
+                  </span>
+                </li>
+              ))}
+            </MultiLingualLabels>
+          </div>
         )}
         {<Extensions extensions={{ ...field.extensions, ...schema.extensions }} />}
         {(renderDiscriminatorSwitch && renderDiscriminatorSwitch(this.props)) || null}

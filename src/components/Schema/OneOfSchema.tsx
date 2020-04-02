@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import {
   OneOfButton as StyledOneOfButton,
+  OneOfButtonTruncated as OneOfButtonTruncated,
   OneOfLabel,
   OneOfList,
 } from '../../common-elements/schema';
@@ -19,8 +20,19 @@ export interface OneOfButtonProps {
 
 @observer
 export class OneOfButton extends React.Component<OneOfButtonProps> {
+  static contextType = OptionsContext;
+  context: RedocNormalizedOptions;
+
   render() {
     const { idx, schema, subSchema } = this.props;
+
+    if (this.props.schema.oneOfTruncated && idx > this.context.oneOffSuppressionThreshold)
+      return null;
+
+    // We're truncating the list .... to make things more compact
+    if (this.props.schema.oneOfTruncated && idx === this.context.oneOffSuppressionThreshold)
+      return (<OneOfButtonTruncated onClick={this.undoTruncate}> more... </OneOfButtonTruncated>)
+
     return (
       <StyledOneOfButton active={idx === schema.activeOneOf} onClick={this.activateOneOf}>
         {subSchema.title || subSchema.typePrefix + subSchema.displayType}
@@ -31,6 +43,10 @@ export class OneOfButton extends React.Component<OneOfButtonProps> {
   activateOneOf = () => {
     this.props.schema.activateOneOf(this.props.idx);
   };
+
+  undoTruncate = () => {
+    this.props.schema.truncateOneOf(false);
+  }
 }
 
 @observer
@@ -45,9 +61,6 @@ export class OneOfSchema extends React.Component<SchemaProps> {
     } = this.props;
 
     if (oneOf === undefined) {
-      return null;
-    }
-    if (oneOf.length >= this.context.oneOffSuppressionThreshold) {
       return null;
     }
 

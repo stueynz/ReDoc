@@ -45,6 +45,12 @@ export const RequiredLabel = styled(FieldLabel.withComponent('div'))`
   line-height: 1;
 `;
 
+export const MultiLingualLabels = styled(TypeTitle.withComponent('ul'))`
+  font-size: ${props => props.theme.schema.labelsTextSize};
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+`;
+
 export const RecursiveLabel = styled(FieldLabel)`
   color: ${({ theme }) => theme.colors.warning.main};
   font-size: 13px;
@@ -53,6 +59,7 @@ export const RecursiveLabel = styled(FieldLabel)`
 export const NullableLabel = styled(FieldLabel)`
   color: #3195a6;
   font-size: 13px;
+  font-weight: bold;
 `;
 
 export const PatternLabel = styled(FieldLabel)`
@@ -91,7 +98,7 @@ export const ExtensionValue = styled(ExampleValue)`
 export const ConstraintItem = styled(FieldLabel)`
   border-radius: 2px;
   ${({ theme }) => `
-    background-color: ${transparentize(0.95, theme.colors.primary.light)};
+    background-color: ${transparentize(0.95, theme.colors.primary.dark)};
     color: ${transparentize(0.1, theme.colors.primary.main)};
 
     margin: 0 ${theme.spacing.unit}px;

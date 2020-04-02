@@ -61,6 +61,9 @@ export class SchemaModel {
   @observable
   activeOneOf: number = 0;
 
+  @observable
+  oneOfTruncated: boolean = true;
+
   rawSchema: OpenAPISchema;
   schema: MergedOpenAPISchema;
   extensions?: Dict<any>;
@@ -107,6 +110,11 @@ export class SchemaModel {
   @action
   activateOneOf(idx: number) {
     this.activeOneOf = idx;
+  }
+
+  @action
+  truncateOneOf(val: boolean) {
+    this.oneOfTruncated = val;
   }
 
   init(parser: OpenAPIParser, isChild: boolean) {
@@ -195,7 +203,7 @@ export class SchemaModel {
       const merged = parser.mergeAllOf(derefVariant, this.pointer + '/oneOf/' + idx);
 
       // try to infer title
-      const title =
+      var title =
         isNamedDefinition(variant.$ref) && !merged.title
           ? JsonPointer.baseName(variant.$ref)
           : merged.title;
@@ -207,6 +215,7 @@ export class SchemaModel {
           // variant may already have allOf so merge it to not get overwritten
           ...merged,
           title,
+          description: merged.description,  // don't pull description down from parent
           allOf: [{ ...this.schema, oneOf: undefined, anyOf: undefined }],
         } as OpenAPISchema,
         this.pointer + '/oneOf/' + idx,
