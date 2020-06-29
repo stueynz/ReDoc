@@ -391,12 +391,21 @@ function humanizeDateRange(
   }
 
   if (end == undefined && start != undefined) {
-    return `${description} from ${start.toISOString().slice(0, 10)}`;
+    if (typeof start.toISOString === 'function')
+      return `${description} from ${start.toISOString().slice(0, 10)}`;
+    else
+      return `${description} from ${start.toString().slice(0, 10)}`;
   }
 
   if (start == undefined && end != undefined) {
-    return `${description} until ${end.toISOString().slice(0, 10)}`;
+    if (typeof end.toISOString === 'function')
+      return `${description} until ${end.toISOString().slice(0, 10)}`;
+    else
+      return `${description} until ${end.toString().slice(0, 10)}`;
   }
+
+  if (start && end)
+    return `${description} from ${start.toString().slice(0, 10)} until ${end.toString().slice(0, 10)}`;
 
   return `${description} from ${start} until ${end}`;
 };
