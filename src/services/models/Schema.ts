@@ -83,12 +83,13 @@ export class SchemaModel {
     this.rawSchema = parser.deref(schemaOrRef);
     this.schema = parser.mergeAllOf(this.rawSchema, this.pointer, isChild);
 
-    this.init(parser, isChild);
+    this.init(parser, isChild, parser.isRef(schemaOrRef));
 
     parser.exitRef(schemaOrRef);
     parser.exitParents(this.schema);
 
-    if (options.showExtensions) {
+    // Don't get extensions from the $ref original
+    if (options.showExtensions && !parser.isRef(schemaOrRef)) {
       this.extensions = extractExtensions(this.schema, options.showExtensions);
     }
 
@@ -107,6 +108,13 @@ export class SchemaModel {
 
       if (schemaOrRef.description)
         this.description = schemaOrRef.description;
+
+      if (schemaOrRef['x-deferred'])
+        this.deferred = !!schemaOrRef['x-deferred'];
+
+      if (options.showExtensions) {
+        this.extensions = extractExtensions(schemaOrRef, options.showExtensions);
+      }
     }
   }
 
@@ -124,7 +132,7 @@ export class SchemaModel {
     this.oneOfTruncated = val;
   }
 
-  init(parser: OpenAPIParser, isChild: boolean) {
+  init(parser: OpenAPIParser, isChild: boolean, isRef: boolean) {
     const schema = this.schema;
     this.isCircular = schema['x-circular-ref'];
 
@@ -140,7 +148,11 @@ export class SchemaModel {
     this.const = schema.const;
     this.example = schema.example;
     this.deprecated = !!schema.deprecated;
-    this.deferred = !!schema['x-deferred'];
+    if (!isRef) {
+      this.deferred = !!schema['x-deferred'];
+    } else {
+      this.deferred = false;
+    }
     this.pattern = schema.pattern;
     this.externalDocs = schema.externalDocs;
 
