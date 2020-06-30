@@ -74,7 +74,7 @@ export class SchemaModel {
    */
   constructor(
     parser: OpenAPIParser,
-    schemaOrRef: Referenced<OpenAPISchema>,
+    schemaOrRef: Referenced<OpenAPISchema> & { description?: string },
     pointer: string,
     private options: RedocNormalizedOptions,
     isChild: boolean = false,
@@ -100,6 +100,13 @@ export class SchemaModel {
     }
     if (options.defaultLanguage && this.descriptionStar[options.defaultLanguage]) {
       this.description = this.descriptionStar[options.defaultLanguage];
+    }
+
+    // If we've got a ref - we might have to 'overload' what we got from the $ref with sibling fields (as a kind of implied 'allOf')
+    if (parser.isRef(schemaOrRef)) {
+
+      if (schemaOrRef.description)
+        this.description = schemaOrRef.description;
     }
   }
 
