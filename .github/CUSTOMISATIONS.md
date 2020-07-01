@@ -9,6 +9,7 @@ This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-r
 - [Vendor Extensions Display](#vendor-extensions-display)
 - [Multi Lingual Annotations](#multi-lingual-annotations)
 - [New Configuration Options](#new-configuration-options)
+- [$ref implied allOf for Annotations](#ref-implied-allOf-for-annotations)
 
 ## Development
 see [CONTRIBUTING.md](CONTRIBUTING.md) to read the original guidelines on development of this [React](https://en.wikipedia.org/wiki/React_(web_framework)) application
@@ -114,3 +115,43 @@ ISO standard language codes as keys; allowing for multiple versions of the same 
 ```
 Such multi-lingual titles and descriptions are displayed thus:
  ![](../docs/images/multi-lingual-annotations.gif)
+
+
+ ## $ref Implied allOf for Annotations
+ Where keyword `$ref` is used to pick-up an element definition treat it as though there is an implied `allOf` so that a definition:
+
+ ``` JSON
+ NZCodeSetsGender:
+    type: string
+    title: Gender
+    description: >-
+      <p>A Person may identify as having a Gender (or Gender Identity). Biological sex and sexual orientation are related but different concepts. Sourced from Statistics NZ Standard for Gender Identity</p>
+    oneOf:
+    - const: '1'
+      title: Male
+    - const: '2'
+      title: Female
+    - const: '3'
+      title: Gender Diverse
+      description: But not further defined
+    - const: '31'
+      title: Transgender Male to Female
+      description: 'Can be rolled up to 3:Gender Diverse'
+    - const: '32'
+      title: Transgender Female to Male
+      description: 'Can be rolled up to 3:Gender Diverse'
+    - const: '9'
+      title: Not Willing to Disclose
+ ```
+
+ Can be used, and have the annotation field `description` adjusted:
+
+``` JSON
+ properties:
+    gender:
+      $ref: '#/definitions/NZCodeSetsGender'
+      description:  The Student's gender identity; defined from NZ Statistics standard for Gender Identity.
+```
+
+Field definitions tend to have somewhat generic descriptions that need to be more specifically
+described where the generic field is actually used.
