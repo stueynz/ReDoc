@@ -88,8 +88,8 @@ export class SchemaModel {
     parser.exitRef(schemaOrRef);
     parser.exitParents(this.schema);
 
-    // Don't get extensions from the $ref original
-    if (options.showExtensions && !parser.isRef(schemaOrRef)) {
+    // We'll need some extensions ... 
+    if (options.showExtensions) {
       this.extensions = extractExtensions(this.schema, options.showExtensions);
     }
 
@@ -111,10 +111,6 @@ export class SchemaModel {
 
       if (schemaOrRef['x-deferred'])
         this.deferred = !!schemaOrRef['x-deferred'];
-
-      if (options.showExtensions) {
-        this.extensions = extractExtensions(schemaOrRef, options.showExtensions);
-      }
     }
   }
 
