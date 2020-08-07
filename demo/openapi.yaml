@@ -2,8 +2,8 @@ openapi: 3.0.2
 info:
   version: v1
   title: Te Rito APIs
-  description: "<p>Derived from SIF Data Model (New Zealand) v3.1 (rc1)</p>
-    <p><strong>Release Date: </strong>01-Apr-2020</p>"
+  description: "<p>Derived from SIF Data Model (New Zealand) v3.1 (rc4)</p>
+    <p><strong>Release Date: </strong>07-Aug-2020</p>"
   contact:
     name: Ministry of Education
     url: http://www.terito.govt.nz
@@ -23,12 +23,201 @@ security:
       - TERITO_SMS
   - devt: []
 paths:
-  "/Providers/{ProviderRefId}":
-    get:
-      summary: Default operation to get a single Provider
-      operationId: getProvider
+  /StaffPersonal:
+    post:
+      summary: Default operation to create one or more StaffPersonal entries
+      security:
+        - sifDataObject:
+            - sysadmin
       parameters:
-        - name: ProviderRefId
+        - $ref: "#/components/parameters/syncOverride"
+      operationId: createStaffPersonals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                StaffPersonals:
+                  $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
+            example:
+              StaffPersonals:
+                StaffPersonal:
+                  - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
+                    StaffPersonalLocalId: ST-001
+                    PersonInfo:
+                      Name:
+                        FamilyName: Smith
+                        GivenName: Fred
+                        FullName: Fred Smith
+                        IsVerified: N
+                      Demographics:
+                        BirthDate: 1966-05-01
+                      EmailList:
+                        Email:
+                          - Type: PRIM
+                            Address: freddy@gmail.com
+                  - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001b3652
+                    StaffPersonalLocalId: ST-002
+                    PersonInfo:
+                      Name:
+                        FullName: Fred Jones
+                        IsVerified: N
+                      Demographics:
+                        BirthDate: 1966-05-01
+                      EmailList:
+                        Email:
+                          - Type: PRIM
+                            Address: fredJ@gmail.com
+          application/xml:
+            schema:
+              type: object
+              properties:
+                StaffPersonals:
+                  $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
+            example: >-
+              <StaffPersonals>
+                <StaffPersonal>
+                  <StaffPersonalRefId>D3E34F41-9D75-101A-8C3D-00AA001A1652</StaffPersonalRefId>
+                  <StaffPersonalLocalId>ST-001</StaffPersonalLocalId>
+                  <PersonInfo>
+                    <Name>
+                      <FamilyName>Smith</FamilyName>
+                      <GivenName>Fred</GivenName>
+                      <FullName>Fred Smith</FullName>
+                      <IsVerified>N</IsVerified>
+                    </Name>
+                    <Demographics>
+                      <BirthDate>1966-05-01</BirthDate>
+                    </Demographics>          
+                    <EmailList>
+                      <Email>
+                        <Type>PRIM</Type>
+                        <Address>freddy@gmail.com</Address>
+                      </Email>
+                    </EmailList>
+                  </PersonInfo>
+                </StaffPersonal>
+                <StaffPersonal>
+                  <StaffPersonalRefId>D3E34F41-9D75-101A-8C3D-00AA001b3652</StaffPersonalRefId>
+                  <StaffPersonalLocalId>ST-002</StaffPersonalLocalId>
+                  <PersonInfo>
+                    <Name>
+                      <FullName>Fred Jones</FullName>
+                      <IsVerified>N</IsVerified>
+                    </Name>
+                    <Demographics>
+                      <BirthDate>1966-05-01</BirthDate>
+                    </Demographics>          
+                    <EmailList>
+                      <Email>
+                        <Type>PRIM</Type>
+                        <Address>fredJ@gmail.com</Address>
+                      </Email>
+                    </EmailList>
+                  </PersonInfo>
+                </StaffPersonal>      
+              </StaffPersonals>
+      responses:
+        "201":
+          description: All objects created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  StaffPersonals:
+                    $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
+              example:
+                $ref: "#/paths/~1StaffPersonal/post/requestBody/content/application\
+                  ~1json/example"
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  StaffPersonals:
+                    $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
+              example:
+                $ref: "#/paths/~1StaffPersonal/post/requestBody/content/application\
+                  ~1xml/example"
+        4xx:
+          description: Some objects created, some objects failed (named array object)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - type: object
+                      title: Error
+                      properties:
+                        Error:
+                          $ref: "#/components/error"
+                    - type: object
+                      title: StaffPersonal
+                      properties:
+                        StaffPersonal:
+                          $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonal
+              example:
+                - StaffPersonal:
+                    StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
+                    StaffPersonalLocalId: ST-001
+                    PersonInfo:
+                      Name:
+                        FamilyName: Smith
+                        GivenName: Fred
+                        FullName: Fred Smith
+                        IsVerified: N
+                      Demographics:
+                        BirthDate: 1966-05-01
+                      EmailList:
+                        Email:
+                          - Type: PRIM
+                            Address: freddy@gmail.com
+                - Error:
+                    error: 1009
+                    when: 2020-07-16 20:00:46
+                    errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required
+                      field PersonInfo-Name-FamilyName (LastName) 'None'"
+                    localId: ST-002
+                    refId: null
+        5xx:
+          description: Some objects created, some objects failed (implied array object)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/components/error"
+                    - $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonal
+              example:
+                - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
+                  StaffPersonalLocalId: ST-001
+                  PersonInfo:
+                    Name:
+                      FamilyName: Smith
+                      GivenName: Fred
+                      FullName: Fred Smith
+                      IsVerified: N
+                    Demographics:
+                      BirthDate: 1966-05-01
+                    EmailList:
+                      Email:
+                        - Type: PRIM
+                          Address: freddy@gmail.com
+                - error: 1009
+                  when: 2020-07-16 20:00:46
+                  errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required
+                    field PersonInfo-Name-FamilyName (LastName) 'None'"
+                  localId: ST-002
+                  refId: null
+  "/Organisations/{OrganisationsRefId}":
+    get:
+      summary: Default operation to get a single Organisation
+      operationId: getOrganisation
+      parameters:
+        - name: OrganisationRefId
           in: path
           description: <p>The SIF GUID used by systems to identify the organisation.</p>
           required: true
@@ -42,179 +231,105 @@ paths:
               schema:
                 type: object
                 properties:
-                  Provider:
-                    $ref: ./jsonSchema.NZ.create.yaml#/properties/Provider
+                  Organisation:
+                    $ref: jsonSchema.NZ.create.yaml#/properties/Organisation
               example:
-                Provider:
-                  AddressList:
-                    Address:
-                      - Type: RU
-                        Role: PHY
-                        Street:
-                          Line1: 1175 Lake Ferry Rd
-                        Suburb: RD 1
-                        City: Martinborough
-                  CommunicationChannelList:
-                    Channel:
-                      - Notes: Attendance System (Self Service)
-                        Type: WEB
-                        Value: http://att.hogwarts.school.nz
-                      - Notes: School Website
-                        Type: WEB
-                        Value: http://www.hogwarts.school.nz
+                Organisation:
+                  AddressList: {}
+                  CommunicationChannelList: {}
                   ContactList:
                     Contact:
-                      - Name:
-                          FamilyName: Dumbledore
-                          GivenName: Albus
-                          FullName: Albus Dumbledore
-                        PositionTitle: Headmaster
-                        Role: PRI
-                        AddressList:
-                          Address:
-                            - Type: TH
-                              Role: PHY
-                              Street:
-                                Line1: 533 Hogwart's Way
-                              City: Hogsmead
-                              PostalCode: "7733"
-                      - Name:
-                          FamilyName: Hagrid
-                          GivenName: Rubeus
-                          FullName: Rubeus Hagrid
-                        PositionTitle: Gamekeeper
-                        Role: DIR
-                        AddressList:
-                          Address:
-                            - Type: TH
-                              Role: PHY
-                              Street:
-                                Line1: The Enchanted Wood
-                                Line2: 533 Hogwart's Way
-                              City: Hogsmead
-                              PostalCode: "7733"
-                  EducationRegion: TAIT
+                      Name:
+                        FamilyName: Dumbledore
+                        GivenName: Albus
+                        FullName: Albus Dumbledore
+                      PositionTitle: Lead School Headmaster
+                      Role: PRI
+                      AddressList:
+                        Address:
+                          Type: TH
+                          Role: PHY
+                          Street:
+                            Line1: 533 Hogwart's Way
+                          City: Hogsmead
+                          PostalCode: "7733"
+                      EmailList: {}
+                      PhoneNumberList: {}
                   EmailList:
                     Email:
                       - Type: PRIM
                         Address: stuart@gmail.com
-                  EntityOpen: 1652-04-01
-                  LocationList:
-                    Location:
-                      - Description: Only Campus
-                        Address:
-                          Type: RU
-                          Role: PHY
-                          Street:
-                            Line1: 1175 Lake Ferry Rd
-                          Suburb: RD 1
-                          City: Martinborough
-                          PostalCode: "5781"
-                        GridLocation:
-                          Latitude: -41.2814719
-                          Longitude: 175.3458472
-                        StatisticalAreaList:
-                          StatisticalArea:
-                            - SpatialUnitType: GE
-                              Code: "058"
-                            - SpatialUnitType: TA
-                              Code: "050"
-                            - SpatialUnitType: WA
-                              Code: "05003"
-                  Name: Hogwart's Area School
+                  LocationList: {}
+                  Name: Masterton (Whakaoriori) Kāhui Ako
                   PhoneNumberList:
                     PhoneNumber:
-                      - Notes: Attendance Office (Automated)
-                        Usage: SMS
-                        Type: WTE
-                        Number: (0274) 300 9991
-                      - Notes: Attendance Office
-                        Usage: INT
-                        Type: WTE
-                        Number: (04) 300 9992
-                      - Notes: School Secretary DDI
-                        Type: WTE
-                        Number: (04) 300 9993
-                  RelatedOrganisationList:
-                    RelatedOrganisation:
-                      - RefId: 0951bacf-fc88-4ed6-8113-11a6d6335c07
-                        LocalId: "99102"
-                        Name: Tai Tokerau
-                        ObjectType: Organisation
-                        StartDate: 2012-10-31
-                        Type: MOE
-                      - RefId: ac0871d9-6562-4209-ae86-abdb3661842b
-                        LocalId: "99204"
-                        Name: Masterton (Whakaoriori) Kāhui Ako
-                        ObjectType: Organisation
-                        StartDate: 2012-04-30
-                        Type: COL
-                  OperationalStatus: O
-                  Type: "21"
-                  ProviderRefId: D3E34B35-9D75-101A-8C3D-00AA001A1652
-                  ProviderLocalId: "01011234"
-                  MinistryOfEducationId: "9651"
-                  Authority: STATE
-                  SchoolService:
-                    CoEdStatus: COED
-                    Decile: 5
-                    NewEntrantPolicyList:
-                      EnactedPolicy:
-                        - EffectiveTo: 2018-12-31
-                          Policy: AE
-                        - EffectiveFrom: 2019-01-01
-                          Policy: CE
-                    DefinitionList:
-                      Definition:
-                        - SMBS
-                        - KKMA
-                        - SWBF
-                    SchoolYearList:
-                      SchoolYear:
-                        - YearLevel: 1
-                          Gender: C
-                        - YearLevel: 2
-                          Gender: C
-                        - YearLevel: 3
-                          Gender: C
-                        - YearLevel: 4
-                          Gender: C
-                        - YearLevel: 5
-                          Gender: C
-                        - YearLevel: 6
-                          Gender: C
-                        - YearLevel: 7
-                          Gender: C
-                        - YearLevel: 8
-                          Gender: C
-                        - YearLevel: 9
-                          Gender: F
-                        - YearLevel: 10
-                          Gender: F
-                        - YearLevel: 11
-                          Gender: F
-                        - YearLevel: 12
-                          Gender: F
-                        - YearLevel: 13
-                          Gender: F
+                      Notes: Lead School Secretary (Mobile)
+                      Type: MOB
+                      Number: (021) 300 999
+                  Type: 998
+                  OrganisationRefId: D3E34B35-9D75-101A-8C3D-00AA001A1652
+                  OrganisationLocalId: 99204
         default:
           description: Failed to retrieve object(s).
           content:
             application/json:
               schema:
                 type: object
+                title: error
+                required:
+                  - error
+                  - when
+                  - errorstr
+                additionalProperties: false
                 properties:
                   error:
-                    $ref: jsonSchema.IN.update.yaml#/properties/error
+                    type: integer
+                  when:
+                    type: string
+                    format: date-time
+                  errorstr:
+                    type: string
+                  refId:
+                    type: string
+                  localId:
+                    type: string
+              example:
+                error: 1009
+                when: 2020-07-16 20:00:46
+                errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required field
+                  PersonInfo-Name-FamilyName (LastName) 'None'"
             application/xml:
               schema:
                 type: object
+                title: error
+                required:
+                  - error
+                additionalProperties: false
                 properties:
                   error:
-                    $ref: jsonSchema.IN.update.yaml#/properties/error
+                    type: object
+                    required:
+                      - error
+                      - when
+                      - errorstr
+                    additionalProperties: false
+                    properties:
+                      error:
+                        type: integer
+                      when:
+                        type: string
+                        format: date-time
+                      errorstr:
+                        type: string
+              example: >-
+                <Error>
+                  <error>1009</error>
+                  <when>"2020-07-16 20:00:46</when>
+                  <errorstr>Bad field: PersonInfo-Name-FamilyName: missing required field PersonInfo-Name-FamilyName (LastName) 'None'</errorstr>
+                </Error>
   "/Enrolment/{EnrolmentRefId}":
     get:
-      summary: Default operation to get a ProviderStudentEnrolment
+      summary: Default operation to get a OrganisationStudentEnrolment
       operationId: getEnrolment
       parameters:
         - name: EnrolmentRefId
@@ -232,7 +347,7 @@ paths:
                 type: object
                 properties:
                   Enrolment:
-                    $ref: ./jsonSchema.NZ.create.yaml#/properties/StudentProviderEnrolment
+                    $ref: jsonSchema.NZ.create.yaml#/properties/StudentProviderEnrolment
               example:
                 StudentProviderEnrolment:
                   StudentProviderEnrolmentRefId: A8C3D3E3-4B35-9D75-101D-00AA001A1652
@@ -254,7 +369,8 @@ paths:
                         FundingYearLevel: 1
                         Curriculum: NZC
         default:
-          $ref: "#/paths/~1Providers~1%7BProviderRefId%7D/get/responses/default"
+          $ref: "#/paths/~1Organisations~1%7BOrganisationsRefId%7D/get/responses/de\
+            fault"
 components:
   securitySchemes:
     devt:
@@ -274,3 +390,41 @@ components:
         bearer token being the SIF Session Token
 
         that was returned by a call to the [SIF environment](#operation/createEnvironment) service.
+  error:
+    type: object
+    title: error
+    required:
+      - error
+      - when
+      - errorstr
+    additionalProperties: false
+    properties:
+      error:
+        type: integer
+      when:
+        type: string
+        format: date-time
+      errorstr:
+        type: string
+      refId:
+        type: string
+      localId:
+        type: string
+  parameters:
+    syncOverride:
+      name: x-http-method-override
+      in: header
+      description: Rather than CREATE records, treat this request as a SYNC request.
+      schema:
+        type: string
+        oneOf:
+          - enum:
+              - IncrSYNC
+            title: Incremental Synchronise Request
+            description: Add and Update records from the POST to ensure all records are
+              present in the repository
+          - enum:
+              - FullSYNC
+            title: Full Synchronise Request
+            description: Add, Update and **Delete** records to ensure that ONLY those
+              records are present in the repository

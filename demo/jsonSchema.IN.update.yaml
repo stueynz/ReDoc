@@ -399,31 +399,30 @@ properties:
     properties:
       type:
         type: string
-        oneOf:
-          - const: DIRECT
-          - const: BROKERED
         xml:
           attribute: true
-        enum:
-          - DIRECT
       id:
         type: string
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[14][a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         xml:
           attribute: true
+        x-deferred: Until Sessions are supported
       fingerprint:
         type: string
         description: >-
           <p>Unique environment identifier that can be safely shared with others. In order to not compromise security it MUST NOT
           match the environment's refId, sessionToken, userToken, or applicationKey.</p>
+        x-deferred: Until Sessions are supported
       sessionToken:
         type: string
+        x-deferred: Until Sessions are supported
       solutionId:
         type: string
         description: >-
           <p>The solution the Application would like to participate in. This is optional only, is advisory, and may be ignored by
           the Administrator. If processed it may be reflected in the URLs of the infrastructure services which are provided in the
           consumerEnvironment.</p>
+        x-deferred: Until Sessions are supported
       defaultZone:
         type: object
         properties:
@@ -456,20 +455,22 @@ properties:
           deploying organization. The Zone in which the Service is to be found always qualifies every Consumer request for any
           Provider Service. Each Service Consumer is assigned a "default" Zone at Registration time, which is used whenever a
           specific Zone is not explicitly included in one of its Provider Service Requests.</p>
+        x-deferred: Until Sessions are supported
       authenticationMethod:
         type: string
         description: <p>Defines the way in which the applicationKey can be used to enforce security.</p>
-        enum:
-          - Bearer
       instanceId:
         type: string
+        x-deferred: Until Sessions are supported
       userToken:
         type: string
+        x-deferred: Until Sessions are supported
       consumerName:
         type: string
         description: >-
           <p>A descriptive name for the application that will be readily identifiable to Zone Administrators if it becomes a
           Registered Consumer</p>
+        x-deferred: Until Sessions are supported
       applicationInfo:
         type: object
         properties:
@@ -479,26 +480,21 @@ properties:
               <p>An opaque (to the SIF standard) element which contains any required Consumer authentication information. The
               content of this element is site-specific. For a Direct Environment which accepts Consumer Registration Requests from a
               mobile application, this element might contain a combination of the User ID and Password.</p>
+            x-deferred: Until Sessions are supported
           supportedInfrastructureVersion:
             type: string
             description: <p>The version of the SIF infrastructure which the Consumer supports.</p>
-            enum:
-              - '3.3'
           dataModelNamespace:
             type: string
             format: uri
             description: >-
               <p>The namespace of the data payloads conveyed by this environment. Returns may be of a diffrent minor version.
               Utility payloads will be of the infrastructure namespace.</p>
-            enum:
-              - 'http://www.sifassociation.org/datamodel/nz/3.0'
           transport:
             type: string
             description: >-
               <p>The transport which the Consumer expects the infrastructure to use to interoperate with it. The default is
               whichever transport the create request was issued on</p>
-            enum:
-              - REST
           applicationProduct:
             type: object
             required:
@@ -522,6 +518,7 @@ properties:
                   <p>HTTP URL referencing an icon for graphical representation of the application/agent. Should range from 16x16
                   pixels to 128x128 pixels and be of an image MIME type commonly supported by Web browsers (e.g. PNG, JPEG,
                   GIF).</p>
+            x-deferred: Until Sessions are supported
           adapterProduct:
             type: object
             required:
@@ -545,6 +542,7 @@ properties:
                   <p>HTTP URL referencing an icon for graphical representation of the application/agent. Should range from 16x16
                   pixels to 128x128 pixels and be of an image MIME type commonly supported by Web browsers (e.g. PNG, JPEG,
                   GIF).</p>
+            x-deferred: Until Sessions are supported
         required:
           - supportedInfrastructureVersion
           - dataModelNamespace
@@ -661,17 +659,46 @@ properties:
                                       xml:
                                         attribute: true
     description: >-
-      <p>The Consumer Environment Service is the gateway to all other services. It scopes the Consumer's possible interactions with
-      the infrastructure and any Provider Services accessible from it. The Environment Service provides the set of (possibly
-      customized) information the Application needs to interoperate successfully.</p>
+      <p>The Environment Service describes the set of API endpoints that are available to the particular API client making the
+      request.</p>
+    x-deferredFields:
+      - environment.id
+      - environment.fingerprint
+      - environment.sessionToken
+      - environment.solutionId
+      - environment.defaultZone
+      - environment.instanceId
+      - environment.userToken
+      - environment.consumerName
+      - environment.applicationInfo.applicationKey
+      - environment.applicationInfo.applicationProduct
+      - environment.applicationInfo.adapterProduct
     required:
       - type
       - authenticationMethod
-      - consumerName
       - applicationInfo
-      - sessionToken
-      - infrastructureServices
-      - provisionedZones
+    x-validationRules:
+      allOf:
+        - properties:
+            type:
+              enum:
+                - DIRECT
+        - properties:
+            authenticationMethod:
+              enum:
+                - Bearer
+        - properties:
+            applicationInfo:
+              properties:
+                supportedInfrastructureVersion:
+                  enum:
+                    - '3.3'
+                dataModelNamespace:
+                  enum:
+                    - 'http://www.sifassociation.org/datamodel/nz/3.0'
+                transport:
+                  enum:
+                    - REST
   error:
     required:
       - code
