@@ -229,9 +229,9 @@ export class OpenAPIParser {
         };
       })
       .filter(child => child !== undefined) as Array<{
-      $ref: string | undefined;
-      schema: MergedOpenAPISchema;
-    }>;
+        $ref: string | undefined;
+        schema: MergedOpenAPISchema;
+      }>;
 
     for (const { $ref: subSchemaRef, schema: subSchema } of allOfSchemas) {
       if (
@@ -272,6 +272,21 @@ export class OpenAPIParser {
 
       if (subSchema.required !== undefined) {
         receiver.required = (receiver.required || []).concat(subSchema.required);
+      }
+
+      // merge (some) annotations as well
+      if (subSchema.title !== undefined) {
+        receiver.title = subSchema.title;
+      }
+      if (subSchema.description !== undefined) {
+        receiver.description = subSchema.description;
+      }
+
+      if (subSchema['title*'] != undefined) {
+        receiver['title*'] = subSchema['title*'];
+      }
+      if (subSchema['description*'] != undefined) {
+        receiver['description*'] = subSchema['description*'];
       }
 
       // merge rest of constraints
