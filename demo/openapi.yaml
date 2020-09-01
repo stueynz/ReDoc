@@ -2,8 +2,8 @@ openapi: 3.0.2
 info:
   version: v1
   title: Te Rito APIs
-  description: "<p>Derived from SIF Data Model (New Zealand) v3.1 (rc4)</p>
-    <p><strong>Release Date: </strong>07-Aug-2020</p>"
+  description: "<p>Derived from SIF Data Model (New Zealand) v3.1 (rc5)</p>
+    <p><strong>Release Date: </strong>01-Sep-2020</p>"
   contact:
     name: Ministry of Education
     url: http://www.terito.govt.nz
@@ -23,7 +23,7 @@ security:
       - TERITO_SMS
   - devt: []
 paths:
-  /StaffPersonal:
+  "/provider/{providerRefId}/StaffPersonal":
     post:
       summary: Default operation to create one or more StaffPersonal entries
       security:
@@ -55,8 +55,8 @@ paths:
                         BirthDate: 1966-05-01
                       EmailList:
                         Email:
-                          - Type: PRIM
-                            Address: freddy@gmail.com
+                          Type: PRIM
+                          Address: freddy@gmail.com
                   - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001b3652
                     StaffPersonalLocalId: ST-002
                     PersonInfo:
@@ -129,8 +129,8 @@ paths:
                   StaffPersonals:
                     $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
               example:
-                $ref: "#/paths/~1StaffPersonal/post/requestBody/content/application\
-                  ~1json/example"
+                $ref: "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
+                  requestBody/content/application~1json/example"
             application/xml:
               schema:
                 type: object
@@ -138,10 +138,10 @@ paths:
                   StaffPersonals:
                     $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
               example:
-                $ref: "#/paths/~1StaffPersonal/post/requestBody/content/application\
-                  ~1xml/example"
-        4xx:
-          description: Some objects created, some objects failed (named array object)
+                $ref: "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
+                  requestBody/content/application~1xml/example"
+        default:
+          description: Some objects created, some objects failed
           content:
             application/json:
               schema:
@@ -158,60 +158,6 @@ paths:
                       properties:
                         StaffPersonal:
                           $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonal
-              example:
-                - StaffPersonal:
-                    StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
-                    StaffPersonalLocalId: ST-001
-                    PersonInfo:
-                      Name:
-                        FamilyName: Smith
-                        GivenName: Fred
-                        FullName: Fred Smith
-                        IsVerified: N
-                      Demographics:
-                        BirthDate: 1966-05-01
-                      EmailList:
-                        Email:
-                          - Type: PRIM
-                            Address: freddy@gmail.com
-                - Error:
-                    error: 1009
-                    when: 2020-07-16 20:00:46
-                    errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required
-                      field PersonInfo-Name-FamilyName (LastName) 'None'"
-                    localId: ST-002
-                    refId: null
-        5xx:
-          description: Some objects created, some objects failed (implied array object)
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  anyOf:
-                    - $ref: "#/components/error"
-                    - $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonal
-              example:
-                - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
-                  StaffPersonalLocalId: ST-001
-                  PersonInfo:
-                    Name:
-                      FamilyName: Smith
-                      GivenName: Fred
-                      FullName: Fred Smith
-                      IsVerified: N
-                    Demographics:
-                      BirthDate: 1966-05-01
-                    EmailList:
-                      Email:
-                        - Type: PRIM
-                          Address: freddy@gmail.com
-                - error: 1009
-                  when: 2020-07-16 20:00:46
-                  errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required
-                    field PersonInfo-Name-FamilyName (LastName) 'None'"
-                  localId: ST-002
-                  refId: null
   "/Organisations/{OrganisationsRefId}":
     get:
       summary: Default operation to get a single Organisation
@@ -284,48 +230,58 @@ paths:
                 properties:
                   error:
                     type: integer
+                    description: Edsby defined error code
                   when:
                     type: string
                     format: date-time
+                    description: Date and Time of when the HTTP request was processed.
                   errorstr:
                     type: string
+                    description: Narrative text describing the error
                   refId:
                     type: string
+                    description: Data object refId of the object being created/updated
                   localId:
                     type: string
+                    description: Data object localId of the object being created/updated
               example:
                 error: 1009
                 when: 2020-07-16 20:00:46
                 errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required field
                   PersonInfo-Name-FamilyName (LastName) 'None'"
+                localId: ST-002
             application/xml:
               schema:
                 type: object
                 title: error
                 required:
                   - error
+                  - when
+                  - errorstr
                 additionalProperties: false
                 properties:
                   error:
-                    type: object
-                    required:
-                      - error
-                      - when
-                      - errorstr
-                    additionalProperties: false
-                    properties:
-                      error:
-                        type: integer
-                      when:
-                        type: string
-                        format: date-time
-                      errorstr:
-                        type: string
+                    type: integer
+                    description: Edsby defined error code
+                  when:
+                    type: string
+                    format: date-time
+                    description: Date and Time of when the HTTP request was processed.
+                  errorstr:
+                    type: string
+                    description: Narrative text describing the error
+                  refId:
+                    type: string
+                    description: Data object refId of the object being created/updated
+                  localId:
+                    type: string
+                    description: Data object localId of the object being created/updated
               example: >-
                 <Error>
                   <error>1009</error>
-                  <when>"2020-07-16 20:00:46</when>
+                  <when>2020-07-16 20:00:46</when>
                   <errorstr>Bad field: PersonInfo-Name-FamilyName: missing required field PersonInfo-Name-FamilyName (LastName) 'None'</errorstr>
+                  <localId>ST-002</localId>
                 </Error>
   "/Enrolment/{EnrolmentRefId}":
     get:
@@ -350,27 +306,303 @@ paths:
                     $ref: jsonSchema.NZ.create.yaml#/properties/StudentProviderEnrolment
               example:
                 StudentProviderEnrolment:
-                  StudentProviderEnrolmentRefId: A8C3D3E3-4B35-9D75-101D-00AA001A1652
-                  StudentProviderEnrolmentLocalId: 2004H102
+                  StudentProviderEnrolmentLocalId: 2020_8001_ST1000001
                   Student:
-                    RefId: d3e34b35-9d75-101a-8c3d-00aa001a1652
-                  StudentId: 851039McG
+                    LocalId: ST1000001
+                    NationalStudentNumber: 9001000001
                   Provider:
-                    RefId: d3e34b35-9d75-101a-8c3d-00aa001a1651
-                  EntryDate: 2018-01-29
+                    RefId: "8001"
+                  StudentId: ST1000001
+                  EntryDate: 2015-03-07
                   Status: ACT
+                  ECEEducationHistoryList:
+                    ECEType:
+                      - Type: EPG
                   SchoolEnrolmentList:
                     SchoolEnrolment:
-                      - SchoolCalendarYear: 2018
+                      - SchoolCalendarYear: 2020
+                        StartDate: 2020-01-27
                         MembershipType: BASE
-                        YearLevel: 11
+                        YearLevel: 6
                         FTE: 1
-                        FundingType: EX
-                        FundingYearLevel: 1
+                        FundingType: SF
+                        FundingYearLevel: 6
                         Curriculum: NZC
         default:
           $ref: "#/paths/~1Organisations~1%7BOrganisationsRefId%7D/get/responses/de\
             fault"
+  /Search:
+    get:
+      tags:
+        - Search
+      summary: Search for Staff and Students
+      description: >-
+        Search operation returning partial <a
+        href="#tag/StaffPersonal">StaffPersonal</a>
+
+        and <a href="#tag/StudentPersonal">StudentPersonal</a> objects.
+      operationId: search
+      security:
+        - sifDataObject:
+            - FIRST
+            - SUPS
+            - SMS
+      parameters:
+        - name: Te Rito Search Parameters
+          in: query
+          description: Standard Te Rito search request parameters
+          type: string
+          schema:
+            anyOf:
+              - name: pattern
+                title: pattern
+                type: string
+                in: query
+                description: Select objects where search index includes the given pattern
+                  pattern; `pattern=Sco*`
+                schema:
+                  type: string
+              - name: query
+                title: query
+                type: string
+                in: query
+                description: Use lucene query language to select objects;
+                schema:
+                  type: string
+              - name: objects
+                title: objects
+                type: csv
+                in: query
+                description: "Limit the search to only some data objects - oneOf:
+                  staffpersonal, studentpersonal"
+                schema:
+                  type: string
+              - name: max
+                title: max
+                in: query
+                description: Maximum items per page, default 10,000; `max=100`; applies to
+                  any call with repeated data
+                type: integer
+                minimum: 1
+                schema:
+                  type: integer
+                  minimum: 1
+              - name: page
+                title: page
+                in: query
+                description: Return nth page of results; default 0	`page=2`; applies to any
+                  call with repeated data
+                type: integer
+                minimum: 0
+                schema:
+                  type: integer
+                  minimum: 0
+              - name: human
+                title: human
+                in: query
+                description: For code set fields, translate code to human readable
+                  form;	`human=1`
+                enum:
+                  - 0
+                  - 1
+                schema:
+                  enum:
+                    - 0
+                    - 1
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Search:
+                    type: object
+                    properties:
+                      Summary:
+                        type: object
+                        description: Statistical summary of the search results returned.
+                        properties:
+                          Shown:
+                            type: integer
+                            description: Count of objects returned in this response
+                          More:
+                            type: integer
+                            description: Count of objects yet to be returned, because of
+                              `max` page size limit
+                      SearchResults:
+                        type: object
+                        description: The data objects found
+                        properties:
+                          Personals:
+                            type: object
+                            description: Staff &amp; Student Personal objects found
+                            properties:
+                              StaffPersonals:
+                                type: object
+                                description: StaffPersonal objects found
+                                properties:
+                                  StaffPersonal:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        Name:
+                                          type: string
+                                          description: Full name from the search index
+                                        Rank:
+                                          type: number
+                                          description: Degree of match to search criteria
+                                        Type:
+                                          type: string
+                                          description: Internal data type of object returned
+                                        ProviderName:
+                                          type: array
+                                          description: Array of strings, being the names of
+                                            the Providers associated with the
+                                            person
+                                          items:
+                                            type: string
+                                        ProviderRefId:
+                                          type: array
+                                          description: Array of strings, being the
+                                            ProviderRefIds of the Providers
+                                            associated with the person
+                                          items:
+                                            type: string
+                                        LocalId:
+                                          type: string
+                                          description: The StaffPersonalLocalId of the
+                                            staff member located
+                                        RefId:
+                                          type: string
+                                          description: The StaffPersonalRefId of the staff
+                                            member located
+                                        ESLPairwiseId:
+                                          type: string
+                                          description: Internal user provisioning
+                                            identifier for the staff member
+                                            located
+                                        PersonInfo:
+                                          type: object
+                                          description: Partial PersonInfo object
+                                          properties:
+                                            Name:
+                                              type: object
+                                              description: Person name, in pieces and
+                                                complete
+                                              properties:
+                                                Title:
+                                                  type: string
+                                                FamilyName:
+                                                  type: string
+                                                GivenName:
+                                                  type: string
+                                                MiddleName:
+                                                  type: string
+                                                PreferredGivenName:
+                                                  type: string
+                                                Suffix:
+                                                  type: string
+                                                FullName:
+                                                  type: string
+                                            Demographics:
+                                              type: object
+                                              properties:
+                                                BirthDate:
+                                                  type: string
+                                                  format: date
+                                            EmailList:
+                                              type: object
+                                              properties:
+                                                Email:
+                                                  type: object
+                                                  properties:
+                                                    Address:
+                                                      type: string
+                              StudentPersonals:
+                                type: object
+                                properties:
+                                  StudentPersonal:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        Name:
+                                          type: string
+                                          description: Full name from the search index
+                                        Rank:
+                                          type: number
+                                          description: Degree of match to search criteria
+                                        Type:
+                                          type: string
+                                          description: Internal data type of object returned
+                                        ProviderName:
+                                          type: array
+                                          description: Array of strings, being the names of
+                                            the Providers associated with the
+                                            person
+                                          items:
+                                            type: string
+                                        ProviderRefId:
+                                          type: array
+                                          description: Array of strings, being the
+                                            ProviderRefIds of the Providers
+                                            associated with the person
+                                          items:
+                                            type: string
+                                        LocalId:
+                                          type: string
+                                          description: The StudentPersonalLocalId of the
+                                            student located
+                                        RefId:
+                                          type: string
+                                          description: The StudentPersonalRefId of the
+                                            student located
+                                        NationalStudentNumber:
+                                          type: string
+                                          description: The National Student Number of the
+                                            student located
+                                        PersonInfo:
+                                          type: object
+                                          description: Partial PersonInfo object
+                                          properties:
+                                            Name:
+                                              type: object
+                                              description: Person name, in pieces and
+                                                complete
+                                              properties:
+                                                Title:
+                                                  type: string
+                                                FamilyName:
+                                                  type: string
+                                                GivenName:
+                                                  type: string
+                                                MiddleName:
+                                                  type: string
+                                                PreferredGivenName:
+                                                  type: string
+                                                Suffix:
+                                                  type: string
+                                                FullName:
+                                                  type: string
+                                            Demographics:
+                                              type: object
+                                              properties:
+                                                BirthDate:
+                                                  type: string
+                                                  format: date
+                                                Gender:
+                                                  $ref: jsonSchema.NZ.create.yaml#/definitions/NZCodeSetsGender
+                                            EmailList:
+                                              type: object
+                                              properties:
+                                                Email:
+                                                  type: object
+                                                  properties:
+                                                    Address:
+                                                      type: string
 components:
   securitySchemes:
     devt:
@@ -401,15 +633,20 @@ components:
     properties:
       error:
         type: integer
+        description: Edsby defined error code
       when:
         type: string
         format: date-time
+        description: Date and Time of when the HTTP request was processed.
       errorstr:
         type: string
+        description: Narrative text describing the error
       refId:
         type: string
+        description: Data object refId of the object being created/updated
       localId:
         type: string
+        description: Data object localId of the object being created/updated
   parameters:
     syncOverride:
       name: x-http-method-override
