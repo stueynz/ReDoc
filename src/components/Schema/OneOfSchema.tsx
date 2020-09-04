@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import {
   OneOfButton as StyledOneOfButton,
-  OneOfButtonTruncated as OneOfButtonTruncated,
+  OneOfButtonTruncated,
   OneOfLabel,
   OneOfList,
 } from '../../common-elements/schema';
@@ -26,12 +26,12 @@ export class OneOfButton extends React.Component<OneOfButtonProps> {
   render() {
     const { idx, schema, subSchema } = this.props;
 
-    if (this.props.schema.oneOfTruncated && idx > this.context.oneOffSuppressionThreshold)
+    if (this.props.schema.oneOfTruncated && idx > this.context.oneOfSuppressionThreshold)
       return null;
 
     // We're truncating the list .... to make things more compact
-    if (this.props.schema.oneOfTruncated && idx === this.context.oneOffSuppressionThreshold)
-      return (<OneOfButtonTruncated onClick={this.undoTruncate}> more... </OneOfButtonTruncated>)
+    if (this.props.schema.oneOfTruncated && idx === this.context.oneOfSuppressionThreshold)
+      return <OneOfButtonTruncated onClick={this.undoTruncate}> more... </OneOfButtonTruncated>;
 
     return (
       <StyledOneOfButton active={idx === schema.activeOneOf} onClick={this.activateOneOf}>
@@ -46,7 +46,7 @@ export class OneOfButton extends React.Component<OneOfButtonProps> {
 
   undoTruncate = () => {
     this.props.schema.truncateOneOf(false);
-  }
+  };
 }
 
 @observer
@@ -74,6 +74,6 @@ export class OneOfSchema extends React.Component<SchemaProps> {
         </OneOfList>
         <Schema {...this.props} schema={oneOf[schema.activeOneOf]} />
       </div>
-    )
+    );
   }
 }

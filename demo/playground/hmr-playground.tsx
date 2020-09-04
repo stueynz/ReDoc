@@ -38,7 +38,7 @@ const options: RedocRawOptions = {
     'x-deferred',
   ],
   defaultLanguage: 'en',
-  oneOffSuppressionThreshold: 6,
+  oneOfSuppressionThreshold: 6,
   parameterGroupCollapseThreshold: 6,
 };
 
