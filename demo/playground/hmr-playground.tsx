@@ -28,11 +28,18 @@ const specUrl =
 let store;
 const options: RedocRawOptions = {
   nativeScrollbars: false,
-  theme: { colors: { primary: { main: "#8abb2a" } } },
+  theme: { colors: { primary: { main: '#8abb2a' } } },
   menuToggle: true,
-  showExtensions: ['x-accessControl', 'x-validationRules', 'x-requiredFields', 'x-deferredFields', 'x-deferred'],
+  showExtensions: [
+    'x-accessControl',
+    'x-validationRules',
+    'x-requiredFields',
+    'x-deferredFields',
+    'x-deferred',
+  ],
   defaultLanguage: 'en',
-  oneOffSuppressionThreshold: 6
+  oneOffSuppressionThreshold: 6,
+  parameterGroupCollapseThreshold: 6,
 };
 
 async function init() {

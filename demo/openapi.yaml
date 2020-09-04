@@ -2,8 +2,8 @@ openapi: 3.0.2
 info:
   version: v1
   title: Te Rito APIs
-  description: "<p>Derived from SIF Data Model (New Zealand) v3.1 (rc5)</p>
-    <p><strong>Release Date: </strong>01-Sep-2020</p>"
+  description: "<p>Derived from SIF Data Model (New Zealand) v3.2 (rc2)</p>
+    <p><strong>Release Date: </strong>04-Sep-2020</p>"
   contact:
     name: Ministry of Education
     url: http://www.terito.govt.nz
@@ -158,11 +158,81 @@ paths:
                       properties:
                         StaffPersonal:
                           $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonal
-  "/Organisations/{OrganisationsRefId}":
+  "/Organisation/{OrganisationsRefId}":
     get:
       summary: Default operation to get a single Organisation
       operationId: getOrganisation
       parameters:
+        - name: fields
+          in: query
+          description: Return only specified fields	`fields=name,nid`
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Return nth page of results; default 0	`page=2`; applies to any call
+            with repeated data
+          schema:
+            type: integer
+            minimum: 0
+        - name: max
+          in: query
+          description: Maximum items per page, default 10,000; `max=100`; applies to any
+            call with repeated data
+          schema:
+            type: integer
+            minimum: 1
+        - name: unwrap
+          in: query
+          description: Remove top level wrapper from json results in single result
+            reponses;	`unwrap=1`
+          schema:
+            enum:
+              - 0
+              - 1
+              - 2
+        - name: human
+          in: query
+          description: For code set fields, translate code to human readable form;	`human=1`
+          schema:
+            enum:
+              - 0
+              - 1
+        - name: start
+          in: query
+          description: Include only items from start date;	`start=2017-01-01`
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: query
+          description: Include only items before end date;	`end=2017-08-31`
+          schema:
+            type: string
+            format: date
+        - name: sort
+          in: query
+          description: Sort results by specified field;	`sort=FamilyName`
+          schema:
+            type: string
+        - name: field
+          in: query
+          description: Field to filter on when used with **pattern**;	`field=FamilyName`
+          schema:
+            type: string
+        - name: pattern
+          in: query
+          description: Filter results using pattern on **field**; `pattern=Sco*`
+          schema:
+            type: string
+        - name: OrganisationRefId
+          in: path
+          description: The Ministry of Education Organisation Id of the Provider; used to
+            limit the scope of the API endpoint to a particular MoE
+            Organisation.
+          schema:
+            type: string
+            pattern: ^[1-9][0-9]{0,4}$
         - name: OrganisationRefId
           in: path
           description: <p>The SIF GUID used by systems to identify the organisation.</p>
@@ -329,8 +399,46 @@ paths:
                         FundingYearLevel: 6
                         Curriculum: NZC
         default:
-          $ref: "#/paths/~1Organisations~1%7BOrganisationsRefId%7D/get/responses/de\
-            fault"
+          $ref: "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
+            ault"
+  "/OrganisationRelationship/{OrganisationRelationshipRefId}":
+    get:
+      summary: Default operation to get a single OrganisationRelationship
+      operationId: getOrganisationReln
+      parameters:
+        - name: OrganisationRelationshipRefId
+          in: path
+          description: <p>The SIF GUID used by systems to identify the organisation.</p>
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Organisation:
+                    $ref: jsonSchema.NZ.create.yaml#/properties/OrganisationRelationship
+              example:
+                OrganisationRelationship:
+                  OrganisationRelationshipLocalId: 90100_8001
+                  Status: A
+                  RelationshipType: "34037"
+                  SourceOrganisation:
+                    RefId: "90100"
+                  SourceOrganisationRole: LSC
+                  SourceOrganisationAgreementDate: 2020-01-15
+                  RelatedOrganisation:
+                    RefId: "8001"
+                  RelatedOrganisationRole: "184000"
+                  RelatedOrganisationAgreementDate: 2020-01-15
+                  EffectiveDate: 2020-01-15
+        default:
+          $ref: "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
+            ault"
   /Search:
     get:
       tags:
@@ -348,67 +456,50 @@ paths:
             - SUPS
             - SMS
       parameters:
-        - name: Te Rito Search Parameters
-          in: query
-          description: Standard Te Rito search request parameters
+        - name: objects
+          title: objects
           type: string
+          in: query
+          description: "CSV delimited list of data object names; limits the search to only
+            some data objects: staffpersonal, studentpersonal"
           schema:
-            anyOf:
-              - name: pattern
-                title: pattern
-                type: string
-                in: query
-                description: Select objects where search index includes the given pattern
-                  pattern; `pattern=Sco*`
-                schema:
-                  type: string
-              - name: query
-                title: query
-                type: string
-                in: query
-                description: Use lucene query language to select objects;
-                schema:
-                  type: string
-              - name: objects
-                title: objects
-                type: csv
-                in: query
-                description: "Limit the search to only some data objects - oneOf:
-                  staffpersonal, studentpersonal"
-                schema:
-                  type: string
-              - name: max
-                title: max
-                in: query
-                description: Maximum items per page, default 10,000; `max=100`; applies to
-                  any call with repeated data
-                type: integer
-                minimum: 1
-                schema:
-                  type: integer
-                  minimum: 1
-              - name: page
-                title: page
-                in: query
-                description: Return nth page of results; default 0	`page=2`; applies to any
-                  call with repeated data
-                type: integer
-                minimum: 0
-                schema:
-                  type: integer
-                  minimum: 0
-              - name: human
-                title: human
-                in: query
-                description: For code set fields, translate code to human readable
-                  form;	`human=1`
-                enum:
-                  - 0
-                  - 1
-                schema:
-                  enum:
-                    - 0
-                    - 1
+            type: string
+        - name: pattern
+          title: pattern
+          type: string
+          in: query
+          description: Select objects where search index includes the given pattern
+            pattern; `pattern=Sco*`
+          schema:
+            type: string
+        - name: query
+          title: query
+          type: string
+          in: query
+          description: Use lucene query language to select objects;
+          schema:
+            type: string
+        - name: max
+          in: query
+          description: Maximum items per page, default 10,000; `max=100`; applies to any
+            call with repeated data
+          schema:
+            type: integer
+            minimum: 1
+        - name: page
+          in: query
+          description: Return nth page of results; default 0	`page=2`; applies to any call
+            with repeated data
+          schema:
+            type: integer
+            minimum: 0
+        - name: human
+          in: query
+          description: For code set fields, translate code to human readable form;	`human=1`
+          schema:
+            enum:
+              - 0
+              - 1
       responses:
         "200":
           description: successful operation
