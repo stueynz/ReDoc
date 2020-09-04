@@ -4,6 +4,7 @@ This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-r
 
 - [JSON Schema `const`](#json-schema-const)
 - [Long Enumerations](#long-enumerations)
+- [Large Parameter Groups](#large-parameter-groups)
 - [JSON Schema `x-deferred`](#json-schema-deferred-fields)
 - [JSON Schema `x-startDate` & `x-endDate`](#json-schema-effective-dates)
 - [Vendor Extensions Display](#vendor-extensions-display)
@@ -41,9 +42,12 @@ There are some other scripts available in the `scripts` section of the `package.
 ## New Configuration Options
 
 Many of these customisations are controlled by new configuration options.
-- `defaultLnaguage`  (default 'en') denotes which language key will be used when generating documentation; ie: title*['en] will be promoted into 'title' field.
-- `oneOffSuppressionThreshold` (default 30)  enumerations with at least this many members will not be fully described; as they are too long to be useful.  They may however be fully described in external documentation, see `externalDocs`
+- `defaultLanguage`  (default 'en') denotes which language key will be used when generating documentation; ie: title*['en] will be promoted into 'title' field.
 
+- `oneOfSuppressionThreshold` (default 30)  enumerations with at least this many members will not be fully described; as they are too long to be useful.  Click on the little red 'more...' to see all available values.  See [Long Enumerations](#long-enumerations)
+
+- `parameterGroupCollapseThreshold` (default 6) parameter groups with more than this many members
+will be collapsed on initial display.  Click on the group heading to expand.  See [Large Parameter Groups](#large-parameter-groups)
 
 
 ## JSON Schema Const
@@ -74,9 +78,15 @@ Many of these customisations are controlled by new configuration options.
 ```
 
 ## Long Enumerations
-Enumerations that have been constructed with `oneOf` and `const` can be very long.  Long enumerations are initially displayed with only `options.oneOffSuppressionThreshold` (default 30) members. Clicking on the little red `more...` button will remove the truncation.
+Enumerations that have been constructed with `oneOf` and `const` can be very long.  Long enumerations are initially displayed with only `options.oneOfSuppressionThreshold` (default 30) members. Clicking on the little red `more...` button will remove the truncation.
 
  ![](../docs/images/truncated-enumerations-demo.gif)
+
+## Large Parameter Groups
+Parameters groups (eg: Query Parmeters in complex APIs) with more than `options.parameterGroupCollapseThreshold` (default 6) members will be collapsed on initial load.
+Click on the heading to expand.
+
+ ![](../docs/images/collapsed-parameters-demo.gif)
 
 ## JSON Schema deferred fields
 - Fields in JSON Schema can be marked as `x-deferred` meaning the fields is deferred, but it will be used in the near future, although currently
