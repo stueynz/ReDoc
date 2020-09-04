@@ -37,8 +37,9 @@ export interface RedocRawOptions {
 
   expandDefaultServerVariables?: boolean;
 
-  defaultLanguage?: string;                   // What is the default language when working with title* and description* fields
-  oneOffSuppressionThreshold?: number;        // No of oneOf children, that means don't bother inserting the oneOf expansion
+  defaultLanguage?: string; // What is the default language when working with title* and description* fields
+  oneOfSuppressionThreshold?: number; // No of oneOf children, that means don't bother inserting the oneOf expansion
+  parameterGroupCollapseThreshold?: number; // No of parameters in a group that means collapse the group on initial display
 }
 
 function argValueToBoolean(val?: string | boolean, defaultValue?: boolean): boolean {
@@ -164,7 +165,9 @@ export class RedocNormalizedOptions {
   hideSchemaTitles: boolean;
   payloadSampleIdx: number;
   defaultLanguage: string;
-  oneOffSuppressionThreshold: number;
+
+  oneOfSuppressionThreshold: number;
+  parameterGroupCollapseThreshold: number;
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
@@ -212,6 +215,7 @@ export class RedocNormalizedOptions {
 
     this.expandDefaultServerVariables = argValueToBoolean(raw.expandDefaultServerVariables);
     this.defaultLanguage = raw.defaultLanguage || '';
-    this.oneOffSuppressionThreshold = raw.oneOffSuppressionThreshold || 30;
+    this.oneOfSuppressionThreshold = raw.oneOfSuppressionThreshold || 30;
+    this.parameterGroupCollapseThreshold = raw.parameterGroupCollapseThreshold || 6;
   }
 }
