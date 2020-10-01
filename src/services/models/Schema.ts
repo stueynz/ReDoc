@@ -59,7 +59,7 @@ export class SchemaModel {
 
   rawSchema: OpenAPISchema;
   schema: MergedOpenAPISchema;
-  extensions?: Dict<any>;
+  extensions?: Record<string, any>;
 
   /**
    * @param isChild if schema discriminator Child
@@ -129,7 +129,7 @@ export class SchemaModel {
     } else if (
       isChild &&
       Array.isArray(schema.oneOf) &&
-      schema.oneOf.find(s => s.$ref === this.pointer)
+      schema.oneOf.find((s) => s.$ref === this.pointer)
     ) {
       // we hit allOf of the schema with the parent discriminator
       delete schema.oneOf;
@@ -168,6 +168,10 @@ export class SchemaModel {
         this.enum = this.items.enum;
       }
     }
+
+    if (this.enum.length && this.options.sortEnumValuesAlphabetically) {
+      this.enum.sort();
+    }
   }
 
   private initOneOf(oneOf: OpenAPISchema[], parser: OpenAPIParser) {
@@ -203,17 +207,22 @@ export class SchemaModel {
       return schema;
     });
 
-    this.displayType = this.oneOf
-      .map(schema => {
-        let name =
-          schema.typePrefix +
-          (schema.title ? `${schema.title} (${schema.displayType})` : schema.displayType);
-        if (name.indexOf(' or ') > -1) {
-          name = `(${name})`;
-        }
-        return name;
-      })
-      .join(' or ');
+    if (this.options.simpleOneOfTypeLabel) {
+      const types = collectUniqueOneOfTypesDeep(this);
+      this.displayType = types.join(' or ');
+    } else {
+      this.displayType = this.oneOf
+        .map((schema) => {
+          let name =
+            schema.typePrefix +
+            (schema.title ? `${schema.title} (${schema.displayType})` : schema.displayType);
+          if (name.indexOf(' or ') > -1) {
+            name = `(${name})`;
+          }
+          return name;
+        })
+        .join(' or ');
+    }
   }
 
   private initDiscriminator(
@@ -240,6 +249,15 @@ export class SchemaModel {
     }
 
     const mapping = discriminator.mapping || {};
+
+    // Defines if the mapping is exhaustive. This avoids having references
+    // that overlap with the mapping entries
+    let isLimitedToMapping = discriminator['x-explicitMappingOnly'] || false;
+    // if there are no mappings, assume non-exhaustive
+    if (Object.keys(mapping).length === 0) {
+      isLimitedToMapping = false;
+    }
+
     const explicitInversedMapping = {};
     for (const name in mapping) {
       const $ref = mapping[name];
@@ -252,9 +270,11 @@ export class SchemaModel {
       }
     }
 
-    const inversedMapping = { ...implicitInversedMapping, ...explicitInversedMapping };
+    const inversedMapping = isLimitedToMapping
+      ? { ...explicitInversedMapping }
+      : { ...implicitInversedMapping, ...explicitInversedMapping };
 
-    const refs: Array<{ $ref; name }> = [];
+    let refs: Array<{ $ref; name }> = [];
 
     for (const $ref of Object.keys(inversedMapping)) {
       const names = inversedMapping[$ref];
@@ -265,6 +285,35 @@ export class SchemaModel {
       } else {
         refs.push({ $ref, name: names });
       }
+    }
+
+    // Make the listing respects the mapping
+    // in case a mapping is defined, the user usually wants to have the order shown
+    // as it was defined in the yaml. This will sort the names given the provided
+    // mapping (if provided).
+    // The logic is:
+    // - If a name is among the mapping, promote it to first
+    // - Names among the mapping are sorted by their order in the mapping
+    // - Names outside the mapping are sorted alphabetically
+    const names = Object.keys(mapping);
+    if (names.length !== 0) {
+      refs = refs.sort((left, right) => {
+        const indexLeft = names.indexOf(left.name);
+        const indexRight = names.indexOf(right.name);
+
+        if (indexLeft < 0 && indexRight < 0) {
+          // out of mapping, order by name
+          return left.name.localeCompare(right.name);
+        } else if (indexLeft < 0) {
+          // the right is found, so mapping wins
+          return 1;
+        } else if (indexRight < 0) {
+          // left wins as it's in mapping
+          return -1;
+        } else {
+          return indexLeft - indexRight;
+        }
+      });
     }
 
     this.oneOf = refs.map(({ $ref, name }) => {
@@ -284,7 +333,7 @@ function buildFields(
   const props = schema.properties || {};
   const additionalProps = schema.additionalProperties;
   const defaults = schema.default || {};
-  let fields = Object.keys(props || []).map(fieldName => {
+  let fields = Object.keys(props || []).map((fieldName) => {
     let field = props[fieldName];
 
     if (!field) {
@@ -344,4 +393,24 @@ function buildFields(
 
 function getDiscriminator(schema: OpenAPISchema): OpenAPISchema['discriminator'] {
   return schema.discriminator || schema['x-discriminator'];
+}
+
+function collectUniqueOneOfTypesDeep(schema: SchemaModel) {
+  const uniqueTypes = new Set();
+
+  function crawl(schema: SchemaModel) {
+    for (const oneOfType of schema.oneOf || []) {
+      if (oneOfType.oneOf) {
+        crawl(oneOfType);
+        continue;
+      }
+
+      if (oneOfType.type) {
+        uniqueTypes.add(oneOfType.type);
+      }
+    }
+  }
+
+  crawl(schema);
+  return Array.from(uniqueTypes.values());
 }
