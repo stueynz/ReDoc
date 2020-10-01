@@ -25,10 +25,126 @@ security:
 paths:
   "/provider/{providerRefId}/StaffPersonal":
     post:
+<<<<<<< HEAD
       summary: Default operation to create one or more StaffPersonal entries
       security:
         - sifDataObject:
             - sysadmin
+=======
+      tags:
+        - pet
+      summary: Add a new pet to the store
+      description: Add new pet to the store inventory.
+      operationId: addPet
+      responses:
+        '405':
+          description: Invalid input
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+      x-codeSamples:
+        - lang: 'C#'
+          source: |
+            PetStore.v1.Pet pet = new PetStore.v1.Pet();
+            pet.setApiKey("your api key");
+            pet.petType = PetStore.v1.Pet.TYPE_DOG;
+            pet.name = "Rex";
+            // set other fields
+            PetStoreResponse response = pet.create();
+            if (response.statusCode == HttpStatusCode.Created)
+            {
+              // Successfully created
+            }
+            else
+            {
+              // Something wrong -- check response for errors
+              Console.WriteLine(response.getRawResponse());
+            }
+        - lang: PHP
+          source: |
+            $form = new \PetStore\Entities\Pet();
+            $form->setPetType("Dog");
+            $form->setName("Rex");
+            // set other fields
+            try {
+                $pet = $client->pets()->create($form);
+            } catch (UnprocessableEntityException $e) {
+                var_dump($e->getErrors());
+            }
+      requestBody:
+        $ref: '#/components/requestBodies/Pet'
+    put:
+      tags:
+        - pet
+      summary: Update an existing pet
+      description: ''
+      operationId: updatePet
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+        '405':
+          description: Validation exception
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+      x-codeSamples:
+        - lang: PHP
+          source: |
+            $form = new \PetStore\Entities\Pet();
+            $form->setPetId(1);
+            $form->setPetType("Dog");
+            $form->setName("Rex");
+            // set other fields
+            try {
+                $pet = $client->pets()->update($form);
+            } catch (UnprocessableEntityException $e) {
+                var_dump($e->getErrors());
+            }
+      requestBody:
+        $ref: '#/components/requestBodies/Pet'
+  '/pet/{petId}':
+    get:
+      tags:
+        - pet
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+        - name: petId
+          in: path
+          description: ID of pet to return
+          required: true
+          deprecated: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+      security:
+        - api_key: []
+    post:
+      tags:
+        - pet
+      summary: Updates a pet in the store with form data
+      description: ''
+      operationId: updatePetWithForm
+>>>>>>> master
       parameters:
         - $ref: "#/components/parameters/syncOverride"
       operationId: createStaffPersonals
@@ -742,6 +858,7 @@ components:
     syncOverride:
       name: x-http-method-override
       in: header
+<<<<<<< HEAD
       description: Rather than CREATE records, treat this request as a SYNC request.
       schema:
         type: string
@@ -756,3 +873,28 @@ components:
             title: Full Synchronise Request
             description: Add, Update and **Delete** records to ensure that ONLY those
               records are present in the repository
+=======
+  examples:
+    Order:
+      value:
+        quantity: 1
+        shipDate: '2018-10-19T16:46:45Z'
+        status: placed
+        complete: false
+x-webhooks:
+  newPet:
+    post:
+      summary: New pet
+      description: Information about a new pet in the systems
+      operationId: newPet
+      tags: 
+        - pet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Pet"
+      responses:
+        "200":
+          description: Return a 200 status to indicate that the data was received successfully
+>>>>>>> master

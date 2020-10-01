@@ -25,6 +25,8 @@ import { RedocNormalizedOptions } from '../../services';
 import { OptionsContext } from '../OptionsProvider';
 import { isEmpty } from 'lodash';
 
+const MAX_PATTERN_LENGTH = 45;
+
 export class FieldDetails extends React.PureComponent<FieldProps> {
   static contextType = OptionsContext;
   context: RedocNormalizedOptions;
@@ -81,7 +83,9 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
             </div>
           )}
           {schema.nullable && <NullableLabel> {l('nullable')} </NullableLabel>}
-          {schema.pattern && <PatternLabel> {schema.pattern} </PatternLabel>}
+          {schema.pattern && schema.pattern.length < MAX_PATTERN_LENGTH && (
+            <PatternLabel> {schema.pattern} </PatternLabel>
+          )}
           {schema.isCircular && <RecursiveLabel> {l('recursive')} </RecursiveLabel>}
         </div>
         {deprecated && (

@@ -1,5 +1,5 @@
 import { dirname } from 'path';
-const URLtemplate = require('url-template');
+import * as URLtemplate from 'url-template';
 
 import { FieldModel } from '../services/models';
 import { OpenAPIParser } from '../services/OpenAPIParser';
@@ -383,9 +383,8 @@ function humanizeMultipleOfConstraint(multipleOf: number | undefined): string | 
 function humanizeDateRange(
   description: string,
   start: Date | undefined,
-  end: Date | undefined
+  end: Date | undefined,
 ): string | undefined {
-
   if (start == undefined && end == undefined) {
     return undefined;
   }
@@ -393,22 +392,22 @@ function humanizeDateRange(
   if (end == undefined && start != undefined) {
     if (typeof start.toISOString === 'function')
       return `${description} from ${start.toISOString().slice(0, 10)}`;
-    else
-      return `${description} from ${start.toString().slice(0, 10)}`;
+    else return `${description} from ${start.toString().slice(0, 10)}`;
   }
 
   if (start == undefined && end != undefined) {
     if (typeof end.toISOString === 'function')
       return `${description} until ${end.toISOString().slice(0, 10)}`;
-    else
-      return `${description} until ${end.toString().slice(0, 10)}`;
+    else return `${description} until ${end.toString().slice(0, 10)}`;
   }
 
   if (start && end)
-    return `${description} from ${start.toString().slice(0, 10)} until ${end.toString().slice(0, 10)}`;
+    return `${description} from ${start.toString().slice(0, 10)} until ${end
+      .toString()
+      .slice(0, 10)}`;
 
   return `${description} from ${start} until ${end}`;
-};
+}
 
 function humanizeRangeConstraint(
   description: string,
@@ -527,7 +526,9 @@ export function mergeParams(
   return pathParams.concat(operationParams);
 }
 
-export function mergeSimilarMediaTypes(types: Dict<OpenAPIMediaType>): Dict<OpenAPIMediaType> {
+export function mergeSimilarMediaTypes(
+  types: Record<string, OpenAPIMediaType>,
+): Record<string, OpenAPIMediaType> {
   const mergedTypes = {};
   Object.keys(types).forEach(name => {
     const mime = types[name];
@@ -545,7 +546,7 @@ export function mergeSimilarMediaTypes(types: Dict<OpenAPIMediaType>): Dict<Open
 
 export function expandDefaultServerVariables(url: string, variables: object = {}) {
   return url.replace(
-    /(?:{)(\w+)(?:})/g,
+    /(?:{)([\w-.]+)(?:})/g,
     (match, name) => (variables[name] && variables[name].default) || match,
   );
 }
@@ -604,7 +605,8 @@ export const shortenHTTPVerb = verb =>
 export function isRedocExtension(key: string): boolean {
   const redocExtensions = {
     'x-circular-ref': true,
-    'x-code-samples': true,
+    'x-code-samples': true, // deprecated
+    'x-codeSamples': true,
     'x-displayName': true,
     'x-examples': true,
     'x-ignoredHeaderParameters': true,
@@ -613,13 +615,17 @@ export function isRedocExtension(key: string): boolean {
     'x-servers': true,
     'x-tagGroups': true,
     'x-traitTag': true,
-    'x-additionalPropertiesName': true
+    'x-additionalPropertiesName': true,
+    'x-explicitMappingOnly': true,
   };
 
   return key in redocExtensions;
 }
 
-export function extractExtensions(obj: object, showExtensions: string[] | true): Dict<any> {
+export function extractExtensions(
+  obj: object,
+  showExtensions: string[] | true,
+): Record<string, any> {
   return Object.keys(obj)
     .filter(key => {
       if (showExtensions === true) {

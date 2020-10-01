@@ -28,6 +28,7 @@ const specUrl =
 let store;
 const options: RedocRawOptions = {
   nativeScrollbars: false,
+  maxDisplayedEnumValues: 3,
   theme: { colors: { primary: { main: '#8abb2a' } } },
   menuToggle: true,
   showExtensions: [

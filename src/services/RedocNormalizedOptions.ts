@@ -12,6 +12,7 @@ export interface RedocRawOptions {
   expandResponses?: string | 'all';
   requiredPropsFirst?: boolean | string;
   sortPropsAlphabetically?: boolean | string;
+  sortEnumValuesAlphabetically?: boolean | string;
   noAutoAuth?: boolean | string;
   nativeScrollbars?: boolean | string;
   pathInMiddlePanel?: boolean | string;
@@ -25,17 +26,21 @@ export interface RedocRawOptions {
   menuToggle?: boolean | string;
   jsonSampleExpandLevel?: number | string | 'all';
   hideSchemaTitles?: boolean | string;
+  simpleOneOfTypeLabel?: boolean | string;
   payloadSampleIdx?: number;
+  expandSingleSchemaField?: boolean | string;
 
   unstable_ignoreMimeParameters?: boolean;
 
-  allowedMdComponents?: Dict<MDXComponentMeta>;
+  allowedMdComponents?: Record<string, MDXComponentMeta>;
 
   labels?: LabelsConfigRaw;
 
   enumSkipQuotes?: boolean | string;
 
   expandDefaultServerVariables?: boolean;
+
+  maxDisplayedEnumValues?: number;
 
   defaultLanguage?: string; // What is the default language when working with title* and description* fields
   oneOfSuppressionThreshold?: number; // No of oneOf children, that means don't bother inserting the oneOf expansion
@@ -52,6 +57,16 @@ function argValueToBoolean(val?: string | boolean, defaultValue?: boolean): bool
   return val;
 }
 
+function argValueToNumber(value: number | string | undefined): number | undefined {
+  if (typeof value === 'string') {
+    return parseInt(value, 10);
+  }
+
+  if (typeof value === 'number') {
+    return value;
+  }
+}
+
 export class RedocNormalizedOptions {
   static normalizeExpandResponses(value: RedocRawOptions['expandResponses']) {
     if (value === 'all') {
@@ -59,7 +74,7 @@ export class RedocNormalizedOptions {
     }
     if (typeof value === 'string') {
       const res = {};
-      value.split(',').forEach(code => {
+      value.split(',').forEach((code) => {
         res[code.trim()] = true;
       });
       return res;
@@ -115,11 +130,18 @@ export class RedocNormalizedOptions {
       return true;
     }
 
-    if (typeof value === 'string') {
-      return value.split(',').map(ext => ext.trim());
+    if (typeof value !== 'string') {
+      return value;
     }
 
-    return value;
+    switch (value) {
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      default:
+        return value.split(',').map((ext) => ext.trim());
+    }
   }
 
   static normalizePayloadSampleIdx(value: RedocRawOptions['payloadSampleIdx']): number {
@@ -150,6 +172,7 @@ export class RedocNormalizedOptions {
   expandResponses: { [code: string]: boolean } | 'all';
   requiredPropsFirst: boolean;
   sortPropsAlphabetically: boolean;
+  sortEnumValuesAlphabetically: boolean;
   noAutoAuth: boolean;
   nativeScrollbars: boolean;
   pathInMiddlePanel: boolean;
@@ -163,21 +186,39 @@ export class RedocNormalizedOptions {
   jsonSampleExpandLevel: number;
   enumSkipQuotes: boolean;
   hideSchemaTitles: boolean;
+  simpleOneOfTypeLabel: boolean;
   payloadSampleIdx: number;
+<<<<<<< HEAD
   defaultLanguage: string;
 
   oneOfSuppressionThreshold: number;
   parameterGroupCollapseThreshold: number;
+=======
+  expandSingleSchemaField: boolean;
+>>>>>>> master
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
-  allowedMdComponents: Dict<MDXComponentMeta>;
+  allowedMdComponents: Record<string, MDXComponentMeta>;
 
   expandDefaultServerVariables: boolean;
+  maxDisplayedEnumValues?: number;
 
   constructor(raw: RedocRawOptions, defaults: RedocRawOptions = {}) {
     raw = { ...defaults, ...raw };
     const hook = raw.theme && raw.theme.extensionsHook;
+
+    // migrate from old theme
+    if ((raw.theme as any)?.menu && !raw.theme?.sidebar) {
+      console.warn('Theme setting "menu" is deprecated. Rename to "sidebar"');
+      raw.theme!.sidebar = (raw.theme as any).menu;
+    }
+
+    if ((raw.theme as any)?.codeSample && !raw.theme?.codeBlock) {
+      console.warn('Theme setting "codeSample" is deprecated. Rename to "codeBlock"');
+      raw.theme!.codeBlock = (raw.theme as any).codeSample;
+    }
+
     this.theme = resolveTheme(
       mergeObjects({} as any, defaultTheme, { ...raw.theme, extensionsHook: undefined }),
     );
@@ -192,6 +233,7 @@ export class RedocNormalizedOptions {
     this.expandResponses = RedocNormalizedOptions.normalizeExpandResponses(raw.expandResponses);
     this.requiredPropsFirst = argValueToBoolean(raw.requiredPropsFirst);
     this.sortPropsAlphabetically = argValueToBoolean(raw.sortPropsAlphabetically);
+    this.sortEnumValuesAlphabetically = argValueToBoolean(raw.sortEnumValuesAlphabetically);
     this.noAutoAuth = argValueToBoolean(raw.noAutoAuth);
     this.nativeScrollbars = argValueToBoolean(raw.nativeScrollbars);
     this.pathInMiddlePanel = argValueToBoolean(raw.pathInMiddlePanel);
@@ -207,15 +249,21 @@ export class RedocNormalizedOptions {
     );
     this.enumSkipQuotes = argValueToBoolean(raw.enumSkipQuotes);
     this.hideSchemaTitles = argValueToBoolean(raw.hideSchemaTitles);
+    this.simpleOneOfTypeLabel = argValueToBoolean(raw.simpleOneOfTypeLabel);
     this.payloadSampleIdx = RedocNormalizedOptions.normalizePayloadSampleIdx(raw.payloadSampleIdx);
+    this.expandSingleSchemaField = argValueToBoolean(raw.expandSingleSchemaField);
 
     this.unstable_ignoreMimeParameters = argValueToBoolean(raw.unstable_ignoreMimeParameters);
 
     this.allowedMdComponents = raw.allowedMdComponents || {};
 
     this.expandDefaultServerVariables = argValueToBoolean(raw.expandDefaultServerVariables);
+<<<<<<< HEAD
     this.defaultLanguage = raw.defaultLanguage || '';
     this.oneOfSuppressionThreshold = raw.oneOfSuppressionThreshold || 30;
     this.parameterGroupCollapseThreshold = raw.parameterGroupCollapseThreshold || 6;
+=======
+    this.maxDisplayedEnumValues = argValueToNumber(raw.maxDisplayedEnumValues);
+>>>>>>> master
   }
 }
