@@ -3,7 +3,7 @@ info:
   version: v1
   title: Te Rito APIs
   description: "<p>Derived from SIF Data Model (New Zealand) v3.2 (rc2)</p>
-    <p><strong>Release Date: </strong>04-Sep-2020</p>"
+    <p><strong>Release Date: </strong>02-Oct-2020</p>"
   contact:
     name: Ministry of Education
     url: http://www.terito.govt.nz
@@ -25,126 +25,10 @@ security:
 paths:
   "/provider/{providerRefId}/StaffPersonal":
     post:
-<<<<<<< HEAD
       summary: Default operation to create one or more StaffPersonal entries
       security:
         - sifDataObject:
             - sysadmin
-=======
-      tags:
-        - pet
-      summary: Add a new pet to the store
-      description: Add new pet to the store inventory.
-      operationId: addPet
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: 'C#'
-          source: |
-            PetStore.v1.Pet pet = new PetStore.v1.Pet();
-            pet.setApiKey("your api key");
-            pet.petType = PetStore.v1.Pet.TYPE_DOG;
-            pet.name = "Rex";
-            // set other fields
-            PetStoreResponse response = pet.create();
-            if (response.statusCode == HttpStatusCode.Created)
-            {
-              // Successfully created
-            }
-            else
-            {
-              // Something wrong -- check response for errors
-              Console.WriteLine(response.getRawResponse());
-            }
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->create($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-    put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      description: ''
-      operationId: updatePet
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetId(1);
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->update($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-  '/pet/{petId}':
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          deprecated: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-      security:
-        - api_key: []
-    post:
-      tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      description: ''
-      operationId: updatePetWithForm
->>>>>>> master
       parameters:
         - $ref: "#/components/parameters/syncOverride"
       operationId: createStaffPersonals
@@ -159,7 +43,7 @@ paths:
             example:
               StaffPersonals:
                 StaffPersonal:
-                  - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001A1652
+                  - StaffPersonalRefId: d3e34f41-9d75-101a-8c3d-00aa001a1652
                     StaffPersonalLocalId: ST-001
                     PersonInfo:
                       Name:
@@ -171,20 +55,8 @@ paths:
                         BirthDate: 1966-05-01
                       EmailList:
                         Email:
-                          Type: PRIM
-                          Address: freddy@gmail.com
-                  - StaffPersonalRefId: D3E34F41-9D75-101A-8C3D-00AA001b3652
-                    StaffPersonalLocalId: ST-002
-                    PersonInfo:
-                      Name:
-                        FullName: Fred Jones
-                        IsVerified: N
-                      Demographics:
-                        BirthDate: 1966-05-01
-                      EmailList:
-                        Email:
                           - Type: PRIM
-                            Address: fredJ@gmail.com
+                            Address: freddy@mailinator.com
           application/xml:
             schema:
               type: object
@@ -194,7 +66,7 @@ paths:
             example: >-
               <StaffPersonals>
                 <StaffPersonal>
-                  <StaffPersonalRefId>D3E34F41-9D75-101A-8C3D-00AA001A1652</StaffPersonalRefId>
+                  <StaffPersonalRefId>d3e34f41-9d75-101a-8c3d-00aa001a1652</StaffPersonalRefId>
                   <StaffPersonalLocalId>ST-001</StaffPersonalLocalId>
                   <PersonInfo>
                     <Name>
@@ -215,7 +87,7 @@ paths:
                   </PersonInfo>
                 </StaffPersonal>
                 <StaffPersonal>
-                  <StaffPersonalRefId>D3E34F41-9D75-101A-8C3D-00AA001b3652</StaffPersonalRefId>
+                  <StaffPersonalRefId>d3e34f41-9d75-101a-8c3d-00aa001b3652</StaffPersonalRefId>
                   <StaffPersonalLocalId>ST-002</StaffPersonalLocalId>
                   <PersonInfo>
                     <Name>
@@ -341,11 +213,12 @@ paths:
           description: Filter results using pattern on **field**; `pattern=Sco*`
           schema:
             type: string
-        - name: OrganisationRefId
-          in: path
-          description: The Ministry of Education Organisation Id of the Provider; used to
-            limit the scope of the API endpoint to a particular MoE
-            Organisation.
+        - name: X-Edsby-OrganisationRefId
+          in: header
+          required: true
+          description: <p>The Ministry of Education Organisation Id of the Provider(or
+            other Organisation); used to limit the scope of the API endpoint to
+            a particular MoE Organisation.</p>
           schema:
             type: string
             pattern: ^[1-9][0-9]{0,4}$
@@ -367,40 +240,156 @@ paths:
                     $ref: jsonSchema.NZ.create.yaml#/properties/Organisation
               example:
                 Organisation:
-                  AddressList: {}
-                  CommunicationChannelList: {}
+                  OrganisationRefId: "922"
+                  OrganisationLocalId: "42342"
+                  Name: Hogwart's Area School
+                  Authority: STATE
+                  SectorRole: "35003"
+                  Type: "10030"
+                  OperationalStatus: O
+                  EntityOpen: 1652-04-01
+                  EducationRegion: "12013"
+                  SpecialEducationDistrict: "182011"
+                  AddressList:
+                    Address:
+                      - Type: RU
+                        Role: PHY
+                        Line1: 1175 Lake Ferry Rd
+                        Suburb: RD 1
+                        City: Martinborough
+                  CommunicationChannelList:
+                    Channel:
+                      - Notes: Attendance System (Self Service)
+                        Type: WEB
+                        Value: http://att.hogwarts.school.nz
+                      - Notes: School Website
+                        Type: WEB
+                        Value: http://www.hogwarts.school.nz
                   ContactList:
                     Contact:
-                      Name:
-                        FamilyName: Dumbledore
-                        GivenName: Albus
-                        FullName: Albus Dumbledore
-                      PositionTitle: Lead School Headmaster
-                      Role: PRI
-                      AddressList:
-                        Address:
-                          Type: TH
-                          Role: PHY
-                          Street:
-                            Line1: 533 Hogwart's Way
-                          City: Hogsmead
-                          PostalCode: "7733"
-                      EmailList: {}
-                      PhoneNumberList: {}
+                      - Name:
+                          FamilyName: Dumbledore
+                          GivenName: Albus
+                          FullName: Albus Dumbledore
+                        PositionTitle: Headmaster
+                        Role: PRI
+                        AddressList:
+                          Address:
+                            - Type: TH
+                              Role: PHY
+                              Line1: 533 Hogwart's Way
+                              City: Hogsmead
+                              PostalCode: "7733"
+                        EmailList:
+                          Email: []
+                        PhoneNumberList:
+                          PhoneNumber: []
+                      - Name:
+                          FamilyName: Hagrid
+                          GivenName: Rubeus
+                          FullName: Rubeus Hagrid
+                        PositionTitle: Gamekeeper
+                        Role: DIR
+                        AddressList:
+                          Address:
+                            - Type: TH
+                              Role: PHY
+                              Line1: The Enchanted Wood
+                              Line2: 533 Hogwart's Way
+                              City: Hogsmead
+                              PostalCode: "7733"
+                        EmailList:
+                          Email: []
+                        PhoneNumberList:
+                          PhoneNumber: []
                   EmailList:
                     Email:
                       - Type: PRIM
                         Address: stuart@gmail.com
-                  LocationList: {}
-                  Name: Masterton (Whakaoriori) Kāhui Ako
+                  LocationList:
+                    Location:
+                      - Description: Only Campus
+                        Address:
+                          Type: RU
+                          Role: PHY
+                          Line1: 1175 Lake Ferry Rd
+                          Suburb: RD 1
+                          City: Martinborough
+                          PostalCode: "5781"
+                        GridLocation:
+                          Latitude: -41.2814719
+                          Longitude: 175.3458472
+                        StatisticalAreaList:
+                          StatisticalArea:
+                            - SpatialUnitType: GE
+                              Code: "058"
+                            - SpatialUnitType: TA
+                              Code: "050"
+                            - SpatialUnitType: WA
+                              Code: "05003"
                   PhoneNumberList:
                     PhoneNumber:
-                      Notes: Lead School Secretary (Mobile)
-                      Type: MOB
-                      Number: (021) 300 999
-                  Type: 998
-                  OrganisationRefId: D3E34B35-9D75-101A-8C3D-00AA001A1652
-                  OrganisationLocalId: 99204
+                      - Notes: Attendance Office (Automated)
+                        Usage: SMS
+                        Type: WTE
+                        Number: (0274) 300 9991
+                      - Notes: Attendance Office
+                        Usage: INT
+                        Type: WTE
+                        Number: (04) 300 9992
+                      - Notes: School Secretary DDI
+                        Type: WTE
+                        Number: (04) 300 9993
+                  SchoolService:
+                    CoEdStatus: COED
+                    Decile: 5
+                    NewEntrantPolicyList:
+                      EnactedPolicy:
+                        - EffectiveTo: 2018-12-31
+                          Policy: AE
+                        - EffectiveFrom: 2019-01-01
+                          Policy: CE
+                    SchoolYearList:
+                      SchoolYear:
+                        - YearLevel: 1
+                          FIRSTSchoolYearGenderId: 1001
+                          Gender: C
+                        - YearLevel: 2
+                          FIRSTSchoolYearGenderId: 1002
+                          Gender: C
+                        - YearLevel: 3
+                          FIRSTSchoolYearGenderId: 1003
+                          Gender: C
+                        - YearLevel: 4
+                          FIRSTSchoolYearGenderId: 1004
+                          Gender: C
+                        - YearLevel: 5
+                          FIRSTSchoolYearGenderId: 1005
+                          Gender: C
+                        - YearLevel: 6
+                          FIRSTSchoolYearGenderId: 1006
+                          Gender: C
+                        - YearLevel: 7
+                          FIRSTSchoolYearGenderId: 1007
+                          Gender: C
+                        - YearLevel: 8
+                          FIRSTSchoolYearGenderId: 1008
+                          Gender: C
+                        - YearLevel: 9
+                          FIRSTSchoolYearGenderId: 1009
+                          Gender: F
+                        - YearLevel: 10
+                          FIRSTSchoolYearGenderId: 1010
+                          Gender: F
+                        - YearLevel: 11
+                          FIRSTSchoolYearGenderId: 1011
+                          Gender: F
+                        - YearLevel: 12
+                          FIRSTSchoolYearGenderId: 1012
+                          Gender: F
+                        - YearLevel: 13
+                          FIRSTSchoolYearGenderId: 1013
+                          Gender: F
         default:
           description: Failed to retrieve object(s).
           content:
@@ -432,7 +421,7 @@ paths:
                     description: Data object localId of the object being created/updated
               example:
                 error: 1009
-                when: 2020-07-16 20:00:46
+                when: 2020-07-16T20:00:46.000Z
                 errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required field
                   PersonInfo-Name-FamilyName (LastName) 'None'"
                 localId: ST-002
@@ -465,7 +454,7 @@ paths:
               example: >-
                 <Error>
                   <error>1009</error>
-                  <when>2020-07-16 20:00:46</when>
+                  <when>2020-07-16T20:00:46.000Z</when>
                   <errorstr>Bad field: PersonInfo-Name-FamilyName: missing required field PersonInfo-Name-FamilyName (LastName) 'None'</errorstr>
                   <localId>ST-002</localId>
                 </Error>
@@ -573,24 +562,18 @@ paths:
             - SMS
       parameters:
         - name: objects
-          title: objects
-          type: string
           in: query
           description: "CSV delimited list of data object names; limits the search to only
             some data objects: staffpersonal, studentpersonal"
           schema:
             type: string
         - name: pattern
-          title: pattern
-          type: string
           in: query
           description: Select objects where search index includes the given pattern
             pattern; `pattern=Sco*`
           schema:
             type: string
         - name: query
-          title: query
-          type: string
           in: query
           description: Use lucene query language to select objects;
           schema:
@@ -616,6 +599,15 @@ paths:
             enum:
               - 0
               - 1
+        - name: Accept
+          in: header
+          description: Standard HTTP accept header, choose between JSON and XML for
+            response. Defaults to XML if this header is missing.
+          schema:
+            type: string
+            enum:
+              - application/json
+              - application/xml
       responses:
         "200":
           description: successful operation
@@ -810,6 +802,74 @@ paths:
                                                   properties:
                                                     Address:
                                                       type: string
+        "401":
+          description: Request didn't have Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                title: error
+                required:
+                  - error
+                  - when
+                  - errorstr
+                additionalProperties: false
+                properties:
+                  error:
+                    type: integer
+                    description: Edsby defined error code
+                  when:
+                    type: string
+                    format: date-time
+                    description: Date and Time of when the HTTP request was processed.
+                  errorstr:
+                    type: string
+                    description: Narrative text describing the error
+                  refId:
+                    type: string
+                    description: Data object refId of the object being created/updated
+                  localId:
+                    type: string
+                    description: Data object localId of the object being created/updated
+              example:
+                error: 401
+                when: 2020-07-16T20:00:46.000Z
+                errorstr: "Unauthorised request: Bearer token missing??"
+        "422":
+          description: Request didn't have Accept header
+          content:
+            application/json:
+              schema:
+                type: object
+                title: error
+                required:
+                  - error
+                  - when
+                  - errorstr
+                additionalProperties: false
+                properties:
+                  error:
+                    type: integer
+                    description: Edsby defined error code
+                  when:
+                    type: string
+                    format: date-time
+                    description: Date and Time of when the HTTP request was processed.
+                  errorstr:
+                    type: string
+                    description: Narrative text describing the error
+                  refId:
+                    type: string
+                    description: Data object refId of the object being created/updated
+                  localId:
+                    type: string
+                    description: Data object localId of the object being created/updated
+              example:
+                error: 422
+                when: 2020-07-16T20:00:46.000Z
+                errorstr: "Unprocessable request: Accept or X-Edsby-OrganisationRefId
+                  header missing?? Request body invalid??  Check sl-violations
+                  header in response"
 components:
   securitySchemes:
     devt:
@@ -858,7 +918,6 @@ components:
     syncOverride:
       name: x-http-method-override
       in: header
-<<<<<<< HEAD
       description: Rather than CREATE records, treat this request as a SYNC request.
       schema:
         type: string
@@ -873,28 +932,3 @@ components:
             title: Full Synchronise Request
             description: Add, Update and **Delete** records to ensure that ONLY those
               records are present in the repository
-=======
-  examples:
-    Order:
-      value:
-        quantity: 1
-        shipDate: '2018-10-19T16:46:45Z'
-        status: placed
-        complete: false
-x-webhooks:
-  newPet:
-    post:
-      summary: New pet
-      description: Information about a new pet in the systems
-      operationId: newPet
-      tags: 
-        - pet
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Pet"
-      responses:
-        "200":
-          description: Return a 200 status to indicate that the data was received successfully
->>>>>>> master

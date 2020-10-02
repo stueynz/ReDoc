@@ -8,7 +8,7 @@ import {
   TypeName,
   TypePrefix,
   TypeTitle,
-  MultiLingualLabels
+  MultiLingualLabels,
 } from '../../common-elements/fields';
 import { serializeParameterValue } from '../../utils/openapi';
 import { ExternalDocumentation } from '../ExternalDocumentation/ExternalDocumentation';
@@ -64,7 +64,9 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
               &gt;{' '}
             </TypeFormat>
           )}
-          {isEmpty(schema.titleStar) && schema.title && !hideSchemaTitles && <TypeTitle> ({schema.title}) </TypeTitle>}
+          {isEmpty(schema.titleStar) && schema.title && !hideSchemaTitles && (
+            <TypeTitle> ({schema.title}) </TypeTitle>
+          )}
           {schema.const && <FieldDetail label={l('enumSingleValue') + ':'} value={schema.const} />}
           <ConstraintsView constraints={schema.constraints} />
           {Object.keys(schema.titleStar).length > 0 && !hideSchemaTitles && (
@@ -72,7 +74,7 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
               <NullableLabel>Title:</NullableLabel>
               <MultiLingualLabels>
                 {Object.keys(schema.titleStar).map(lang => (
-                  <li>
+                  <li key={lang}>
                     <span>
                       <NullableLabel> {lang} </NullableLabel>
                       <TypeTitle> {schema.titleStar[lang]} </TypeTitle>
@@ -96,11 +98,11 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
         <FieldDetail raw={rawDefault} label={l('default') + ':'} value={schema.default} />
         {!renderDiscriminatorSwitch && <EnumValues type={schema.type} values={schema.enum} />}{' '}
         {exampleField}
-        {isEmpty(schema.descriptionStar) &&
+        {isEmpty(schema.descriptionStar) && (
           <div>
             <Markdown compact={true} source={description} />
           </div>
-        }
+        )}
         {schema.externalDocs && (
           <ExternalDocumentation externalDocs={schema.externalDocs} compact={true} />
         )}
@@ -109,7 +111,7 @@ export class FieldDetails extends React.PureComponent<FieldProps> {
             <NullableLabel>Description:</NullableLabel>
             <MultiLingualLabels>
               {Object.keys(schema.descriptionStar).map(lang => (
-                <li>
+                <li key={lang}>
                   <span>
                     <NullableLabel> {lang} </NullableLabel>
                     <TypeTitle> {schema.descriptionStar[lang]} </TypeTitle>

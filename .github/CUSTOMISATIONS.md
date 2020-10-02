@@ -1,6 +1,6 @@
 # MoE Customisations to ReDoc
 
-This fork of [ReDoc v2.0.0-rc.20](https://github.com/Redocly/redoc/tree/v2.0.0-rc.20) has the following customisations:
+This fork of [ReDoc v2.0.0-rc.40](https://github.com/Redocly/redoc/tree/v2.0.0-rc.40) has the following customisations:
 
 - [JSON Schema `const`](#json-schema-const)
 - [Long Enumerations](#long-enumerations)

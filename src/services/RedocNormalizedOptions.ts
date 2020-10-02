@@ -74,7 +74,7 @@ export class RedocNormalizedOptions {
     }
     if (typeof value === 'string') {
       const res = {};
-      value.split(',').forEach((code) => {
+      value.split(',').forEach(code => {
         res[code.trim()] = true;
       });
       return res;
@@ -140,7 +140,7 @@ export class RedocNormalizedOptions {
       case 'false':
         return false;
       default:
-        return value.split(',').map((ext) => ext.trim());
+        return value.split(',').map(ext => ext.trim());
     }
   }
 
@@ -188,14 +188,11 @@ export class RedocNormalizedOptions {
   hideSchemaTitles: boolean;
   simpleOneOfTypeLabel: boolean;
   payloadSampleIdx: number;
-<<<<<<< HEAD
   defaultLanguage: string;
 
   oneOfSuppressionThreshold: number;
   parameterGroupCollapseThreshold: number;
-=======
   expandSingleSchemaField: boolean;
->>>>>>> master
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
@@ -258,12 +255,9 @@ export class RedocNormalizedOptions {
     this.allowedMdComponents = raw.allowedMdComponents || {};
 
     this.expandDefaultServerVariables = argValueToBoolean(raw.expandDefaultServerVariables);
-<<<<<<< HEAD
     this.defaultLanguage = raw.defaultLanguage || '';
     this.oneOfSuppressionThreshold = raw.oneOfSuppressionThreshold || 30;
     this.parameterGroupCollapseThreshold = raw.parameterGroupCollapseThreshold || 6;
-=======
     this.maxDisplayedEnumValues = argValueToNumber(raw.maxDisplayedEnumValues);
->>>>>>> master
   }
 }
