@@ -62,7 +62,17 @@ export const StyledMarkdownBlock = styled(
 
   h2 {
     ${headerCommonMixin(2)};
-    color: ${props => props.theme.colors.text.primary};
+    color: ${props => props.theme.colors.primary.main};
+  }
+
+  h3 {
+    ${headerCommonMixin(3)};
+    color: ${props => props.theme.colors.primary.main};
+  }
+
+  h4 {
+    ${headerCommonMixin(4)};
+    color: ${props => props.theme.colors.primary.main};
   }
 
   code {

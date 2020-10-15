@@ -3,11 +3,317 @@ info:
   version: v1
   title: Te Rito APIs
   description: "<p>Derived from SIF Data Model (New Zealand) v3.2 (rc2)</p>
-    <p><strong>Release Date: </strong>02-Oct-2020</p>"
+    <p><strong>Release Date: </strong>15-Oct-2020</p>"
   contact:
     name: Ministry of Education
     url: http://www.terito.govt.nz
     email: terito@education.govt.nz
+tagGroups:
+  - name: Attendance
+    x-displayName: Schedule & Attendance Domain
+    tags:
+      - ScheduleAttendanceOverview
+      - Organisation
+      - Schedule
+      - ScheduleAcademicDay
+      - SchedulePeriod
+      - BellSchedule
+      - ScheduleTerm
+      - ScheduleHoliday
+      - ScheduleDate
+      - TeachingGroupEvent
+      - ScheduleEvent
+      - StudentPersonal
+      - StudentAttendanceTimeList
+      - StudentAttendanceSummary
+      - ProviderCourse
+tags:
+  - name: ScheduleAttendanceOverview
+    x-displayName: Schedule & Attendance Overview
+    description: >-
+      Here is some initial text about Schedules before the first heading
+
+
+      # Schedule
+
+
+      <p> The Schedule & Attendance domain describes the school's schedule or timetable, along with transactional entities that record a Student's
+          attendance at & absence from Providers. Attendance is recorded at either Day, Half-Day or individual Period granuality at the choice of the 
+          Provider; and reported back in summary form. </p>
+        <img src="domains/SIFNZ-LogicalModel-TimetableAttendanceDomain.png" usemap="#Schedule &amp; AttendanceMap" />
+        <map title="Schedule &amp; AttendanceMap" name="Schedule &amp; AttendanceMap">
+          <area title="StudentPersonal" shape="rect" coords="36,134,151,170" href="#tag/StudentPersonal" />
+          <area title="Organisation" shape="rect" coords="479,43,899,80" href="#tag/Organisation" />
+          <area title="StudentAttendanceTimeList" shape="rect" coords="183,189,342,223" href="#tag/StudentAttendanceTimeList" />
+          <area title="StudentAttendanceSummary" shape="rect" coords="306,139,466,175" href="#tag/StudentAttendanceSummary" />
+          <area title="TeachingGroup" shape="rect" coords="646,514,744,549" href="#tag/TeachingGroup" />
+          <area title="ProviderCourse" shape="rect" coords="647,607,743,655" href="#tag/ProviderCourse" />
+          <area title="Schedule" shape="rect" coords="756,163,845,200" href="#tag/Schedule" />
+          <area title="ScheduleTerm" shape="rect" coords="595,165,669,199" href="#tag/ScheduleTerm" />
+          <area title="ScheduleHoliday" shape="rect" coords="642,240,733,275" href="#tag/ScheduleHoliday" />
+          <area title="ScheduleDate" shape="rect" coords="436,223,523,279" href="#tag/ScheduleDate" />
+          <area title="ScheduleEvent" shape="rect" coords="296,307,386,342" href="#tag/ScheduleEvent" />
+          <area title="SchedulePeriod" shape="rect" coords="418,366,530,401" href="#tag/SchedulePeriod" />
+          <area title="ScheduleAcademicDay" shape="rect" coords="626,360,757,394" href="#tag/ScheduleAcademicDay" />
+          <area title="BellSchedule" shape="rect" coords="645,306,735,351" href="#tag/BellSchedule" />
+          <area title="TeachingGroupEvent" shape="rect" coords="635,406,748,464" href="#tag/TeachingGroupEvent" />
+        </map>
+
+
+      The `Schedule` data objects in the *SIF NZ Data Model* have been designed to be as flexible as possible to accomodate the myriad of different scheduling and timetabling structures used within the New Zealand Education System. 
+
+
+      A `Schedule` is set up by a `Provider` to manage their timetable for their students, teachers, curriculum and resources for part or all of a calendar year. 
+
+
+      ## 1.1 Structure
+
+
+      The structure of a `Schedule` is held in the `Schedule`, `ScheduleAcademicDay`, `SchedulePeriod` and `BellSchedule` data objects.
+
+
+      A `Schedule` can be considered a rotation of one or more ****academic days****, defined by a `ScheduleAcademicDay` object. Each academic day represents a regular structured day undertaken by the Provider. The academic days do not have to have the same structure across a single rotation through the `Schedule`. For instance, at Hogwarts High, days A through D are made of 5 periods, each of which are defined by `SchedulePeriod`, with day E only consisting of 4 periods with the last period longer than usual (2 hours instead of 1 hour; [Figure 1)](Figure1). Based on the two types of day structures (A - D and E), Hogwarts High can assign one of two Bell schedules, held within the `BellSchedule` data object. The Bell schedules defines when each Period of the `ScheduleAcademicDay` begins and ends, e.g. Period 1 is 9am - 9:50am, Period 2 is 10am - 10:50am etc.
+
+
+      ### Bell Periods
+
+
+      #### Small Bell Periods
+
+
+
+      Figure 1, below, depicts the period structure and bell schedules of the two academic days at Hogwarts High.
+
+
+
+      ![Hogwarts High Schedule for secondary school years](domains/Figure_1.png)
+
+      <div style="margin-top:-1.2em; text-align:center">**Figure 1: Hogwarts High Schedule for secondary school years**</div>
+
+
+
+      A school may have multiple schedule structures for different year groups. For instance, a composite school, the primary school level students may have a bell schedule different to that of secondary school students. The figure below depicts the bell schedule for the primary level students at Hogwarts High. 
+
+
+
+      ![Hogwarts High Schedule for primary school years](domains/Figure_2.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 2: Hogwarts High Schedule for primary school years**</div>
+
+
+      ## 1.2 Schedule Dates
+
+
+      Once defined, the structure of the `Schedule` can be mapped to a specific calendar date as needed. The mapping between academic days and schedule periods to specific calendar days is held in the `ScheduleDate` data object. Each calendar date is associated with an `ScheduleAcademicDay`, which in turn is associated with the relevant `BellSchedule` and `SchedulePeriod`.
+
+
+      For example, at Hogwarts High for the secondary level students, academic days A through D take place on Mondays to Thursdays and academic day E on Friday. If 1st of July is a Monday, which is academic day A, the bell schedule and period for academic day A apply to 1st of July. Similarly, the bell schedule and the periods for each of the academic days B to E can be applied to July 2nd to July 5th, as shown below. 
+
+
+
+      ![Hogwarts High Schedule for secondary years with Academic Days mapped to Schedule Periods](domains/Figure_3.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 3: Hogwarts High Schedule for secondary years with Academic Days mapped to Schedule Periods**</div>
+
+
+
+      ![Hogwarts High Schedule for primary years with Academic Days mapped to Schedule Periods](domains/Figure_4.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 4: Hogwarts High Schedule for primary years with Academic Days mapped to Schedule Periods**</div>
+
+
+
+      ## 1.3 Teaching Group Timetable
+
+
+      The `Schedule` can also be used to create the providers' teaching groups. A teaching group's timetable specifies the `ScheduleAcademicDay` it is being taught on, the curriculum being taught, who is being taught and the assigned location. This timetable is held in the `TeachingGroupEvent` data object.
+
+
+      Below is an example of the timetable for Hogwart’s Purple teaching group, which follows the Secondary level `Schedule`, and Yellow teaching group which follows the Primary level `Schedule`.
+
+
+
+      ![Hogwarts High Secondary Teaching Group Purple Schedule](domains/Figure_5.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 5: Hogwarts High Secondary Teaching Group Purple Schedule**</div>
+
+
+
+      ![Hogwarts High Primary Teaching Group Purple Schedule](domains/Figure_6.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 6:Hogwarts High Primary Teaching Group Purple Schedule**</div>
+
+
+
+      Combining the teaching group’s timetable from TeachingGroupEvent data object with the calendar date assignment data from ScheduleDate data object gives a completed date specific timetable for Hogwarts Purple teaching groups.
+
+
+
+      ![Hogwarts High Secondary Teaching Group Purple Schedule with Dates](domains/Figure_7.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 7: Hogwarts High Secondary Teaching Group Purple Schedule with Dates**</div>
+
+
+
+      It works just as well for simple timetables, with straightforward morning and afternoon periods as per the Yellow teaching group example below.
+
+
+
+      ![Hogwarts High Primary Teaching Group Purple Schedule with Dates](domains/Figure_8.png)
+
+      <div style="margin-top:-1.2em; text-align:center;">**Figure 8: Hogwarts High Primary Teaching Group Purple Schedule with Dates**</div>
+
+
+      ## 1.4 Schedule Variations
+
+
+      Every so often one off events will occur that may impact the regular schedule. These one off events could impact a single date, or multiple dates, or one or more periods on a specific date(s). 
+
+
+      Events that impact the schedule are held in the `ScheduleEvent` data object. There is a set of predefined standardised effects an event may have.  (Note: Providers also have the ability to create custom effects if one of the standardised options does not provide the required change to the schedule. See Below.) 
+
+
+      **List of Standardised Effects**  
+
+
+      |Standard Effect|Effect Description|
+
+      |---|---|
+
+      |No effect|This event has no effect on the school schedule, but it is recorded for display purposes.|
+
+      |Pause Schedule Rotation|Temporarily suspend the academic day rotation until a subsequent Resume Schedule event occurs.|
+
+      |Resume Schedule Rotation|Resume an academic day rotation previously suspended (paused).|
+
+      |Renumber Schedule Rotation|This event causes the day rotation on the school calendar to be renumbered, starting with any academic days specified as impacted by the event. If any terms are included in the event, those terms are activated effective on the start date of this event.|
+
+      |Insert Day into Rotation|This event causes an insertion in the normal academic day rotation of the schedule. That is to say, any academic days and bell schedules specified in the event are scheduled for the duration of this event, or school is cancelled if there are no academic days specified; after the event ends the academic day rotation resumes from the point at which it was interrupted, e.g. if it was Day 1 before the event, then it will be Day 2 afterwards.|
+
+      |Displace Day in Rotation|This event causes a displacement in the normal academic day rotation of the schedule. That is to say, any academic days or bell schedules specified in the event are scheduled for the duration of this event, or school is cancelled if there are no academic days values specified; after the event ends the rotation resumes from the point it would be at had the event not occurred, e.g. if it was Day 1 before the event, and the event duration was 1 day, then it will be Day 3 afterwards; Day 2 is overwritten by the event.|
+
+      |Start Term|Start one or more terms specified on this date without changing the academic day rotation.|
+
+      |End Term|This event terminates the academic schedule for any term(s) specified in the event. A term is required to be specified when using this schedule effect. Note that events take effect at midnight on the start date, so the designated term(s) do not occur on the actual day of the End Schedule event (i.e. the day prior to the event's start date is the last day the term(s) are in session).|
+
+      |Customised Schedule Effect|This event creates a custom effect; with an arbitrary, customised set of periods and matching bell schedule replacing the normal rotation days of the schedule for the duration of the event.|
+
+      |Cancel Schedule Day|Cancel one or more specified Academic Days that would normally occur on this date. This is generally used to partially cancel the school schedule at the event start time on the event date. To fully cancel school on event date, use either the "insert" or "displace" schedule effect.|
+
+      |Additional Day|Set one or more additional academic days to apply to this calendar date in addition to those defined in the schedule. This can also be used to schedule school on a day on which it would not normally occur, such as a weekend. As a convenience, a list of academic days to remove from the calendar while this event is in effect can also be supplied.|
+
+
+
+
+      ## 1.5 Terms and Holidays
+
+
+      Other additional information about the schedule can also be captured such as the length of the terms a provider follows, or what holidays are recognised in the area that the provider lives and whether or not they impact the schedule, e.g. public holidays, regional holidays. 
+
+
+      These are stored in ScheduleTerm and ScheduleHoliday respectively.
+    externalDocs:
+      description: Schedule & Attendance Domain in SIF NZ Data Model
+      url: http://specification.sifassociation.org/Implementation/NZ/---vn-------rel---/DomainMap.html#Domain__ScheduleAttendance
+  - name: Organisation
+    x-displayName: Organisation
+    description:
+      Operations on recognised Education Provider entities (ECEs, Schools &
+      Tertiary  Education Institutions), Communities (Kāhui Ako, Learning
+      Support Clusters, etc.), and  others (Teen Parent Units, Activity Centres.
+      etc.)
+  - name: Schedule
+    x-displayName: Timetable Schedule
+    description: Operations for maintaining a timetable Schedule for the given Provider.
+  - name: ScheduleAcademicDay
+    x-displayName: Schedule Academic Day
+    description:
+      <p>Operations on a academic day, that makes up all or part of  a <a
+      href="#tag/Schedule">Schedule</a> for the given Provider.</p> <p>An
+      academic day represents a structured day that reoccurs consistently e.g.
+      Day A has  five periods that occurs Mon-Wed and Day B has four periods and
+      occurs Thurs-Fri.</p>
+  - name: SchedulePeriod
+    x-displayName: Schedule Period
+    description: Operations on a Period that takes place within one or more  <a
+      href="AcademicDay">AcademicDays</a> in a particular <a
+      href="#tag/Schedule">Schedule</a> at the given Provider.
+  - name: BellSchedule
+    x-displayName: Bell Schedule
+    description: >-
+      <p>Operations maintaining a bell schedule within the scope of a
+      particular  <a href="#tag/Schedule">Schedule</a> at the given Provider.
+
+      Each bell schedule defines the start and end times of the <a href="#tag/SchedulePeriod">SchedulePeriods</a> of a particular  <a href="#tag/ScheduleAcademicDay">ScheduleAcademicDay</a>.</p>
+
+      <p>These bell schedules are assigned to the calendar dates on which the school is in session using <a href="#tag/ScheduleDate">ScheduleDate</a> in order to specify the school timetable (schedule) on those dates.</p>
+
+      <p>These bell schedules should generally only be used to define standard day types. Exception days (unless they repeat multiple times and follow a common template) are defined using <a href="#tag/ScheduleEvent">ScheduleEvent</a>.</p>
+  - name: ScheduleTerm
+    x-displayName: Schedule Term
+    description:
+      <p>Operations maintaining the structure of a particular school term,
+      semester, or calendar year for a particular timetable <a
+      href="#tag/Schedule">Schedule</a> at the given Provider.</p>
+  - name: ScheduleHoliday
+    x-displayName: Schedule Holiday
+    description:
+      <p>Operations maintaining the detail of a particular holiday that impacts
+      upon the  <a href="#tag/Schedule">Schedule</a> of the given Provider.</p>
+  - name: ScheduleDate
+    x-displayName: Schedule Date
+    description: <p>Operations maintaining the detail of which timetable <a
+      href="#tag/Schedule">Schedule</a>, <a
+      href="#tag/ScheduleAcademicDay">ScheduleAcademicDay</a> and <a
+      href="#tag/BellSchedule">BellSchedule</a> are being followed on a specific
+      calendar date at the given Provider.</p>
+  - name: TeachingGroupEvent
+    x-displayName: Teaching Group Event
+    description:
+      <p>Operations maintaining the details of an individual timetable cell in a
+      particular timetable <a href="#tag/Schedule">Schedule</a> at the given
+      Provider.</p> <p>TeachingGroupEvent records that a particular <a
+      href="#tag/TeachingGroup">TeachingGroup</a> meets during a particular
+      timetable  <a href="#tag/ShedulePeriod">Period</a> on the particular
+      timetable <a href="#tag/ScheduleAcademicDay">ScheduleAcadmicDay</a>,
+      multiple records are used when the TeachingGroup meets more than once in
+      the Shedule.</p>
+  - name: ScheduleEvent
+    x-displayName: Schedule Event
+    description: >-
+      <p>Operations maintaining an event that has an impact on the given
+      timetable <a href="#tag/Schedule">Schedule</a> at the given Provider.</p>
+
+      <p>Schedule events record one-off events that cause the normal structure of a timetable Schedule to be adjusted.  e.g.  Snow days closing the school, shortened days which require a special BellSchedule, etc.</p>
+  - name: StudentPersonal
+    x-displayName: Student Personal
+    description: >-
+      <p>Operations on the personal contact and demographic information of one
+      or more students.</p>
+
+      <p>Searching for student personal record by name, email address (or whatever) is available via <a href="#tag/Search">Te Rito Search API</a>.</p>
+
+      <p>Non personal information relating to the student's enrolment in Providers is stored in the <a href="#tag/StudentProviderEnrolment">StudentProviderEnrolment</a> data object.
+  - name: StudentAttendanceTimeListS
+    x-displayName: Student Attendance Time List
+    description:
+      <p>Operations maintaining an attendance record for a single student on a
+      single day at the given Provider.</p>
+  - name: StudentAttendanceSummary
+    x-displayName: Student Attendance Summary
+    description:
+      <p>Provides a summary of a student's daily attendance and membership
+      information for a given provider during the time period between the
+      StartDate and EndDate, inclusive.</p> <p>There will be multiple instances
+      of this object for a student in a school over the  course of a school
+      year. This summary may be generated by aggregating more
+      granular  attendance records, in which case all fields will be read-only;
+      and RefId element may  not be applicable.</p>
+  - name: ProviderCourse
+    x-displayName: Provider Course
+    description:
+      <p>Operations on provider defined Courses that Students enrol in,  and may
+      be assessed for, and achieve passes in.</p>
 servers:
   - url: https://{host}.edsby.co.nz/{basePath}
     description: The demonstration Te Rito server
@@ -26,6 +332,8 @@ paths:
   "/provider/{providerRefId}/StaffPersonal":
     post:
       summary: Default operation to create one or more StaffPersonal entries
+      tags:
+        - organisation
       security:
         - sifDataObject:
             - sysadmin
@@ -117,7 +425,8 @@ paths:
                   StaffPersonals:
                     $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
               example:
-                $ref: "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
+                $ref:
+                  "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
                   requestBody/content/application~1json/example"
             application/xml:
               schema:
@@ -126,7 +435,8 @@ paths:
                   StaffPersonals:
                     $ref: jsonSchema.NZ.create.yaml#/properties/StaffPersonals
               example:
-                $ref: "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
+                $ref:
+                  "#/paths/~1provider~1%7BproviderRefId%7D~1StaffPersonal/post/\
                   requestBody/content/application~1xml/example"
         default:
           description: Some objects created, some objects failed
@@ -149,79 +459,107 @@ paths:
   "/Organisation/{OrganisationsRefId}":
     get:
       summary: Default operation to get a single Organisation
+      tags:
+        - organisation
       operationId: getOrganisation
       parameters:
         - name: fields
           in: query
           description: Return only specified fields	`fields=name,nid`
+          required: false
           schema:
             type: string
+          example: PersonInfo.Name.FamilyName,PersonInfo.Name.GivenName
         - name: page
           in: query
-          description: Return nth page of results; default 0	`page=2`; applies to any call
+          description:
+            Return nth page of results; default 0	`page=2`; applies to any call
             with repeated data
+          required: false
           schema:
             type: integer
             minimum: 0
+          example: 2
         - name: max
           in: query
-          description: Maximum items per page, default 10,000; `max=100`; applies to any
+          description:
+            Maximum items per page, default 10,000; `max=100`; applies to any
             call with repeated data
+          required: false
           schema:
             type: integer
             minimum: 1
+          example: 100
         - name: unwrap
           in: query
-          description: Remove top level wrapper from json results in single result
+          description:
+            Remove top level wrapper from json results in single result
             reponses;	`unwrap=1`
+          required: false
           schema:
             enum:
               - 0
               - 1
               - 2
+          example: 1
         - name: human
           in: query
           description: For code set fields, translate code to human readable form;	`human=1`
+          required: false
           schema:
+            type: integer
             enum:
               - 0
               - 1
+          example: 1
         - name: start
           in: query
-          description: Include only items from start date;	`start=2017-01-01`
+          description: Include only items from start date;	`start=2017-08-01`
+          required: false
           schema:
             type: string
             format: date
+          example: 2017-08-01
         - name: end
           in: query
           description: Include only items before end date;	`end=2017-08-31`
+          required: false
           schema:
             type: string
             format: date
+          example: 2018-08-31
         - name: sort
           in: query
           description: Sort results by specified field;	`sort=FamilyName`
+          required: false
           schema:
             type: string
+          example: PersonInfo.Name.FamilyName,PersonInfo.Name.GivenName
         - name: field
           in: query
           description: Field to filter on when used with **pattern**;	`field=FamilyName`
+          required: false
           schema:
             type: string
+          example: PersonName.Name.FamilyName
         - name: pattern
           in: query
-          description: Filter results using pattern on **field**; `pattern=Sco*`
+          description: Filter results using pattern on **field**; `pattern=We*`
+          required: false
           schema:
             type: string
+          example: We*
         - name: X-Edsby-OrganisationRefId
           in: header
           required: true
-          description: <p>The Ministry of Education Organisation Id of the Provider(or
+          description:
+            <p>The Ministry of Education Organisation Id of the Provider(or
             other Organisation); used to limit the scope of the API endpoint to
             a particular MoE Organisation.</p>
           schema:
             type: string
             pattern: ^[1-9][0-9]{0,4}$
+          example: "9651"
         - name: OrganisationRefId
           in: path
           description: <p>The SIF GUID used by systems to identify the organisation.</p>
@@ -422,7 +760,8 @@ paths:
               example:
                 error: 1009
                 when: 2020-07-16T20:00:46.000Z
-                errorstr: "Bad field: PersonInfo-Name-FamilyName: missing required field
+                errorstr:
+                  "Bad field: PersonInfo-Name-FamilyName: missing required field
                   PersonInfo-Name-FamilyName (LastName) 'None'"
                 localId: ST-002
             application/xml:
@@ -461,6 +800,8 @@ paths:
   "/Enrolment/{EnrolmentRefId}":
     get:
       summary: Default operation to get a OrganisationStudentEnrolment
+      tags:
+        - schedule
       operationId: getEnrolment
       parameters:
         - name: EnrolmentRefId
@@ -504,11 +845,14 @@ paths:
                         FundingYearLevel: 6
                         Curriculum: NZC
         default:
-          $ref: "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
+          $ref:
+            "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
             ault"
   "/OrganisationRelationship/{OrganisationRelationshipRefId}":
     get:
       summary: Default operation to get a single OrganisationRelationship
+      tags:
+        - schedule
       operationId: getOrganisationReln
       parameters:
         - name: OrganisationRelationshipRefId
@@ -542,334 +886,9 @@ paths:
                   RelatedOrganisationAgreementDate: 2020-01-15
                   EffectiveDate: 2020-01-15
         default:
-          $ref: "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
+          $ref:
+            "#/paths/~1Organisation~1%7BOrganisationsRefId%7D/get/responses/def\
             ault"
-  /Search:
-    get:
-      tags:
-        - Search
-      summary: Search for Staff and Students
-      description: >-
-        Search operation returning partial <a
-        href="#tag/StaffPersonal">StaffPersonal</a>
-
-        and <a href="#tag/StudentPersonal">StudentPersonal</a> objects.
-      operationId: search
-      security:
-        - sifDataObject:
-            - FIRST
-            - SUPS
-            - SMS
-      parameters:
-        - name: objects
-          in: query
-          description: "CSV delimited list of data object names; limits the search to only
-            some data objects: staffpersonal, studentpersonal"
-          schema:
-            type: string
-        - name: pattern
-          in: query
-          description: Select objects where search index includes the given pattern
-            pattern; `pattern=Sco*`
-          schema:
-            type: string
-        - name: query
-          in: query
-          description: Use lucene query language to select objects;
-          schema:
-            type: string
-        - name: max
-          in: query
-          description: Maximum items per page, default 10,000; `max=100`; applies to any
-            call with repeated data
-          schema:
-            type: integer
-            minimum: 1
-        - name: page
-          in: query
-          description: Return nth page of results; default 0	`page=2`; applies to any call
-            with repeated data
-          schema:
-            type: integer
-            minimum: 0
-        - name: human
-          in: query
-          description: For code set fields, translate code to human readable form;	`human=1`
-          schema:
-            enum:
-              - 0
-              - 1
-        - name: Accept
-          in: header
-          description: Standard HTTP accept header, choose between JSON and XML for
-            response. Defaults to XML if this header is missing.
-          schema:
-            type: string
-            enum:
-              - application/json
-              - application/xml
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  Search:
-                    type: object
-                    properties:
-                      Summary:
-                        type: object
-                        description: Statistical summary of the search results returned.
-                        properties:
-                          Shown:
-                            type: integer
-                            description: Count of objects returned in this response
-                          More:
-                            type: integer
-                            description: Count of objects yet to be returned, because of
-                              `max` page size limit
-                      SearchResults:
-                        type: object
-                        description: The data objects found
-                        properties:
-                          Personals:
-                            type: object
-                            description: Staff &amp; Student Personal objects found
-                            properties:
-                              StaffPersonals:
-                                type: object
-                                description: StaffPersonal objects found
-                                properties:
-                                  StaffPersonal:
-                                    type: array
-                                    items:
-                                      type: object
-                                      properties:
-                                        Name:
-                                          type: string
-                                          description: Full name from the search index
-                                        Rank:
-                                          type: number
-                                          description: Degree of match to search criteria
-                                        Type:
-                                          type: string
-                                          description: Internal data type of object returned
-                                        ProviderName:
-                                          type: array
-                                          description: Array of strings, being the names of
-                                            the Providers associated with the
-                                            person
-                                          items:
-                                            type: string
-                                        ProviderRefId:
-                                          type: array
-                                          description: Array of strings, being the
-                                            ProviderRefIds of the Providers
-                                            associated with the person
-                                          items:
-                                            type: string
-                                        LocalId:
-                                          type: string
-                                          description: The StaffPersonalLocalId of the
-                                            staff member located
-                                        RefId:
-                                          type: string
-                                          description: The StaffPersonalRefId of the staff
-                                            member located
-                                        ESLPairwiseId:
-                                          type: string
-                                          description: Internal user provisioning
-                                            identifier for the staff member
-                                            located
-                                        PersonInfo:
-                                          type: object
-                                          description: Partial PersonInfo object
-                                          properties:
-                                            Name:
-                                              type: object
-                                              description: Person name, in pieces and
-                                                complete
-                                              properties:
-                                                Title:
-                                                  type: string
-                                                FamilyName:
-                                                  type: string
-                                                GivenName:
-                                                  type: string
-                                                MiddleName:
-                                                  type: string
-                                                PreferredGivenName:
-                                                  type: string
-                                                Suffix:
-                                                  type: string
-                                                FullName:
-                                                  type: string
-                                            Demographics:
-                                              type: object
-                                              properties:
-                                                BirthDate:
-                                                  type: string
-                                                  format: date
-                                            EmailList:
-                                              type: object
-                                              properties:
-                                                Email:
-                                                  type: object
-                                                  properties:
-                                                    Address:
-                                                      type: string
-                              StudentPersonals:
-                                type: object
-                                properties:
-                                  StudentPersonal:
-                                    type: array
-                                    items:
-                                      type: object
-                                      properties:
-                                        Name:
-                                          type: string
-                                          description: Full name from the search index
-                                        Rank:
-                                          type: number
-                                          description: Degree of match to search criteria
-                                        Type:
-                                          type: string
-                                          description: Internal data type of object returned
-                                        ProviderName:
-                                          type: array
-                                          description: Array of strings, being the names of
-                                            the Providers associated with the
-                                            person
-                                          items:
-                                            type: string
-                                        ProviderRefId:
-                                          type: array
-                                          description: Array of strings, being the
-                                            ProviderRefIds of the Providers
-                                            associated with the person
-                                          items:
-                                            type: string
-                                        LocalId:
-                                          type: string
-                                          description: The StudentPersonalLocalId of the
-                                            student located
-                                        RefId:
-                                          type: string
-                                          description: The StudentPersonalRefId of the
-                                            student located
-                                        NationalStudentNumber:
-                                          type: string
-                                          description: The National Student Number of the
-                                            student located
-                                        PersonInfo:
-                                          type: object
-                                          description: Partial PersonInfo object
-                                          properties:
-                                            Name:
-                                              type: object
-                                              description: Person name, in pieces and
-                                                complete
-                                              properties:
-                                                Title:
-                                                  type: string
-                                                FamilyName:
-                                                  type: string
-                                                GivenName:
-                                                  type: string
-                                                MiddleName:
-                                                  type: string
-                                                PreferredGivenName:
-                                                  type: string
-                                                Suffix:
-                                                  type: string
-                                                FullName:
-                                                  type: string
-                                            Demographics:
-                                              type: object
-                                              properties:
-                                                BirthDate:
-                                                  type: string
-                                                  format: date
-                                                Gender:
-                                                  $ref: jsonSchema.NZ.create.yaml#/definitions/NZCodeSetsGender
-                                            EmailList:
-                                              type: object
-                                              properties:
-                                                Email:
-                                                  type: object
-                                                  properties:
-                                                    Address:
-                                                      type: string
-        "401":
-          description: Request didn't have Bearer token
-          content:
-            application/json:
-              schema:
-                type: object
-                title: error
-                required:
-                  - error
-                  - when
-                  - errorstr
-                additionalProperties: false
-                properties:
-                  error:
-                    type: integer
-                    description: Edsby defined error code
-                  when:
-                    type: string
-                    format: date-time
-                    description: Date and Time of when the HTTP request was processed.
-                  errorstr:
-                    type: string
-                    description: Narrative text describing the error
-                  refId:
-                    type: string
-                    description: Data object refId of the object being created/updated
-                  localId:
-                    type: string
-                    description: Data object localId of the object being created/updated
-              example:
-                error: 401
-                when: 2020-07-16T20:00:46.000Z
-                errorstr: "Unauthorised request: Bearer token missing??"
-        "422":
-          description: Request didn't have Accept header
-          content:
-            application/json:
-              schema:
-                type: object
-                title: error
-                required:
-                  - error
-                  - when
-                  - errorstr
-                additionalProperties: false
-                properties:
-                  error:
-                    type: integer
-                    description: Edsby defined error code
-                  when:
-                    type: string
-                    format: date-time
-                    description: Date and Time of when the HTTP request was processed.
-                  errorstr:
-                    type: string
-                    description: Narrative text describing the error
-                  refId:
-                    type: string
-                    description: Data object refId of the object being created/updated
-                  localId:
-                    type: string
-                    description: Data object localId of the object being created/updated
-              example:
-                error: 422
-                when: 2020-07-16T20:00:46.000Z
-                errorstr: "Unprocessable request: Accept or X-Edsby-OrganisationRefId
-                  header missing?? Request body invalid??  Check sl-violations
-                  header in response"
 components:
   securitySchemes:
     devt:
@@ -925,10 +944,12 @@ components:
           - enum:
               - IncrSYNC
             title: Incremental Synchronise Request
-            description: Add and Update records from the POST to ensure all records are
+            description:
+              Add and Update records from the POST to ensure all records are
               present in the repository
           - enum:
               - FullSYNC
             title: Full Synchronise Request
-            description: Add, Update and **Delete** records to ensure that ONLY those
+            description:
+              Add, Update and **Delete** records to ensure that ONLY those
               records are present in the repository
