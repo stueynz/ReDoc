@@ -11,6 +11,7 @@ This fork of [ReDoc v2.0.0-rc.40](https://github.com/Redocly/redoc/tree/v2.0.0-r
 - [Multi Lingual Annotations](#multi-lingual-annotations)
 - [New Configuration Options](#new-configuration-options)
 - [$ref implied allOf for Annotations](#ref-implied-allOf-for-annotations)
+- [`h3` and `h4` headers styled](#h3-and-h4-headers-styled)
 
 ## Development
 see [CONTRIBUTING.md](CONTRIBUTING.md) to read the original guidelines on development of this [React](https://en.wikipedia.org/wiki/React_(web_framework)) application
@@ -165,3 +166,10 @@ Such multi-lingual titles and descriptions are displayed thus:
 
 Field definitions tend to have somewhat generic descriptions that need to be more specifically
 described where the generic field is actually used.
+
+## h3 and h4 headers styled
+When `h3` and `h4` headers are used in markdown descriptions ( ### and ####) they are styled according to `theme.typography.headings` settings
+-  **font** - `props.theme.typography.fontFamily`
+-  **fontWeight** - `props.theme.typography.fontWeightRegular`
+-  **lineHeight** - `props.theme.typography.lineHeight`
+-  **colour** - `props.theme.colors.primary.main`
