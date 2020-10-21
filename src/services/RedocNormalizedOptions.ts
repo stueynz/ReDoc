@@ -45,6 +45,7 @@ export interface RedocRawOptions {
   defaultLanguage?: string; // What is the default language when working with title* and description* fields
   oneOfSuppressionThreshold?: number; // No of oneOf children, that means don't bother inserting the oneOf expansion
   parameterGroupCollapseThreshold?: number; // No of parameters in a group that means collapse the group on initial display
+  defaultOAuthScope?: string;   // Which OAuth scope is the default one to be turned on in the Scopes Filter dialog on initial display?
 }
 
 function argValueToBoolean(val?: string | boolean, defaultValue?: boolean): boolean {
@@ -193,6 +194,7 @@ export class RedocNormalizedOptions {
   oneOfSuppressionThreshold: number;
   parameterGroupCollapseThreshold: number;
   expandSingleSchemaField: boolean;
+  defaultOAuthScope: string;
 
   /* tslint:disable-next-line */
   unstable_ignoreMimeParameters: boolean;
@@ -258,6 +260,7 @@ export class RedocNormalizedOptions {
     this.defaultLanguage = raw.defaultLanguage || '';
     this.oneOfSuppressionThreshold = raw.oneOfSuppressionThreshold || 30;
     this.parameterGroupCollapseThreshold = raw.parameterGroupCollapseThreshold || 6;
+    this.defaultOAuthScope = raw.defaultOAuthScope ||'';
     this.maxDisplayedEnumValues = argValueToNumber(raw.maxDisplayedEnumValues);
   }
 }

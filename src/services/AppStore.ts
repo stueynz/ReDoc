@@ -92,8 +92,12 @@ export class AppStore {
       this.scopes = Object.keys(oauth2Scheme.flows.clientCredentials.scopes).reduce(
         (options, option) => ({
           ...options,
-          [option]: true
+          [option]: false   // Turn off all scopes
       }), this.scopes);
+
+      // If we've been given a default scope, then turn that one on.
+      if(this.options.defaultOAuthScope != '')
+        this.scopes[this.options.defaultOAuthScope] = true;
     }
 
     if (!this.options.disableSearch) {

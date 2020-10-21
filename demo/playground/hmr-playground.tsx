@@ -41,6 +41,7 @@ const options: RedocRawOptions = {
   defaultLanguage: 'en',
   oneOfSuppressionThreshold: 6,
   parameterGroupCollapseThreshold: 6,
+  defaultOAuthScope: 'SMS'
 };
 
 async function init() {
