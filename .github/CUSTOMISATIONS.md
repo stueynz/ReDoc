@@ -11,6 +11,7 @@ This fork of [ReDoc v2.0.0-rc.40](https://github.com/Redocly/redoc/tree/v2.0.0-r
 - [Multi Lingual Annotations](#multi-lingual-annotations)
 - [New Configuration Options](#new-configuration-options)
 - [$ref implied allOf for Annotations](#ref-implied-allOf-for-annotations)
+- [OAuth Scope Filtering](#oauth-scope-filtering)
 - [`h3` and `h4` headers styled](#h3-and-h4-headers-styled)
 
 ## Development
@@ -166,6 +167,13 @@ Such multi-lingual titles and descriptions are displayed thus:
 
 Field definitions tend to have somewhat generic descriptions that need to be more specifically
 described where the generic field is actually used.
+
+## OAuth Scope filtering
+When OpenAPI specification includes OAuth security and scopes, the set of defined OAuth scopes will be displayed
+at the top of the menu pane, with checkboxes;  turning off particular scopes will filter API documentation displayed
+to only include what is available to the checked scopes.
+
+![](../docs/images/oauth-scopes-demo.gif)
 
 ## h3 and h4 headers styled
 When `h3` and `h4` headers are used in markdown descriptions ( ### and ####) they are styled according to `theme.typography.headings` settings
