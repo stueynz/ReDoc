@@ -3,17 +3,19 @@ import * as React from 'react';
 
 export const ScopesDialog = styled.div`
     ${({ theme }) => `
-        width: 100%;
+        width: 85%;
         margin-left: 1em;
         font-family: "Courier New";
         display: block;
         color: ${theme.colors.primary.main};
         font-weight: bolder;
+        border-bottom: 1px solid #ccc;
+        padding: 5px 0;
     `};
 `;
 
 
-const Label = styled.label`
+export const ScopeLabel = styled.label`
     cursor: pointer;
 `;
 
@@ -51,15 +53,15 @@ const Checkbox = styled.input`
 
 export const ScopeOption = ({ label, isSelected, onCheckboxChange }) => (
     <div>
-        <Label>
-        <Checkbox
-            type="checkbox"
-            name={label}
-            checked={isSelected}
-            onChange={onCheckboxChange}
-            className="form-check-input"
-        />
-        {label}
-        </Label>
+        <ScopeLabel>
+            <Checkbox
+                type="checkbox"
+                name={label}
+                checked={isSelected}
+                onChange={onCheckboxChange}
+                className="form-check-input"
+            />
+            {label}
+        </ScopeLabel>
     </div>
 );
