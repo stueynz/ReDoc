@@ -11,6 +11,11 @@ export interface SecurityScheme extends OpenAPISecurityScheme {
 export class SecurityRequirementModel {
   schemes: SecurityScheme[];
 
+  // Retrieve the SecurityScheme of type oauth2
+  oauth2Scheme() {
+    return this.schemes.find( s => s.type === "oauth2" );
+  }
+
   constructor(requirement: OpenAPISecurityRequirement, parser: OpenAPIParser) {
     const schemes = (parser.spec.components && parser.spec.components.securitySchemes) || {};
 

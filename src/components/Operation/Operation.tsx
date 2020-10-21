@@ -12,6 +12,7 @@ import { ExternalDocumentation } from '../ExternalDocumentation/ExternalDocument
 import { Extensions } from '../Fields/Extensions';
 import { Markdown } from '../Markdown/Markdown';
 import { OptionsContext } from '../OptionsProvider';
+import { ScopesContext } from '../ScopesDlg/ScopesContext';
 import { Parameters } from '../Parameters/Parameters';
 import { RequestSamples } from '../RequestSamples/RequestSamples';
 import { ResponsesList } from '../Responses/ResponsesList';
@@ -34,12 +35,39 @@ export interface OperationProps {
 
 @observer
 export class Operation extends React.Component<OperationProps> {
+
+  static contextType = ScopesContext;
+
+  // Is this Operation hidden, because of the current OAuth scopes??
+  isHidden(): boolean {
+    const scopes = this.context;  // which OAuth scopes are we displaying ??
+    const opScheme = this.props.operation.oauth2SecurityScheme();
+    if(opScheme) {
+      for(let s of opScheme.scopes) {
+
+        if(scopes[s]) {   // If this scope is included, then we're not hidden 
+          return false;
+        }
+      }
+
+      // None of the scopes for this operation are included
+      return true;
+    }
+
+    // There is no OAuth security scheme; so we're not hidden
+    return false;
+  }
+
   render() {
     const { operation } = this.props;
 
     const { name: summary, description, deprecated, externalDocs, isWebhook } = operation;
     const hasDescription = !!(description || externalDocs);
 
+    // We might be hiding operations based upon OAuth scope settings...
+    if(this.isHidden()) {
+      return null;
+    }
     return (
       <OptionsContext.Consumer>
         {(options) => (

@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
+import { ScopesContext } from '../ScopesDlg/ScopesContext';
 import { ExternalDocumentation } from '../ExternalDocumentation/ExternalDocumentation';
 import { AdvancedMarkdown } from '../Markdown/AdvancedMarkdown';
 import { H1, H2, MiddlePanel, Row, Section, ShareLink } from '../../common-elements';
@@ -29,8 +30,15 @@ export interface ContentItemProps {
 
 @observer
 export class ContentItem extends React.Component<ContentItemProps> {
+  static contextType = ScopesContext;
+
   render() {
     const item = this.props.item;
+
+    if(item.isHidden(this.context)) {
+      return null;
+    }
+
     let content;
     const { type } = item;
     switch (type) {
@@ -47,7 +55,6 @@ export class ContentItem extends React.Component<ContentItemProps> {
       default:
         content = <SectionItem {...this.props} />;
     }
-
     return (
       <>
         {content && (
@@ -67,7 +74,6 @@ const middlePanelWrap = component => <MiddlePanel compact={true}>{component}</Mi
 export class SectionItem extends React.Component<ContentItemProps> {
   render() {
     const { name, description, externalDocs, level } = this.props.item as GroupModel;
-
     const Header = level === 2 ? H2 : H1;
     return (
       <>

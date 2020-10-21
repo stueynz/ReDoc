@@ -63,6 +63,7 @@ export class AppStore {
   options: RedocNormalizedOptions;
   search?: SearchStore<string>;
   marker = new MarkerService();
+  scopes: Map<String, boolean> = new Map<String, boolean>();
 
   private scroll: ScrollService;
   private disposer: Lambda | null = null;
@@ -82,6 +83,18 @@ export class AppStore {
 
     this.spec = new SpecStore(spec, specUrl, this.options);
     this.menu = new MenuStore(this.spec, this.scroll, history);
+
+    // What scopes are defined in OAuth2 security scheme?
+    const oauth2Scheme = this.spec.securitySchemes.schemes.find( s=> s.type === 'oauth2');
+    if (oauth2Scheme && oauth2Scheme.flows && oauth2Scheme.flows.clientCredentials && oauth2Scheme.flows.clientCredentials.scopes) {
+
+      // We have OAuth2 defined auth, so setup the scopes Map
+      this.scopes = Object.keys(oauth2Scheme.flows.clientCredentials.scopes).reduce(
+        (options, option) => ({
+          ...options,
+          [option]: true
+      }), this.scopes);
+    }
 
     if (!this.options.disableSearch) {
       this.search = new SearchStore();

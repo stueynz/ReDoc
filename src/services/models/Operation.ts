@@ -77,6 +77,11 @@ export class OperationModel implements IMenuItem {
   isCallback: boolean;
   isWebhook: boolean;
 
+  //  retrieve the SecurityScheme that has an OAuth2 scheme in it.
+  oauth2SecurityScheme() {
+    return this.security.find( s => s.oauth2Scheme())?.oauth2Scheme();
+  }
+
   constructor(
     private parser: OpenAPIParser,
     private operationSpec: ExtendedOpenAPIOperation,
@@ -130,6 +135,20 @@ export class OperationModel implements IMenuItem {
     if (options.showExtensions) {
       this.extensions = extractExtensions(operationSpec, options.showExtensions);
     }
+  }
+
+  // This operation isHidden if none of its OAuth scopes are turned on...
+  isHidden(scopes:Map<String, boolean>): boolean {
+    const opScopes = this.oauth2SecurityScheme();
+
+    if(opScopes) {
+      // console.log('menuItem:' + item.id + '\navailScopes:' + JSON.stringify(scopes, null, 2) + '\nopScopes:' + JSON.stringify(opScopes.scopes, null, 2));
+      for(let s of opScopes.scopes) {
+        if(scopes[s])
+          return false;   // this scope is turned on, so we're not hidden
+      }
+    }
+    return true;
   }
 
   /**

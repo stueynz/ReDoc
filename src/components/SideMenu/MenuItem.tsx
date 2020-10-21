@@ -2,6 +2,8 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
+import { ScopesContext } from '../ScopesDlg/ScopesContext';
+
 import { ShelfIcon } from '../../common-elements/shelfs';
 import { IMenuItem, OperationModel } from '../../services';
 import { shortenHTTPVerb } from '../../utils/openapi';
@@ -18,6 +20,7 @@ export interface MenuItemProps {
 @observer
 export class MenuItem extends React.Component<MenuItemProps> {
   ref = React.createRef<HTMLLabelElement>();
+  static contextType = ScopesContext;
 
   activate = (evt: React.MouseEvent<HTMLElement>) => {
     this.props.onActivate!(this.props.item);
@@ -40,6 +43,58 @@ export class MenuItem extends React.Component<MenuItemProps> {
 
   render() {
     const { item, withoutChildren } = this.props;
+
+    if (item.type === 'operation') {     
+      //  We might be hiding operations based upon OAuth Scope settings...
+      if(item.isHidden(this.context)) {
+        return null;
+      }
+    }
+    else if(item.type == 'tag') {
+      // If all the operationChildren are hidden, then hide the Tag item as well...
+      var hiddenChildren=0;
+      for(let it of item.items) {
+        if(it.type === 'operation' && it.isHidden(this.context)) {
+          hiddenChildren++;
+        }
+      }
+      // if all the children operations are hidden, then this 'tag' is hidden
+      if(hiddenChildren === item.items.length)
+        return null;
+    }
+    else if(item.type == 'group') {
+      // If all the operation children are hidden, then hide the Group item as well...
+      // Not all children are operations...
+      var hiddenOperations=0, operations=0;
+      for(let it of item.items) {
+        if(it.type === 'operation') {
+          operations++;
+          if(it.isHidden(this.context)) {
+            hiddenOperations++;
+          }
+        }
+        else if(it.type === 'tag') {
+          for(let op of it.items) {
+            if (op.type === 'operation') {
+              operations++;
+              if(op.isHidden(this.context)) {
+                hiddenOperations++;
+             }
+            }
+          }
+        }
+      }
+      
+      // all the operations are hidden so hide the group
+      if(operations == hiddenOperations) {
+        return null;
+      }
+    }
+    else if(item.type != 'section') {
+      console.log('menuItem:' + item.id + ' type:' + item.type + ' something to hide?');
+    }
+
+    // Ok we're not hiding anything... let's do it...
     return (
       <MenuItemLi onClick={this.activate} depth={item.depth} data-item-id={item.id}>
         {item.type === 'operation' ? (
