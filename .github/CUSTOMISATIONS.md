@@ -51,6 +51,8 @@ Many of these customisations are controlled by new configuration options.
 - `parameterGroupCollapseThreshold` (default 6) parameter groups with more than this many members
 will be collapsed on initial display.  Click on the group heading to expand.  See [Large Parameter Groups](#large-parameter-groups)
 
+- `options.defaultOAuthScope` the name of the only OAuth scope that will be displayed on initial load.  See [OAuth Scope Filtering](#oauth-scope-filtering)
+
 
 ## JSON Schema Const
 - JSON Schema uses keyword `const` as short hand for a single `enum` value, which allows us to have titles and description fields for each enumeration value, thus:
@@ -172,6 +174,8 @@ described where the generic field is actually used.
 When OpenAPI specification includes OAuth security and scopes, the set of defined OAuth scopes will be displayed
 at the top of the menu pane, with checkboxes;  turning off particular scopes will filter API documentation displayed
 to only include what is available to the checked scopes.
+
+On initial load, all scopes are off, except the one named by `options.defaultOAuthScope`
 
 ![](../docs/images/oauth-scopes-demo.gif)
 
