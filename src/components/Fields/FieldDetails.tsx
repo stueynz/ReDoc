@@ -25,7 +25,7 @@ import { RedocNormalizedOptions } from '../../services';
 import { OptionsContext } from '../OptionsProvider';
 import { isEmpty } from 'lodash';
 
-const MAX_PATTERN_LENGTH = 45;
+const MAX_PATTERN_LENGTH = 85;   // UUID pattern ^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$   is  72 chars long !!!!!
 
 export class FieldDetails extends React.PureComponent<FieldProps> {
   static contextType = OptionsContext;
