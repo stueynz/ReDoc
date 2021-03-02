@@ -141,7 +141,7 @@ export class OperationModel implements IMenuItem {
   isHidden(scopes: Map<String, boolean>): boolean {
 
     // No scopes defined means no hidden operations...
-    if (scopes.entries.length == 0) {
+    if (Object.keys(scopes).length == 0) {
       return false;
     }
 

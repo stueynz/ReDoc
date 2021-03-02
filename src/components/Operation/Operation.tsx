@@ -43,7 +43,7 @@ export class Operation extends React.Component<OperationProps> {
     const scopes = this.context;  // which OAuth scopes are we displaying ??
 
     // No scopes defined means no hidden operations...
-    if (scopes.entries.length == 0) {
+    if (Object.keys(scopes).length == 0) {
       return false;
     }
 

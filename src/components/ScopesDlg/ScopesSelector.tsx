@@ -41,7 +41,7 @@ export class ScopesSelector extends React.Component<{ scopes: Map<String, boolea
   render() {
 
     // No scopes ... means no dialog
-    if (this.props.scopes.entries.length == 0) {
+    if (Object.keys(this.props.scopes).length == 0) {
       return null;
     }
 

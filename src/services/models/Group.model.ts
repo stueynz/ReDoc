@@ -63,7 +63,7 @@ export class GroupModel implements IMenuItem {
   hasHiddenOperations(scopes: Map<String, boolean>): boolean {
 
     // No scopes defined means no hidden operations...
-    if (scopes.entries.length == 0) {
+    if (Object.keys(scopes).length == 0) {
       return false;
     }
 
@@ -91,7 +91,7 @@ export class GroupModel implements IMenuItem {
   hasVisibleOperations(scopes: Map<String, boolean>): boolean {
 
     // No scopes defined means no hidden operations...
-    if (scopes.entries.length == 0) {
+    if (Object.keys(scopes).length == 0) {
       return true;
     }
 
