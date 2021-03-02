@@ -41,11 +41,17 @@ export class Operation extends React.Component<OperationProps> {
   // Is this Operation hidden, because of the current OAuth scopes??
   isHidden(): boolean {
     const scopes = this.context;  // which OAuth scopes are we displaying ??
-    const opScheme = this.props.operation.oauth2SecurityScheme();
-    if(opScheme) {
-      for(let s of opScheme.scopes) {
 
-        if(scopes[s]) {   // If this scope is included, then we're not hidden 
+    // No scopes defined means no hidden operations...
+    if (scopes.entries.length == 0) {
+      return false;
+    }
+
+    const opScheme = this.props.operation.oauth2SecurityScheme();
+    if (opScheme) {
+      for (let s of opScheme.scopes) {
+
+        if (scopes[s]) {   // If this scope is included, then we're not hidden 
           return false;
         }
       }
@@ -65,7 +71,7 @@ export class Operation extends React.Component<OperationProps> {
     const hasDescription = !!(description || externalDocs);
 
     // We might be hiding operations based upon OAuth scope settings...
-    if(this.isHidden()) {
+    if (this.isHidden()) {
       return null;
     }
     return (

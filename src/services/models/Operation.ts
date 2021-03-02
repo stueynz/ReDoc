@@ -79,7 +79,7 @@ export class OperationModel implements IMenuItem {
 
   //  retrieve the SecurityScheme that has an OAuth2 scheme in it.
   oauth2SecurityScheme() {
-    return this.security.find( s => s.oauth2Scheme())?.oauth2Scheme();
+    return this.security.find(s => s.oauth2Scheme())?.oauth2Scheme();
   }
 
   constructor(
@@ -119,8 +119,8 @@ export class OperationModel implements IMenuItem {
         operationSpec.operationId !== undefined
           ? 'operation/' + operationSpec.operationId
           : parent !== undefined
-          ? parent.id + this.pointer
-          : this.pointer;
+            ? parent.id + this.pointer
+            : this.pointer;
 
       this.security = (operationSpec.security || parser.spec.security || []).map(
         (security) => new SecurityRequirementModel(security, parser),
@@ -138,13 +138,19 @@ export class OperationModel implements IMenuItem {
   }
 
   // This operation isHidden if none of its OAuth scopes are turned on...
-  isHidden(scopes:Map<String, boolean>): boolean {
+  isHidden(scopes: Map<String, boolean>): boolean {
+
+    // No scopes defined means no hidden operations...
+    if (scopes.entries.length == 0) {
+      return false;
+    }
+
     const opScopes = this.oauth2SecurityScheme();
 
-    if(opScopes) {
+    if (opScopes) {
       // console.log('menuItem:' + item.id + '\navailScopes:' + JSON.stringify(scopes, null, 2) + '\nopScopes:' + JSON.stringify(opScopes.scopes, null, 2));
-      for(let s of opScopes.scopes) {
-        if(scopes[s])
+      for (let s of opScopes.scopes) {
+        if (scopes[s])
           return false;   // this scope is turned on, so we're not hidden
       }
     }

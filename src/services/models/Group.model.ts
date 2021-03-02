@@ -34,12 +34,12 @@ export class GroupModel implements IMenuItem {
   isHidden(scopes: Map<String, boolean>): boolean {
 
     // If there are no operations ... then it's pure narrative and can't be hidden
-    if(! this.hasOperations()) {
+    if (!this.hasOperations()) {
       return false;
     }
 
     // If one of the operations is visable, we can't be hidden
-    if( this.hasVisibleOperations(scopes)) {
+    if (this.hasVisibleOperations(scopes)) {
       return false;
     }
 
@@ -50,8 +50,8 @@ export class GroupModel implements IMenuItem {
   // This groupModel has operations 
   hasOperations(): boolean {
 
-    for(let it of this.items) {
-      if(it.type === 'operation' || it.hasOperations()) {
+    for (let it of this.items) {
+      if (it.type === 'operation' || it.hasOperations()) {
         return true;
       }
     }
@@ -62,18 +62,23 @@ export class GroupModel implements IMenuItem {
 
   hasHiddenOperations(scopes: Map<String, boolean>): boolean {
 
-    for(let it of this.items) {
+    // No scopes defined means no hidden operations...
+    if (scopes.entries.length == 0) {
+      return false;
+    }
+
+    for (let it of this.items) {
 
       // This operation is hidden - we're done - we've got a hidden tag
-      if(it.type === 'operation' && it.isHidden(scopes)) {
+      if (it.type === 'operation' && it.isHidden(scopes)) {
         return true;
       }
 
       // Recurse for tags, groups and sections
-      if(it.type !== 'operation') {
+      if (it.type !== 'operation') {
 
         // does that tag, group or section have hidden tags ??
-        if(it.hasHiddenOperations(scopes)) {
+        if (it.hasHiddenOperations(scopes)) {
           return true;
         }
       }
@@ -82,21 +87,26 @@ export class GroupModel implements IMenuItem {
     // We don't have any hidden operations
     return false;
   }
- 
+
   hasVisibleOperations(scopes: Map<String, boolean>): boolean {
 
-    for(let it of this.items) {
+    // No scopes defined means no hidden operations...
+    if (scopes.entries.length == 0) {
+      return true;
+    }
+
+    for (let it of this.items) {
 
       // This operation is visible - we're done - we've got a visible operation
-      if(it.type === 'operation' && ! it.isHidden(scopes)) {
+      if (it.type === 'operation' && !it.isHidden(scopes)) {
         return true;
       }
 
       // Recurse for tags, groups and sections
-      if(it.type !== 'operation') {
+      if (it.type !== 'operation') {
 
         // does that tag, group or section have visible operations ??
-        if(it.hasVisibleOperations(scopes)) {
+        if (it.hasVisibleOperations(scopes)) {
           return true;
         }
       }
