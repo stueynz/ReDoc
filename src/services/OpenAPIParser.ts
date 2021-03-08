@@ -276,6 +276,14 @@ export class OpenAPIParser {
         receiver.required = (receiver.required || []).concat(subSchema.required);
       }
 
+      if (receiver['x-deferred'] === undefined && subSchema['x-deferred'] !== undefined) {
+        receiver['x-deferred'] = subSchema['x-deferred'];
+      }
+
+      if (receiver.deprecated === undefined && subSchema.deprecated !== undefined) {
+        receiver.deprecated = subSchema.deprecated;
+      }
+
       // merge (some) annotations as well
       if (receiver.title === undefined && subSchema.title !== undefined) {
         receiver.title = subSchema.title;
@@ -294,6 +302,10 @@ export class OpenAPIParser {
       // merge rest of constraints
       // TODO: do more intelligent merge
       receiver = { ...subSchema, ...receiver };
+
+      if(receiver.deprecated) {
+        console.log('deprecated: ' + JSON.stringify(receiver, null, 2));
+      }
 
       if (subSchemaRef) {
         receiver.parentRefs!.push(subSchemaRef);

@@ -79,7 +79,7 @@ export class SchemaModel {
    */
   constructor(
     parser: OpenAPIParser,
-    schemaOrRef: Referenced<OpenAPISchema> & { description?: string },
+    schemaOrRef: Referenced<OpenAPISchema> & { description?: string, deprecated? : boolean },
     pointer: string,
     private options: RedocNormalizedOptions,
     isChild: boolean = false,
@@ -112,7 +112,13 @@ export class SchemaModel {
     if (parser.isRef(schemaOrRef)) {
       if (schemaOrRef.description) this.description = schemaOrRef.description;
 
-      if (schemaOrRef['x-deferred']) this.deferred = !!schemaOrRef['x-deferred'];
+      if (schemaOrRef['x-deferred']) {
+        this.deferred = !!schemaOrRef['x-deferred'];
+
+        if(this.extensions) this.extensions['x-deferred'] = schemaOrRef['x-deferred'];
+      }
+
+      if(schemaOrRef.deprecated) this.deprecated = schemaOrRef.deprecated;
     }
   }
 
