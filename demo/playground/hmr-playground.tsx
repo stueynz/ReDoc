@@ -37,6 +37,9 @@ const options: RedocRawOptions = {
     'x-requiredFields',
     'x-deferredFields',
     'x-deferred',
+    'x-lsrOnlyFields',
+    'x-lsrOnly',
+    'x-deprecatedFields'
   ],
   defaultLanguage: 'en',
   oneOfSuppressionThreshold: 6,
