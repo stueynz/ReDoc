@@ -44,6 +44,7 @@ export class FieldModel {
   schema: SchemaModel;
   name: string;
   required: boolean;
+  readOnly: boolean;
   description: string;
   example?: string;
   deprecated: boolean;
@@ -67,7 +68,7 @@ export class FieldModel {
     this.name = infoOrRef.name || info.name;
     this.in = info.in;
     this.required = !!info.required;
-
+    
     let fieldSchema = info.schema;
     let serializationMime = '';
     if (!fieldSchema && info.in && info.content) {
@@ -80,6 +81,7 @@ export class FieldModel {
       info.description === undefined ? this.schema.description || '' : info.description;
     this.example = info.example || this.schema.example;
     this.deferred = !!this.schema.deferred;
+    this.readOnly = this.schema.readOnly;
 
     if (serializationMime) {
       this.serializationMime = serializationMime;

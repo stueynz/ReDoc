@@ -47,7 +47,7 @@ export class Field extends React.Component<FieldProps> {
 
   render() {
     const { className, field, isLast, expandByDefault } = this.props;
-    const { name, deferred, deprecated, required, kind } = field;
+    const { name, deferred, deprecated, required, kind, readOnly } = field;
     const withSubSchema = !field.schema.isPrimitive && !field.schema.isCircular;
 
     const expanded = field.expanded === undefined ? expandByDefault : field.expanded;
@@ -69,6 +69,7 @@ export class Field extends React.Component<FieldProps> {
         </button>
         {required && !deferred && <RequiredLabel> required </RequiredLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
+        {readOnly && <RequiredLabel> read-only </RequiredLabel>}
       </ClickablePropertyNameCell>
     ) : (
       <PropertyNameCell className={deprecated ? 'deprecated' : undefined} kind={kind} title={name}>
@@ -76,6 +77,7 @@ export class Field extends React.Component<FieldProps> {
         {name}
         {required && !deferred && <RequiredLabel> required </RequiredLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
+        {readOnly && <RequiredLabel> read-only </RequiredLabel>}
       </PropertyNameCell>
     );
 
