@@ -4,6 +4,8 @@ import * as React from 'react';
 import { ClickablePropertyNameCell, RequiredLabel } from '../../common-elements/fields';
 import { FieldDetails } from './FieldDetails';
 
+import { ScopesContext } from '../ScopesDlg/ScopesContext';
+
 import {
   InnerPropertiesWrap,
   PropertyBullet,
@@ -30,6 +32,23 @@ export interface FieldProps extends SchemaOptions {
 
 @observer
 export class Field extends React.Component<FieldProps> {
+
+  static contextType = ScopesContext;
+
+  // Is this Operation hidden, because of the current OAuth scopes??
+  isHidden(): boolean {
+    const scopes = this.context;  // which OAuth scopes are we displaying ??
+
+    // No scopes defined means no hidden operations...
+    if (Object.keys(scopes).length == 0) {
+      return false;
+    }
+
+    // If they're showing the DEFERRED scope then the field is not hidden
+    return  ! scopes.DEFERRED;
+  }
+
+
   toggle = () => {
     if (this.props.field.expanded === undefined && this.props.expandByDefault) {
       this.props.field.expanded = false;
@@ -80,6 +99,10 @@ export class Field extends React.Component<FieldProps> {
         {readOnly && <RequiredLabel> read-only </RequiredLabel>}
       </PropertyNameCell>
     );
+
+    if (field.schema.deferred && this.isHidden()) {
+      return null;
+    }
 
     return (
       <>
