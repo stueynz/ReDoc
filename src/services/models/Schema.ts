@@ -79,7 +79,7 @@ export class SchemaModel {
    */
   constructor(
     parser: OpenAPIParser,
-    schemaOrRef: Referenced<OpenAPISchema> & { description?: string, deprecated? : boolean },
+    schemaOrRef: Referenced<OpenAPISchema> & { description?: string, deprecated? : boolean, title?: string },
     pointer: string,
     private options: RedocNormalizedOptions,
     isChild: boolean = false,
@@ -111,6 +111,7 @@ export class SchemaModel {
     // If we've got a ref - we might have to 'overload' what we got from the $ref with sibling fields (as a kind of implied 'allOf')
     if (parser.isRef(schemaOrRef)) {
       if (schemaOrRef.description) this.description = schemaOrRef.description;
+      if (schemaOrRef.title) this.title = schemaOrRef.title;
 
       if (schemaOrRef['x-deferred']) {
         this.deferred = !!schemaOrRef['x-deferred'];
