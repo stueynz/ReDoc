@@ -31,7 +31,7 @@ export class GroupModel implements IMenuItem {
   //#endregion
 
   // This groupModel is hidden if all its operation children are hidden
-  isHidden(scopes: Map<String, boolean>): boolean {
+  isHidden(scopes: Map<String, boolean>, longURLs: boolean): boolean {
 
     // If there are no operations ... then it's pure narrative and can't be hidden
     if (!this.hasOperations()) {
@@ -39,12 +39,12 @@ export class GroupModel implements IMenuItem {
     }
 
     // If one of the operations is visable, we can't be hidden
-    if (this.hasVisibleOperations(scopes)) {
+    if (this.hasVisibleOperations(scopes, longURLs)) {
       return false;
     }
 
     // No visible operations ... Hide if we've hidden operations...
-    return this.hasHiddenOperations(scopes);
+    return this.hasHiddenOperations(scopes, longURLs);
   }
 
   // This groupModel has operations 
@@ -60,7 +60,7 @@ export class GroupModel implements IMenuItem {
     return false;
   }
 
-  hasHiddenOperations(scopes: Map<String, boolean>): boolean {
+  hasHiddenOperations(scopes: Map<String, boolean>, longURLs: boolean): boolean {
 
     // No scopes defined means no hidden operations...
     if (Object.keys(scopes).length == 0) {
@@ -70,7 +70,7 @@ export class GroupModel implements IMenuItem {
     for (let it of this.items) {
 
       // This operation is hidden - we're done - we've got a hidden tag
-      if (it.type === 'operation' && it.isHidden(scopes)) {
+      if (it.type === 'operation' && it.isHidden(scopes, longURLs)) {
         return true;
       }
 
@@ -78,7 +78,7 @@ export class GroupModel implements IMenuItem {
       if (it.type !== 'operation') {
 
         // does that tag, group or section have hidden tags ??
-        if (it.hasHiddenOperations(scopes)) {
+        if (it.hasHiddenOperations(scopes, longURLs)) {
           return true;
         }
       }
@@ -88,7 +88,7 @@ export class GroupModel implements IMenuItem {
     return false;
   }
 
-  hasVisibleOperations(scopes: Map<String, boolean>): boolean {
+  hasVisibleOperations(scopes: Map<String, boolean>, longURLs: boolean): boolean {
 
     // No scopes defined means no hidden operations...
     if (Object.keys(scopes).length == 0) {
@@ -98,7 +98,7 @@ export class GroupModel implements IMenuItem {
     for (let it of this.items) {
 
       // This operation is visible - we're done - we've got a visible operation
-      if (it.type === 'operation' && !it.isHidden(scopes)) {
+      if (it.type === 'operation' && !it.isHidden(scopes, longURLs)) {
         return true;
       }
 
@@ -106,7 +106,7 @@ export class GroupModel implements IMenuItem {
       if (it.type !== 'operation') {
 
         // does that tag, group or section have visible operations ??
-        if (it.hasVisibleOperations(scopes)) {
+        if (it.hasVisibleOperations(scopes, longURLs)) {
           return true;
         }
       }

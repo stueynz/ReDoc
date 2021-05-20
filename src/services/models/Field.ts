@@ -57,6 +57,8 @@ export class FieldModel {
 
   serializationMime?: string;
 
+  longFormURL?: boolean;  // Is this field an objectReference that could be in the Operation URL ??
+
   constructor(
     parser: OpenAPIParser,
     infoOrRef: Referenced<OpenAPIParameter> & { name?: string; kind?: string },
@@ -68,6 +70,7 @@ export class FieldModel {
     this.name = infoOrRef.name || info.name;
     this.in = info.in;
     this.required = !!info.required;
+    this.longFormURL = info['x-longFormURL'];
     
     let fieldSchema = info.schema;
     let serializationMime = '';
@@ -82,6 +85,7 @@ export class FieldModel {
     this.example = info.example || this.schema.example;
     this.deferred = !!this.schema.deferred;
     this.readOnly = this.schema.readOnly;
+
 
     if (serializationMime) {
       this.serializationMime = serializationMime;

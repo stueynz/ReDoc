@@ -7,6 +7,7 @@ import { MediaTypeModel } from '../../services/models';
 import { Markdown } from '../Markdown/Markdown';
 import { Example } from './Example';
 import { DropdownLabel, DropdownWrapper, NoSampleLabel } from './styled.elements';
+import { ScopesContext } from '../ScopesDlg/ScopesContext';     //  We wanna know - are we displaying long-form URLs ??
 
 export interface PayloadSamplesProps {
   mediaType: MediaTypeModel;
@@ -18,6 +19,8 @@ interface MediaTypeSamplesState {
 }
 
 export class MediaTypeSamples extends React.Component<PayloadSamplesProps, MediaTypeSamplesState> {
+  static contextType = ScopesContext;
+
   state = {
     activeIdx: 0,
   };
@@ -38,6 +41,20 @@ export class MediaTypeSamples extends React.Component<PayloadSamplesProps, Media
       return noSample;
     }
 
+    // We have OAuth scopes; and two named examples 'main' and 'altURL' --- So use the longURLs setting to pick the right example...
+    if(this.context.scopes && examplesNames.length == 2 && examplesNames[0] == 'main' && examplesNames[1] == 'altURL') {
+      const chosenIdx = this.context.longURLs ? 1 : 0;
+      const example = examples[examplesNames[chosenIdx]];
+
+      return (
+        <SamplesWrapper>
+          {example.description && <Markdown source={example.description} />}
+          <Example example={example} mimeType={mimeType} />
+        </SamplesWrapper>
+      );      
+    }
+
+    // More than one named example ... we'll need a drop down
     if (examplesNames.length > 1) {
       const options = examplesNames.map((name, idx) => {
         return {

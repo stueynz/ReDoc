@@ -79,6 +79,8 @@ export interface OpenAPIOperation {
   servers?: OpenAPIServer[];
   'x-codeSamples'?: OpenAPIXCodeSample[];
   'x-code-samples'?: OpenAPIXCodeSample[]; // deprecated
+
+  'x-altURL'?: string;
 }
 
 export interface OpenAPIParameter {

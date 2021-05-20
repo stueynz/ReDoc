@@ -77,6 +77,9 @@ export class OperationModel implements IMenuItem {
   isCallback: boolean;
   isWebhook: boolean;
 
+  altURL?: string;
+  altURLOnly: boolean;
+
   //  retrieve the SecurityScheme that has an OAuth2 scheme in it.
   oauth2SecurityScheme() {
     return this.security.find(s => s.oauth2Scheme())?.oauth2Scheme();
@@ -135,16 +138,29 @@ export class OperationModel implements IMenuItem {
     if (options.showExtensions) {
       this.extensions = extractExtensions(operationSpec, options.showExtensions);
     }
+
+    this.altURL = operationSpec['x-altURL'];
+    this.altURLOnly = !!operationSpec['x-altURLOnly'];
   }
 
-  // This operation isHidden if none of its OAuth scopes are turned on...
-  isHidden(scopes: Map<String, boolean>): boolean {
+  isHidden(scopes: Map<String, boolean>, longURLs: boolean): boolean {
 
     // No scopes defined means no hidden operations...
     if (Object.keys(scopes).length == 0) {
       return false;
     }
 
+    // If we're displaying longURLs and this operation doesn't have an altURL then this one is hidden
+    if(longURLs && ! this.altURL) {
+      return true;
+
+    }
+    // This operation may be only for altURLs...
+    if (! longURLs && this.altURLOnly) {
+      return true;
+    }
+
+    // Not hidden because of longURLs setting, maybe hidden because of OAuth scopes...
     const opScopes = this.oauth2SecurityScheme();
 
     if (opScopes) {

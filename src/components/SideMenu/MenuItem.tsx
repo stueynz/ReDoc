@@ -46,7 +46,7 @@ export class MenuItem extends React.Component<MenuItemProps> {
 
     if (item.type === 'operation') {     
       //  We might be hiding operations based upon OAuth Scope settings...
-      if(item.isHidden(this.context)) {
+      if(item.isHidden(this.context.scopes, this.context.longURLs)) {
         return null;
       }
     }
@@ -54,13 +54,14 @@ export class MenuItem extends React.Component<MenuItemProps> {
       // If all the operationChildren are hidden, then hide the Tag item as well...
       var hiddenChildren=0;
       for(let it of item.items) {
-        if(it.type === 'operation' && it.isHidden(this.context)) {
+        if(it.type === 'operation' && it.isHidden(this.context.scopes, this.context.longURLs)) {
           hiddenChildren++;
         }
       }
       // if all the children operations are hidden, then this 'tag' is hidden
-      if(hiddenChildren === item.items.length)
+      if(hiddenChildren === item.items.length) {
         return null;
+      }
     }
     else if(item.type == 'group') {
       // If all the operation children are hidden, then hide the Group item as well...
@@ -69,7 +70,7 @@ export class MenuItem extends React.Component<MenuItemProps> {
       for(let it of item.items) {
         if(it.type === 'operation') {
           operations++;
-          if(it.isHidden(this.context)) {
+          if(it.isHidden(this.context.scopes, this.context.longURLs)) {
             hiddenOperations++;
           }
         }
@@ -77,7 +78,7 @@ export class MenuItem extends React.Component<MenuItemProps> {
           for(let op of it.items) {
             if (op.type === 'operation') {
               operations++;
-              if(op.isHidden(this.context)) {
+              if(op.isHidden(this.context.scopes, this.context.longURLs)) {
                 hiddenOperations++;
              }
             }

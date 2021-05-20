@@ -20,11 +20,12 @@ import { StoreProvider } from '../StoreBuilder';
 export interface RedocProps {
   store: AppStore;
 }
-export interface RedocState {
-  scopes: Map<String, boolean>
+export interface ScopesState {
+  scopes: Map<String, boolean>,
+  longURLs: boolean
 }
 
-export class Redoc extends React.Component<RedocProps, RedocState> {
+export class Redoc extends React.Component<RedocProps, ScopesState> {
   static propTypes = {
     store: PropTypes.instanceOf(AppStore).isRequired,
   };
@@ -41,19 +42,32 @@ export class Redoc extends React.Component<RedocProps, RedocState> {
     super(props);
 
     // initialise state from scopes that're defined in the original OpenAPI spec
-    this.state = { scopes: props.store.scopes };
+    this.state = { scopes: props.store.scopes, longURLs: false };
     this.handleScopeChange = this.handleScopeChange.bind(this);
   }
 
   handleScopeChange = changeEvent => {
-    const { name } = changeEvent.target;
+    const { name, id } = changeEvent.target;
+    if(name) {
+      this.setState(prevState => ({
+        scopes: {
+          ...prevState.scopes,              // use all the scope settings from the previous state
+          [name]: !prevState.scopes[name],  // turn the one that's changed around
+        },
+        longURLs: prevState.longURLs      // ... and the longURL setting from the previous state
+      }));
+      return;
+    }
 
-    this.setState(prevState => ({
-      scopes: {
-        ...prevState.scopes,             // use all the scope settings from the previous state
-        [name]: !prevState.scopes[name]  // turn the one that's changed around
-      }
-    }));
+    // Could be an unnamed item  ... check via item Id
+    if(id && id == 'url') {
+      this.setState(prevState => ({
+        scopes: {
+          ...prevState.scopes,               // use all the scope settings from the previous state
+        },
+        longURLs: !prevState.longURLs        // ... and switch longURL setting from the previous state
+      }));
+    }
   };
 
   render() {
@@ -66,7 +80,7 @@ export class Redoc extends React.Component<RedocProps, RedocState> {
       <ThemeProvider theme={options.theme}>
         <StoreProvider value={this.props.store}>
           <OptionsProvider value={options}>
-            <ScopesProvider value={this.state.scopes}>
+            <ScopesProvider value={this.state}>
               <RedocWrap className="redoc-wrap">
                 <StickyResponsiveSidebar menu={menu} className="menu-content">
                   <ApiLogo info={spec.info} />
@@ -81,6 +95,7 @@ export class Redoc extends React.Component<RedocProps, RedocState> {
                     null}
                   <ScopesSelector
                     scopes={ this.state.scopes }
+                    longURLs={ this.state.longURLs }
                     handleScopeChange={ this.handleScopeChange }
                   />
                   <SideMenu menu={menu} />

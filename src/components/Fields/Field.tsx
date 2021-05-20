@@ -37,15 +37,25 @@ export class Field extends React.Component<FieldProps> {
 
   // Is this Operation hidden, because of the current OAuth scopes??
   isHidden(): boolean {
-    const scopes = this.context;  // which OAuth scopes are we displaying ??
+    const { scopes } = this.context;  // which OAuth scopes are we displaying ??
 
     // No scopes defined means no hidden operations...
     if (Object.keys(scopes).length == 0) {
       return false;
     }
 
-    // If they're showing the DEFERRED scope then the field is not hidden
-    return  ! scopes.DEFERRED;
+    // If the field is marked with x-deferred... then use the DEFERRED scope to decide
+    if(this.props.field.schema.deferred) {
+      return  ! scopes.DEFERRED;
+    }
+
+    // Are we doing long-form URLs ??
+    if(this.context.longURLs) {
+      return this.props.field.longFormURL !== undefined && ! this.props.field.longFormURL;
+    }
+
+    // We're doing short-form URLs
+    return this.props.field.longFormURL !== undefined && this.props.field.longFormURL;
   }
 
 
@@ -66,7 +76,9 @@ export class Field extends React.Component<FieldProps> {
 
   render() {
     const { className, field, isLast, expandByDefault } = this.props;
-    const { name, deferred, deprecated, required, kind, readOnly } = field;
+    const { name, deferred, deprecated, required, kind, readOnly, schema } = field;
+    const { altURLReference } = schema;
+
     const withSubSchema = !field.schema.isPrimitive && !field.schema.isCircular;
 
     const expanded = field.expanded === undefined ? expandByDefault : field.expanded;
@@ -89,6 +101,7 @@ export class Field extends React.Component<FieldProps> {
         {required && !deferred && <RequiredLabel> required </RequiredLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
         {readOnly && <RequiredLabel> read-only </RequiredLabel>}
+        {altURLReference && <RequiredLabel>short-form URL Only</RequiredLabel>}
       </ClickablePropertyNameCell>
     ) : (
       <PropertyNameCell className={deprecated ? 'deprecated' : undefined} kind={kind} title={name}>
@@ -100,7 +113,7 @@ export class Field extends React.Component<FieldProps> {
       </PropertyNameCell>
     );
 
-    if (field.schema.deferred && this.isHidden()) {
+    if (this.isHidden()) {
       return null;
     }
 

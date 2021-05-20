@@ -19,12 +19,13 @@ export class ExampleModel {
     encoding?: { [field: string]: OpenAPIEncoding },
   ) {
     const example = parser.deref(infoOrRef);
-    this.value = example.value;
+    this.value = parser.deref(example.value);  // value can be a {$ref }
     this.summary = example.summary;
     this.description = example.description;
     if (example.externalValue) {
       this.externalValueUrl = urlResolve(parser.specUrl || '', example.externalValue);
     }
+    parser.exitRef(example.value);
     parser.exitRef(infoOrRef);
 
     if (isFormUrlEncoded(mime) && this.value && typeof this.value === 'object') {

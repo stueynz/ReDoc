@@ -34,9 +34,9 @@ export class SchemaModel {
   displayType: string;
   typePrefix: string = '';
   title: string;
-  titleStar: OpenAPIDictionary;
+  titleStar: OpenAPIDictionary;   // moeExtension
   description: string;
-  descriptionStar: OpenAPIDictionary;
+  descriptionStar: OpenAPIDictionary;  // moeExtension
   externalDocs?: OpenAPIExternalDocumentation;
 
   isPrimitive: boolean;
@@ -46,14 +46,16 @@ export class SchemaModel {
   displayFormat?: string;
   nullable: boolean;
   deprecated: boolean;
-  deferred: boolean;
+  deferred: boolean;  // moeExtension
   pattern?: string;
   example?: any;
   enum: any[];
-  const: any;
+  const: any;  // moeExtension
   default?: any;
   readOnly: boolean;
   writeOnly: boolean;
+
+  altURLReference: boolean; // moeExtension
 
   constraints: string[];
 
@@ -113,13 +115,13 @@ export class SchemaModel {
       if (schemaOrRef.description) this.description = schemaOrRef.description;
       if (schemaOrRef.title) this.title = schemaOrRef.title;
 
+      this.deferred = !!schemaOrRef['x-deferred'];
       if (schemaOrRef['x-deferred']) {
-        this.deferred = !!schemaOrRef['x-deferred'];
-
         if(this.extensions) this.extensions['x-deferred'] = schemaOrRef['x-deferred'];
       }
-
-      if(schemaOrRef.deprecated) this.deprecated = schemaOrRef.deprecated;
+      
+      this.deprecated = !!schemaOrRef.deprecated;
+      this.altURLReference = !! schemaOrRef['x-altURLReference'];
     }
   }
 
@@ -155,8 +157,7 @@ export class SchemaModel {
     this.deprecated = !!schema.deprecated;
     if (!isRef) {
       this.deferred = !!schema['x-deferred'];
-    } else {
-      this.deferred = false;
+      this.altURLReference = !!schema['x-altURLReference'];
     }
     this.pattern = schema.pattern;
     this.externalDocs = schema.externalDocs;

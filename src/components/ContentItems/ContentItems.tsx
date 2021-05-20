@@ -35,7 +35,7 @@ export class ContentItem extends React.Component<ContentItemProps> {
   render() {
     const item = this.props.item;
 
-    if(item.isHidden(this.context)) {
+    if(item.isHidden(this.context.scopes, this.context.longURLs)) {
       return null;
     }
 

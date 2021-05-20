@@ -4,19 +4,21 @@ import * as React from 'react';
 import { ShelfIcon } from '../../common-elements/shelfs';
 
 import { ScopesDialog, ScopeOption, ScopeLabel } from './styled.elements';
-import { ScopesState } from './ScopesContext';
 
+interface ScopesState {
+  expanded: boolean;
+}
 
 @observer
-export class ScopesSelector extends React.Component<{ scopes: Map<String, boolean>, handleScopeChange: (e) => void }, ScopesState> {
+export class ScopesSelector extends React.Component<{ scopes: Map<String, boolean>, longURLs:boolean, handleScopeChange: (e) => void }, ScopesState> {
 
   constructor(props) {
     super(props);
     this.handleScopeChange = this.handleScopeChange.bind(this);
   }
 
-  state = { scopes: this.props.scopes, expanded: false };
-  toggle = () => {
+  state = { expanded: false };
+  toggleScopes = () => {
     this.setState({ expanded: !this.state.expanded });
   };
 
@@ -37,6 +39,9 @@ export class ScopesSelector extends React.Component<{ scopes: Map<String, boolea
   selectedScopes = () => {
     return <span>{Object.keys(this.props.scopes).map(key => this.props.scopes[key] === true ? key : null).filter(Boolean).join(',')}</span>;
   }
+  selectedURLs = () => {
+    return this.props.longURLs ? "Long-Form" : "Short-Form";
+  }
 
   render() {
 
@@ -47,12 +52,15 @@ export class ScopesSelector extends React.Component<{ scopes: Map<String, boolea
 
     return (
       <ScopesDialog>
-        <ScopeLabel onClick={this.toggle}>
+        <ScopeLabel onClick={this.toggleScopes}>
           <span>OAuth2 Scopes:</span>
           {!this.state.expanded && this.selectedScopes()}
           <ShelfIcon color="primary" direction={this.state.expanded ? 'down' : 'right'} />
-        </ScopeLabel>
+        </ScopeLabel><br/>
         {this.state.expanded && this.createCheckboxes()}
+        <ScopeLabel  id="url" onClick={this.handleScopeChange}>
+          <span>URLs:</span>{ this.selectedURLs() }
+        </ScopeLabel>
       </ScopesDialog>
     );
   }

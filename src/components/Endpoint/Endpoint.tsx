@@ -3,6 +3,7 @@ import { ShelfIcon } from '../../common-elements';
 import { OperationModel } from '../../services';
 import { Markdown } from '../Markdown/Markdown';
 import { OptionsContext } from '../OptionsProvider';
+import { ScopesContext } from '../ScopesDlg/ScopesContext';     //  We wanna know - are we displaying long-form URLs ??
 import { SelectOnClick } from '../SelectOnClick/SelectOnClick';
 
 import { expandDefaultServerVariables, getBasePath } from '../../utils';
@@ -29,6 +30,8 @@ export interface EndpointState {
 }
 
 export class Endpoint extends React.Component<EndpointProps, EndpointState> {
+  static contextType = ScopesContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -53,7 +56,7 @@ export class Endpoint extends React.Component<EndpointProps, EndpointState> {
               <HttpVerb type={operation.httpVerb} compact={this.props.compact}>
                 {operation.httpVerb}
               </HttpVerb>
-              <ServerRelativeURL>{operation.path}</ServerRelativeURL>
+              <ServerRelativeURL>{this.context.longURLs ? operation.altURL : operation.path}</ServerRelativeURL>
               <ShelfIcon
                 float={'right'}
                 color={inverted ? 'black' : 'white'}
@@ -77,7 +80,7 @@ export class Endpoint extends React.Component<EndpointProps, EndpointState> {
                             ? getBasePath(normalizedUrl)
                             : normalizedUrl}
                         </span>
-                        {operation.path}
+                        {this.context.longURLs ? operation.altURL : operation.path}
                       </ServerUrl>
                     </SelectOnClick>
                   </ServerItem>

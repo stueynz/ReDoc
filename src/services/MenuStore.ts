@@ -32,7 +32,7 @@ export interface IMenuItem {
   expand(): void;
 
   // Use the given set of OAuth scopes flags, to decide if this menu item is hidden...
-  isHidden(scopes: Map<String, boolean>): boolean;
+  isHidden(scopes: Map<String, boolean>, longURLs: boolean): boolean;
 }
 
 export const SECTION_ATTR = 'data-section-id';
