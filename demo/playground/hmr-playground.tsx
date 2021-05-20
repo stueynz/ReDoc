@@ -31,6 +31,7 @@ const options: RedocRawOptions = {
   maxDisplayedEnumValues: 3,
   theme: { colors: { primary: { main: '#8abb2a' } } },
   menuToggle: true,
+  pathInMiddlePanel: true,
   showExtensions: [
     'x-accessControl',
     'x-validationRules',
