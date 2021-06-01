@@ -89,6 +89,7 @@ const defaultTheme: ThemeInterface = {
     typeNameColor: theme => theme.colors.text.secondary,
     typeTitleColor: theme => theme.schema.typeNameColor,
     requireLabelColor: theme => theme.colors.error.main,
+    conditionalLabelColor: theme => theme.colors.warning.main,
     labelsTextSize: '0.9em',
     nestingSpacing: '1em',
     nestedBackground: '#fafafa',
@@ -272,6 +273,7 @@ export interface ResolvedThemeInterface {
     typeNameColor: string;
     typeTitleColor: string;
     requireLabelColor: string;
+    conditionalLabelColor: string;
     labelsTextSize: string;
     nestingSpacing: string;
     nestedBackground: string;

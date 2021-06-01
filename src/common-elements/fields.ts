@@ -56,6 +56,21 @@ export const RequiredLabel = styled(FieldLabel.withComponent('div'))`
   line-height: 1;
 `;
 
+export const ConditionalMandatoryLabel = styled(FieldLabel.withComponent('div'))`
+  color: ${props => props.theme.schema.conditionalLabelColor};
+  font-size: ${props => props.theme.schema.labelsTextSize};
+  font-weight: normal;
+  margin-left: 20px;
+  line-height: 1;
+`;
+export const OptionalLabel = styled(FieldLabel.withComponent('div'))`
+  color: ${props => props.theme.colors.primary.main};
+  font-size: ${props => props.theme.schema.labelsTextSize};
+  font-weight: normal;
+  margin-left: 20px;
+  line-height: 1;
+`;
+
 export const MultiLingualLabels = styled(TypeTitle.withComponent('ul'))`
   font-size: ${props => props.theme.schema.labelsTextSize};
   margin-block-start: 0px;

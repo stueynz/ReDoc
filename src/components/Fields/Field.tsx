@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { ClickablePropertyNameCell, RequiredLabel } from '../../common-elements/fields';
+import { ClickablePropertyNameCell, RequiredLabel, OptionalLabel, ConditionalMandatoryLabel } from '../../common-elements/fields';
 import { FieldDetails } from './FieldDetails';
 
 import { ScopesContext } from '../ScopesDlg/ScopesContext';
@@ -76,7 +76,7 @@ export class Field extends React.Component<FieldProps> {
 
   render() {
     const { className, field, isLast, expandByDefault } = this.props;
-    const { name, deferred, deprecated, required, kind, readOnly, schema } = field;
+    const { name, deferred, conditionalMandatory, deprecated, required, kind, readOnly, schema } = field;
     const { altURLReference } = schema;
 
     const withSubSchema = !field.schema.isPrimitive && !field.schema.isCircular;
@@ -98,7 +98,9 @@ export class Field extends React.Component<FieldProps> {
           {name}
           <ShelfIcon direction={expanded ? 'down' : 'right'} />
         </button>
-        {required && !deferred && <RequiredLabel> required </RequiredLabel>}
+        {required && !conditionalMandatory && !deferred && <RequiredLabel> required </RequiredLabel>}
+        {conditionalMandatory && !deferred && <ConditionalMandatoryLabel> conditional </ConditionalMandatoryLabel>}
+        {!required && !deferred && <OptionalLabel> optional </OptionalLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
         {readOnly && <RequiredLabel> read-only </RequiredLabel>}
         {altURLReference && <RequiredLabel>short-form URL Only</RequiredLabel>}
@@ -107,7 +109,9 @@ export class Field extends React.Component<FieldProps> {
       <PropertyNameCell className={deprecated ? 'deprecated' : undefined} kind={kind} title={name}>
         <PropertyBullet />
         {name}
-        {required && !deferred && <RequiredLabel> required </RequiredLabel>}
+        {required && !conditionalMandatory && !deferred && <RequiredLabel> required </RequiredLabel>}
+        {conditionalMandatory && !deferred && <ConditionalMandatoryLabel> conditional </ConditionalMandatoryLabel>}
+        {!required && !deferred && <OptionalLabel> optional </OptionalLabel>}
         {deferred && <RequiredLabel> deferred </RequiredLabel>}
         {readOnly && <RequiredLabel> read-only </RequiredLabel>}
       </PropertyNameCell>

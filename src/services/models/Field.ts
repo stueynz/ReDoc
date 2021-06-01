@@ -44,6 +44,7 @@ export class FieldModel {
   schema: SchemaModel;
   name: string;
   required: boolean;
+  conditionalMandatory: boolean;    // field is required (but inside an optional ancestor)
   readOnly: boolean;
   description: string;
   example?: string;
@@ -86,6 +87,7 @@ export class FieldModel {
     this.deferred = !!this.schema.deferred;
     this.readOnly = this.schema.readOnly;
 
+    this.conditionalMandatory = !!this.schema.conditionalMandatory;
 
     if (serializationMime) {
       this.serializationMime = serializationMime;

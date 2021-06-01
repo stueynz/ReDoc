@@ -39,6 +39,8 @@ export class SchemaModel {
   descriptionStar: OpenAPIDictionary;  // moeExtension
   externalDocs?: OpenAPIExternalDocumentation;
 
+  conditionalMandatory: boolean; // moeExtension
+
   isPrimitive: boolean;
   isCircular: boolean = false;
 
@@ -122,6 +124,7 @@ export class SchemaModel {
       
       this.deprecated = !!schemaOrRef.deprecated;
       this.altURLReference = !! schemaOrRef['x-altURLReference'];
+      this.conditionalMandatory = !! schemaOrRef['x-conditionalMandatory'];
     }
   }
 
@@ -158,6 +161,7 @@ export class SchemaModel {
     if (!isRef) {
       this.deferred = !!schema['x-deferred'];
       this.altURLReference = !!schema['x-altURLReference'];
+      this.conditionalMandatory = !!schema['x-conditionalMandatory'];
     }
     this.pattern = schema.pattern;
     this.externalDocs = schema.externalDocs;
