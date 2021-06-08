@@ -117,9 +117,17 @@ export class SchemaModel {
       if (schemaOrRef.description) this.description = schemaOrRef.description;
       if (schemaOrRef.title) this.title = schemaOrRef.title;
 
+      // pickup the $ref.siblin x-deferred setting
       this.deferred = !!schemaOrRef['x-deferred'];
-      if (schemaOrRef['x-deferred']) {
-        if(this.extensions) this.extensions['x-deferred'] = schemaOrRef['x-deferred'];
+
+      // fixup extensions (on this schema) to match 'x-deferred' setting
+      if(this.extensions) {
+        if (this.deferred) {
+          this.extensions['x-deferred'] = schemaOrRef['x-deferred'];
+        }
+        else {
+          delete this.extensions['x-deferred'];
+        }
       }
       
       this.deprecated = !!schemaOrRef.deprecated;
